@@ -1,0 +1,22 @@
+﻿using System.Linq.Expressions;
+
+namespace Solveit.Api.Core.Application.Repositories
+{
+    public interface IGenericRepository
+        <TEntity, TKey> where TEntity : class
+    {
+        IQueryable<TEntity> GetAll(bool isTracking = false);
+        Task<List<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, bool isTracking = false, params Expression<Func<TEntity, object>>[] includes);
+        Task<List<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, bool isTracking = false, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity> GetByIdAsync(TKey id, bool isTracking = true, params Expression<Func<TEntity, object>>[] includes);
+        Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> expression, bool isTracking = true, params Expression<Func<TEntity, object>>[] includes);
+        bool Any(Expression<Func<TEntity, bool>> expression);
+        Task<bool> Exists(TKey id);
+        Task<TEntity> AddAsync(TEntity entity);
+        TEntity Update(TEntity entity);
+        Task DeleteByIdAsync(TKey id);
+        Task DeleteRangeAsync(List<TKey> ids);
+        Task<int> SaveChangesAsync();
+        int SaveChanges();
+    }
+}

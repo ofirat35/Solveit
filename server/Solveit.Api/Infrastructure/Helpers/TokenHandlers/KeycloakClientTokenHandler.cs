@@ -1,0 +1,55 @@
+﻿using Solveit.Api.Core.Domain.Dtos;
+using Solveit.Api.Core.Domain.Models;
+using Solveit.Api.Extensions;
+using Microsoft.Extensions.Options;
+
+namespace Solveit.Api.Infrastructure.Context.TokenHandlers
+{
+
+    public class KeycloakClientTokenProvider(
+        IOptions<KeycloakConfig> options,
+        HttpClient httpClient,
+        ILogger<KeycloakClientTokenProvider> logger) : ITokenProvider
+    {
+        private DateTime? expire = null;
+        private string? token = null;
+
+        public async Task<string?> GetTokenAsync()
+        {
+            if (expire != null && expire > DateTime.UtcNow && token != null) return token;
+            var values = new Dictionary<string, string>
+            {
+                ["grant_type"] = options.Value.GrantType,
+                ["client_id"] = options.Value.ClientId,
+                ["client_secret"] = options.Value.ClientSecret
+            };
+            var openIdConfigs = await httpClient.GetAsync<OpenIdConfigurationResponse>(
+                  options.Value.OpenIdConfigurationUrl);
+            if (!openIdConfigs.IsSuccess) throw new Exception(openIdConfigs.ErrorMessage);
+
+            var response = await httpClient.PostFormAsync<KeycloakTokenResponse>(
+                openIdConfigs.Data.TokenEndpoint,
+                values);
+            if (!response.IsSuccess)
+            {
+                logger.LogError("HTTP  {StatusCode} - Response: {ResponseBody}. Failed to get token.",
+                    response.StatusCode, response.ErrorMessage);
+                throw new Exception(response.ErrorMessage);
+            }
+
+            expire = DateTime.UtcNow.AddSeconds(response.Data!.ExpiresIn);
+            token = response.Data!.AccessToken;
+
+            return token;
+        }
+    }
+
+    public class KeycloakClientTokenHandler(
+        KeycloakClientTokenProvider tokenProvider,
+        ILogger<BearerTokenHandlerBase> logger)
+        : BearerTokenHandlerBase(logger)
+    {
+        protected async override Task<string?> GetTokenAsync()
+            => await tokenProvider.GetTokenAsync();
+    }
+}

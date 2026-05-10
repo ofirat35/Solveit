@@ -1,0 +1,492 @@
+import { FontAwesome5 } from "@expo/vector-icons";
+import { yupResolver } from "@hookform/resolvers/yup";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { RadioButton } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GenderEnum } from "../helpers/enums/GenderEnum";
+import { RegisterFormData, registerSchema } from "../helpers/schemas";
+import { showToast } from "../helpers/Toasts/DefaultToasts";
+import { useAppNavigation } from "../hooks/useAppNavigation";
+import { RegisterModel } from "../models/Auths/RegisterModel";
+import { AuthService } from "../services/AuthService";
+
+export function RegisterScreen() {
+  const { navigate } = useAppNavigation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
+  const { t } = useTranslation();
+  const defaultBirthday = new Date();
+  defaultBirthday.setFullYear(defaultBirthday.getFullYear() - 18);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerSchema),
+    defaultValues: {
+      birthday: defaultBirthday,
+    },
+  });
+  const handleRegister = async (data: RegisterFormData) => {
+    setLoading(true);
+    const { confirmPassword, ...rest } = data;
+    const payload: RegisterModel = {
+      ...rest,
+      birthday: rest.birthday.toISOString().split("T")[0],
+    };
+    AuthService.register({ ...payload }).then((isSuccess) => {
+      setLoading(false);
+      if (isSuccess) {
+        showToast("Successfully registered!");
+        navigate("LoginScreen");
+      }
+    });
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 24,
+            paddingVertical: 40,
+            justifyContent: "center",
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View
+            style={{
+              marginBottom: 36,
+            }}
+          >
+            <Text style={styles.title}>{t("Create account")}</Text>
+            <Text style={styles.subtitle}>{t("Sign up to get started")}</Text>
+          </View>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <View style={[styles.field, styles.rowField]}>
+                <Text style={styles.label}>{t("First Name")}</Text>
+                <Controller
+                  control={control}
+                  name="firstName"
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={[
+                        styles.input,
+                        errors.lastName && styles.inputError,
+                      ]}
+                      value={value}
+                      onChangeText={onChange}
+                      autoCapitalize="words"
+                      autoCorrect={false}
+                    />
+                  )}
+                />
+                {errors.firstName && (
+                  <Text style={{ color: "red" }}>
+                    {errors.firstName.message}
+                  </Text>
+                )}
+              </View>
+
+              <View style={[styles.field, styles.rowField]}>
+                <Text style={styles.label}>{t("Last Name")}</Text>
+                <Controller
+                  control={control}
+                  name="lastName"
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={[
+                        styles.input,
+                        errors.lastName && styles.inputError,
+                      ]}
+                      value={value}
+                      onChangeText={onChange}
+                      autoCapitalize="words"
+                      autoCorrect={false}
+                    />
+                  )}
+                />
+                {errors.lastName && (
+                  <Text style={{ color: "red" }}>
+                    {errors.lastName.message}
+                  </Text>
+                )}
+              </View>
+            </View>
+
+            <View style={styles.form}>
+              <View style={styles.row}>
+                <View style={[styles.field, styles.rowField]}>
+                  <Text style={styles.label}>{t("Birthday")}</Text>
+                  <Controller
+                    control={control}
+                    name="birthday"
+                    render={({ field: { onChange, value } }) => {
+                      const dateValue = value ? new Date(value) : new Date();
+
+                      return (
+                        <>
+                          <TouchableOpacity
+                            style={[
+                              styles.input,
+                              { paddingVertical: 0 },
+                              errors.lastName && styles.inputError,
+                            ]}
+                            onPress={() => setShowPicker(true)}
+                          >
+                            <View
+                              pointerEvents="none"
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <View style={{ paddingRight: 5 }}>
+                                <FontAwesome5 name="calendar-alt" size={16} />
+                              </View>
+                              <TextInput
+                                value={dateValue.toLocaleDateString()}
+                                editable={false}
+                              />
+                            </View>
+                          </TouchableOpacity>
+
+                          {showPicker && (
+                            <DateTimePicker
+                              value={dateValue}
+                              mode="date"
+                              display={
+                                Platform.OS === "ios" ? "spinner" : "default"
+                              }
+                              maximumDate={(() => {
+                                const maxAge = new Date();
+                                maxAge.setFullYear(
+                                  new Date().getFullYear() - 18,
+                                );
+                                return maxAge;
+                              })()}
+                              onChange={(event, selectedDate) => {
+                                setShowPicker(Platform.OS === "ios");
+                                if (selectedDate) onChange(selectedDate);
+                              }}
+                            />
+                          )}
+                        </>
+                      );
+                    }}
+                  />
+                  {errors.birthday && (
+                    <Text style={{ color: "red" }}>
+                      {errors.birthday.message}
+                    </Text>
+                  )}
+                </View>
+                <View style={[styles.field, styles.rowField]}>
+                  <Text style={styles.label}>{t("Gender")}</Text>
+                  <Controller
+                    control={control}
+                    name="gender"
+                    render={({ field: { onChange, value } }) => (
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <RadioButton
+                          value={GenderEnum.Woman.toString()}
+                          status={
+                            value === GenderEnum.Woman ? "checked" : "unchecked"
+                          }
+                          onPress={() => onChange(GenderEnum.Woman)}
+                        />
+                        <Text>Woman</Text>
+
+                        <RadioButton
+                          value={GenderEnum.Man.toString()}
+                          status={
+                            value === GenderEnum.Man ? "checked" : "unchecked"
+                          }
+                          onPress={() => onChange(GenderEnum.Man)}
+                        />
+                        <Text>Man</Text>
+                      </View>
+                    )}
+                  />
+                  {errors.gender && (
+                    <Text style={{ color: "red" }}>
+                      {errors.gender.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </View>
+            <View style={[styles.field, styles.rowField]}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "600",
+                  color: "#333",
+                  marginBottom: 8,
+                }}
+              >
+                {t("Email")}
+              </Text>
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      errors.email && {
+                        borderColor: "#E05252",
+                      },
+                    ]}
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="you@example.com"
+                    secureTextEntry
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholderTextColor="#ABABAB"
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text style={{ color: "red" }}>{errors.email.message}</Text>
+              )}
+            </View>
+
+            <View style={[styles.field, styles.rowField]}>
+              <Text style={styles.label}>{t("Password")}</Text>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, value } }) => (
+                  <View
+                    style={[
+                      styles.input,
+                      styles.passwordRow,
+                      errors.password && styles.inputError,
+                    ]}
+                  >
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={value}
+                      onChangeText={onChange}
+                      placeholder="••••••••"
+                      secureTextEntry={!showPassword}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      placeholderTextColor="#ABABAB"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPassword((p) => !p)}
+                    >
+                      <Text style={styles.toggleText}>
+                        {showPassword ? "Hide" : "Show"}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+              {errors.email && (
+                <Text style={{ color: "red" }}>{errors.password?.message}</Text>
+              )}
+            </View>
+
+            <View style={[styles.field, styles.rowField]}>
+              <Text style={styles.label}>{t("Confirm Password")}</Text>
+              <Controller
+                control={control}
+                name="confirmPassword"
+                render={({ field: { onChange, value } }) => (
+                  <View
+                    style={[
+                      styles.input,
+                      styles.passwordRow,
+                      errors.confirmPassword && styles.inputError,
+                    ]}
+                  >
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={value}
+                      onChangeText={onChange}
+                      placeholder="••••••••"
+                      secureTextEntry={!showConfirmPassword}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      placeholderTextColor="#ABABAB"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowConfirmPassword((p) => !p)}
+                    >
+                      <Text style={styles.toggleText}>
+                        {showConfirmPassword ? "Hide" : "Show"}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+              {errors.confirmPassword && (
+                <Text style={{ color: "red" }}>
+                  {errors.confirmPassword?.message}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              pressed && {
+                opacity: 0.8,
+              },
+            ]}
+            onPress={handleSubmit(handleRegister)}
+            disabled={false}
+            // disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                {t("Create account")}
+              </Text>
+            )}
+          </Pressable>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 28,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#888",
+              }}
+            >
+              {t("Already have an account?")}{" "}
+            </Text>
+            <TouchableOpacity onPress={() => navigate("LoginScreen")}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "#111",
+                  fontWeight: "600",
+                }}
+              >
+                {t("Sign in")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#111",
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 15,
+    color: "#888",
+  },
+  form: {
+    marginBottom: 8,
+  },
+  row: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  rowField: {
+    flex: 1,
+  },
+  field: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 8,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: "#111",
+    backgroundColor: "#FAFAFA",
+  },
+  inputError: {
+    borderColor: "#E05252",
+  },
+  passwordRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 0,
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 15,
+    color: "#111",
+    paddingVertical: 12,
+  },
+  toggleText: {
+    fontSize: 13,
+    color: "#555",
+    fontWeight: "500",
+    paddingRight: 4,
+  },
+  button: {
+    backgroundColor: "#111",
+    borderRadius: 10,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 28,
+  },
+});

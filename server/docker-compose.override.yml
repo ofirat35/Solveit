@@ -1,0 +1,52 @@
+services:
+  reservationapp.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_HTTP_PORTS=5000
+      - "ConnectionStrings__SqlConnectionString=Server=sqlserverdb,1433;Database=ReservationAppDb;User Id=sa;Password=Firat3521;TrustServerCertificate=True"
+      - "KeycloakClientConfig__base_url=http://keycloak:8080" 
+      - "KeycloakClientConfig__openid_configuration_url=http://keycloak:8080/realms/ReservationApp/.well-known/openid-configuration" 
+      - "Keycloak__auth-server-url=http://keycloak:8080"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - sqlserverdb
+      
+  sqlserverdb:
+    container_name: sqlserverdb
+    environment:
+        SA_PASSWORD: "Firat3521"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "10433:1433" 
+    volumes:
+        - ./data:/var/opt/mssql/data
+        - ./log:/var/opt/mssql/log
+        - ./secrets:/var/opt/mssql/secrets
+  keycloak:
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+
+      KC_HOSTNAME_URL: http://localhost:8080
+
+      KC_PROXY: edge
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+ 
+
+
+   
+

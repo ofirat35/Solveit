@@ -1,0 +1,268 @@
+import axios from "axios";
+import * as AuthSession from "expo-auth-session";
+import * as WebBrowser from "expo-web-browser";
+import { AuthStorage } from "./auth-storage";
+import { JWTUtils, UserInfo } from "./jwt-utils";
+WebBrowser.maybeCompleteAuthSession();
+
+export interface KeycloakTokens {
+  accessToken: string;
+  refreshToken: string | null;
+  idToken: string | null;
+  tokenType: string;
+  expiresIn: number;
+  userInfo?: UserInfo | null;
+}
+
+export interface KeycloakConfig {
+  url: string;
+  realm: string;
+  clientId: string;
+  redirectUri: string;
+}
+
+export class KeycloakService {
+  private config: KeycloakConfig;
+  private static instance: KeycloakService;
+
+  private constructor(config: KeycloakConfig) {
+    this.config = config;
+  }
+
+  static getInstance(config?: KeycloakConfig): KeycloakService {
+    if (!KeycloakService.instance && config) {
+      KeycloakService.instance = new KeycloakService(config);
+    }
+    return KeycloakService.instance;
+  }
+
+  async login(): Promise<KeycloakTokens | null> {
+    const discovery = await this.getDiscoveryDocument();
+    const authRequest = new AuthSession.AuthRequest({
+      clientId: this.config.clientId,
+      redirectUri: this.config.redirectUri,
+      usePKCE: true,
+      codeChallengeMethod: AuthSession.CodeChallengeMethod.S256,
+      scopes: ["openid", "profile", "email", "offline_access"],
+    });
+    const result = await authRequest.promptAsync(discovery, {
+      showInRecents: true,
+    });
+
+    console.log("Auth result:", JSON.stringify(result));
+    if (result.type === "success") {
+      const code = result.params.code;
+      const error = result.params.error;
+
+      if (error) {
+        console.error("❌ Authentication error:", error);
+        return null;
+      }
+
+      if (code) {
+        const tokens = await this.exchangeCodeForTokens(
+          code,
+          this.config.redirectUri,
+          authRequest.codeVerifier!,
+        );
+        return tokens;
+      }
+    } else {
+      console.log("❌ Authentication failed or cancelled");
+      console.log("📄 Result type:", result.type);
+    }
+
+    return null;
+  }
+
+  private async getDiscoveryDocument() {
+    const discoveryUrl = `${this.config.url}/realms/${this.config.realm}/.well-known/openid-configuration`;
+    const discovery = (
+      await axios.get<{
+        authorization_endpoint: string;
+        token_endpoint: string;
+        revocation_endpoint: string;
+        end_session_endpoint: string;
+      }>(discoveryUrl)
+    ).data;
+
+    return {
+      authorizationEndpoint: discovery.authorization_endpoint,
+      tokenEndpoint: discovery.token_endpoint,
+      revocationEndpoint: discovery.revocation_endpoint,
+      endSessionEndpoint: discovery.end_session_endpoint,
+    };
+  }
+
+  private async exchangeCodeForTokens(
+    code: string,
+    redirectUri: string,
+    codeVerifier: string,
+  ): Promise<KeycloakTokens | null> {
+    const discovery = await this.getDiscoveryDocument();
+    const formData = new URLSearchParams({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectUri,
+      client_id: this.config.clientId,
+      code_verifier: codeVerifier,
+    });
+    const response = await axios.post(
+      discovery.tokenEndpoint,
+      formData.toString(),
+      { headers: { "Content-Type": "application/x-www-form-urlencoded" } },
+    );
+    const data = await response.data;
+    let userInfo = JWTUtils.extractUserInfo(data.access_token);
+
+    const tokens: KeycloakTokens = {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token || null,
+      idToken: data.id_token || null,
+      tokenType: data.token_type,
+      expiresIn: data.expires_in,
+      userInfo: userInfo,
+    };
+    await AuthStorage.storeTokens(tokens);
+    return tokens;
+  }
+
+  async refreshAccessToken(): Promise<KeycloakTokens | null> {
+    const refreshToken = AuthStorage.getRefreshToken();
+    if (!refreshToken) {
+      return null;
+    }
+
+    try {
+      const discovery = await this.getDiscoveryDocument();
+      const formData = new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: this.config.clientId,
+      });
+
+      const response = await axios.post(
+        discovery.tokenEndpoint,
+        formData.toString(),
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } },
+      );
+
+      const data = response.data;
+      const userInfo = JWTUtils.extractUserInfo(data.access_token);
+
+      const tokens: KeycloakTokens = {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token || refreshToken,
+        idToken: data.id_token || null,
+        tokenType: data.token_type,
+        expiresIn: data.expires_in,
+        userInfo: userInfo,
+      };
+
+      await AuthStorage.storeTokens(tokens);
+      return tokens;
+    } catch (error) {
+      await AuthStorage.clearTokens();
+      return null;
+    }
+  }
+
+  async logout(): Promise<void> {
+    const discovery = await this.getDiscoveryDocument();
+    const refreshToken = AuthStorage.getRefreshToken();
+    await this.revokeToken(refreshToken!, discovery.revocationEndpoint);
+    await AuthStorage.clearTokens();
+  }
+
+  isAuthenticated(): boolean {
+    return AuthStorage.isAuthenticated();
+  }
+
+  getStoredTokens(): KeycloakTokens | null {
+    const accessToken = AuthStorage.getAccessToken();
+    const refreshToken = AuthStorage.getRefreshToken();
+    const idToken = AuthStorage.getIdToken();
+
+    if (accessToken) {
+      let userInfo = null;
+      if (idToken) {
+        userInfo = JWTUtils.extractUserInfo(idToken);
+      }
+      const tokens: KeycloakTokens = {
+        accessToken,
+        refreshToken,
+        idToken,
+        tokenType: "Bearer",
+        expiresIn: 3600,
+        userInfo,
+      };
+      return tokens;
+    }
+
+    return null;
+  }
+
+  getCurrentUserName(): string {
+    const tokens = this.getStoredTokens();
+
+    if (tokens?.userInfo?.name) {
+      return tokens.userInfo.name;
+    }
+    if (tokens?.idToken) {
+      const userName = JWTUtils.extractUserName(tokens.idToken);
+      return userName;
+    }
+    return "User";
+  }
+
+  getCurrentUserId(): string | undefined {
+    const tokens = this.getStoredTokens();
+
+    if (tokens?.userInfo?.sub) {
+      return tokens.userInfo.sub;
+    }
+    if (tokens?.idToken) {
+      return JWTUtils.extractUserId(tokens.idToken);
+    }
+    return undefined;
+  }
+
+  getCurrentUserEmail(): string {
+    const tokens = this.getStoredTokens();
+    if (tokens?.userInfo?.email) {
+      return tokens.userInfo.email;
+    }
+    if (tokens?.idToken) {
+      const userInfo = JWTUtils.extractUserInfo(tokens.idToken);
+      const email = userInfo?.email || "";
+      return email;
+    }
+    return "";
+  }
+
+  private async revokeToken(
+    token: string,
+    revocationEndpoint: string,
+  ): Promise<boolean> {
+    const formData = new URLSearchParams({
+      token: token,
+      client_id: this.config.clientId,
+      token_type_hint: "refresh_token",
+    });
+
+    const response = await axios.post(revocationEndpoint, formData.toString(), {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    return response.data;
+  }
+}
+
+export const keycloakConfig: KeycloakConfig = {
+  url: "http://10.0.2.2:8080",
+  realm: "ReservationApp",
+  clientId: "reservationapp-mobile",
+  redirectUri: "com.firat35.client://redirect",
+};
+
+export const keycloakService = KeycloakService.getInstance(keycloakConfig);

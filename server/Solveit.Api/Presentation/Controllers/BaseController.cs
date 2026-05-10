@@ -1,0 +1,26 @@
+﻿using Solveit.Api.Core.Domain.Models;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Solveit.Api.Presentation.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class BaseController : ControllerBase
+    {
+        private IMediator _mediator;
+        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
+        protected IActionResult HandleResponse<T>(ResponseModel<T> response)
+        {
+            if (response.IsError)
+            {
+                return StatusCode(response.StatusCode, new
+                {
+                    Errors = response.ErrorMessages
+                });
+            }
+            return StatusCode(response.StatusCode, response.Data);
+        }
+    }
+}

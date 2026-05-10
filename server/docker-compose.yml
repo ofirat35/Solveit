@@ -1,0 +1,14 @@
+services:
+  reservationapp.api:
+    image: ${DOCKER_REGISTRY-}reservationappapi
+    build:
+      context: .
+      dockerfile: ReservationApp.Api/Dockerfile
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.2
+
+volumes:
+  keycloak_data:
+    external: true
