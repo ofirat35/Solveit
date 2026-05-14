@@ -11,7 +11,7 @@ using Solveit.Api.Infrastructure.Context;
 
 namespace Solveit.Api.Migrations
 {
-    [DbContext(typeof(ReservationAppContext))]
+    [DbContext(typeof(SolveitAppContext))]
     [Migration("20260508095406_init22")]
     partial class init22
     {

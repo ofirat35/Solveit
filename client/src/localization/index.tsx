@@ -5,26 +5,29 @@ import { initReactI18next } from "react-i18next";
 import en from "./en/common.json";
 import tr from "./tr/common.json";
 
+const deviceLanguage = getLocales()[0]?.languageCode || "en";
+
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     tr: { translation: tr },
   },
-  saveMissing: true,
-  lng: getLocales()[0].languageCode || "en",
+  lng: deviceLanguage,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
   react: { useSuspense: false },
 });
 
-AsyncStorage.getItem("@language").then((stored) => {
-  const lang = stored || getLocales()[0].languageCode || "en";
-  if (!stored) {
-    AsyncStorage.setItem("@language", lang);
+const loadStoredLanguage = async () => {
+  try {
+    const stored = await AsyncStorage.getItem("@language");
+    if (stored) i18n.changeLanguage(stored);
+    else await AsyncStorage.setItem("@language", deviceLanguage);
+  } catch (error) {
+    console.error("Error loading language from storage", error);
   }
-  if (lang !== i18n.language) {
-    i18n.changeLanguage(lang);
-  }
-});
+};
+
+loadStoredLanguage();
 
 export default i18n;

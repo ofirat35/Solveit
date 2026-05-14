@@ -5,9 +5,7 @@ export type AppUserUpdateModel = {
   firstName: string;
   lastName: string;
   gender: GenderEnum;
-  bio: string;
-  country: string;
+  phone: string | null;
   email: string;
   birthday: string;
-  createdDate: string;
 };

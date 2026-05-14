@@ -1,9 +1,9 @@
 services:
-  reservationapp.api:
-    image: ${DOCKER_REGISTRY-}reservationappapi
+  solveitapp.api:
+    image: ${DOCKER_REGISTRY-}solveitappapi
     build:
       context: .
-      dockerfile: ReservationApp.Api/Dockerfile
+      dockerfile: Solveit.Api/Dockerfile
   sqlserverdb:
     image: mcr.microsoft.com/mssql/server
   keycloak:

@@ -10,8 +10,8 @@ using Solveit.Api.Infrastructure.Context;
 
 namespace Solveit.Api.Migrations
 {
-    [DbContext(typeof(ReservationAppContext))]
-    partial class ReservationAppContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SolveitAppContext))]
+    partial class SolveitAppContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

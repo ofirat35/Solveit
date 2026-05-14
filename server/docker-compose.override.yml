@@ -1,11 +1,11 @@
 services:
-  reservationapp.api:
+  solveitapp.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_HTTP_PORTS=5000
-      - "ConnectionStrings__SqlConnectionString=Server=sqlserverdb,1433;Database=ReservationAppDb;User Id=sa;Password=Firat3521;TrustServerCertificate=True"
+      - "ConnectionStrings__SqlConnectionString=Server=sqlserverdb,1433;Database=SolveitAppDb;User Id=sa;Password=Firat3521;TrustServerCertificate=True"
       - "KeycloakClientConfig__base_url=http://keycloak:8080" 
-      - "KeycloakClientConfig__openid_configuration_url=http://keycloak:8080/realms/ReservationApp/.well-known/openid-configuration" 
+      - "KeycloakClientConfig__openid_configuration_url=http://keycloak:8080/realms/SolveitApp/.well-known/openid-configuration" 
       - "Keycloak__auth-server-url=http://keycloak:8080"
     ports:
       - "5000:5000"

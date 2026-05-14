@@ -13,7 +13,7 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var db = scope.ServiceProvider.GetRequiredService<ReservationAppContext>();
+        var db = scope.ServiceProvider.GetRequiredService<SolveitAppContext>();
         await db.Database.MigrateAsync();
 
     }

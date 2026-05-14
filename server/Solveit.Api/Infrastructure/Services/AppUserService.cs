@@ -10,12 +10,12 @@ using AutoMapper;
 namespace Solveit.Api.Infrastructure.Services
 {
     public class AppUserService(
-        ReservationAppContext dbContext,
+        SolveitAppContext dbContext,
         IAppCacheService cacheService,
         IMapper mapper,
         IHttpContextAccessor httpContext,
         ILogger<AppUserService> logger)
-        : BaseService<ReservationAppContext, AppUser, string>(dbContext, logger, httpContext, EventIds.AppUserService),
+        : BaseService<SolveitAppContext, AppUser, string>(dbContext, logger, httpContext, EventIds.AppUserService),
             IAppUserService
     {
         private static string GetUserCacheKey(string id) => $"User:{id}";

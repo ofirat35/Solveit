@@ -1,28 +1,41 @@
-import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LanguageModal } from "../components/shared/LanguageModal";
 import { useAuth } from "../helpers/contexts/AuthContext";
 import { useAppNavigation } from "../hooks/useAppNavigation";
-
+import i18n from "../localization";
 export function LoginScreen() {
   const { t } = useTranslation();
   const { navigate } = useAppNavigation();
   const { login, isLoading } = useAuth();
+  const [selectedLang, setSelectedLang] = useState(i18n.language);
+  const [changeLanguageVisible, setChangeLanguageVisible] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          marginRight: 24,
+        }}
+      >
+        <TouchableOpacity onPress={() => setChangeLanguageVisible(true)}>
+          <FontAwesome name="language" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -123,6 +136,13 @@ export function LoginScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      <LanguageModal
+        visible={changeLanguageVisible}
+        onDismiss={() => setChangeLanguageVisible(false)}
+        onConfirm={() => setChangeLanguageVisible(false)}
+        selectedLang={selectedLang}
+        setSelectedLang={(lang) => setSelectedLang(lang)}
+      ></LanguageModal>
     </SafeAreaView>
   );
 }

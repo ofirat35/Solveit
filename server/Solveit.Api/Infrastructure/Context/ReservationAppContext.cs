@@ -3,7 +3,7 @@ using Solveit.Api.Core.Domain.Entities;
 
 namespace Solveit.Api.Infrastructure.Context
 {
-    public class ReservationAppContext(DbContextOptions<ReservationAppContext> options) : DbContext(options)
+    public class SolveitAppContext(DbContextOptions<SolveitAppContext> options) : DbContext(options)
     {
         public override int SaveChanges()
         {

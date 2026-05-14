@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Solveit.Api.Core.Application.Features.Commands.Auth;
+using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Entities;
@@ -12,7 +13,13 @@ namespace Solveit.Api.Core.Application.Mappings
         {
             CreateMap<RegisterUserRequestCommand, KeycloakUserCreateRequestDto>();
             CreateMap<RegisterUserRequestCommand, AppUserCreateDto>();
+
+            CreateMap<UserUpdateRequestCommand, KeyCloakUserUpdateDto>();
+            CreateMap<UserUpdateRequestCommand, AppUserUpdateDto>();
+
             CreateMap<AppUserCreateDto, AppUser>();
+            CreateMap<AppUserUpdateDto, AppUser>();
+            CreateMap<AppUser, AppUserListDto>();
 
 
         }

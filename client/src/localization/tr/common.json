@@ -1,3 +1,66 @@
 {
-  "HomeScreen": "HomeScreen"
+  "Already have an account?": "Zaten bir hesabınız var mı?",
+  "Birthday": "Doğum Günü",
+  "common": {
+    "cancel": "İptal",
+    "confirm": "Onayla"
+  },
+  "Confirm Password": "Parolayı yeniden girin",
+  "Create account": "Hesap Oluştur",
+  "DiscoveryTab": {
+    "TabNavTitle": "Keşfet"
+  },
+  "Don't have an account?": "Hesap yok mu?",
+  "Email": "Email",
+  "Failed to update profile": "Profil güncellenemedi.",
+  "First Name": "İsim",
+  "Forgot password?": "Şifremi unuttum?",
+  "Gender": "Cinsiyet",
+  "jobs": {
+    "myOrders": "Siparişlerim",
+    "myServices": "Hizmetlerim",
+    "title": "İşler"
+  },
+  "JobsTab": {
+    "TabNavTitle": "İşler"
+  },
+  "Last Name": "Soyisim",
+  "Loading": "Loading",
+  "Man": "Erkek",
+  "NotificationTab": {
+    "TabNavTitle": "Bildirimler"
+  },
+  "Password": "Şifre",
+  "Phone": "Telefon",
+  "Profile updated successfully!": "Profil başarıyla güncellendi!",
+  "Register": "Kayıt Ol",
+  "Reset": "Sıfırla",
+  "Reset Password": "Şifre Sıfırla",
+  "settings": {
+    "account": "Hesabım",
+    "changePassword": "Şifre Değiştir",
+    "confirmLogout": "Çıkış Onayı",
+    "confirmLogoutMessage": "Çıkış yapmak istediğinize emin misiniz?",
+    "editProfile": "Profil Düzenle",
+    "helpCenter": "Yardım Merkezi",
+    "language": "Dil",
+    "logout": "Çıkış",
+    "preferences": "Tercihler",
+    "selectLanguage": "Dil Seç",
+    "support": "Destek",
+    "termsPrivacy": "Şartlar ve Gizlilik",
+    "version": "Sürüm"
+  },
+  "SettingsTab": {
+    "TabNavTitle": "Ayarlar"
+  },
+  "Sign in": "Giriş Yap",
+  "Sign up to get started": "Başlamak için kayıt ol",
+  "Successfully registered!": "Başarıyla kayıt oldunuz!",
+  "Try 'House Cleaning'": "Try 'House Cleaning'",
+  "Update": "Güncelle",
+  "Update Profile": "Profili Güncelle",
+  "Welcome back": "Tekrar hoş geldiniz",
+  "What do you need help with?": "Ne konuda yardım istiyorsunuz?",
+  "Woman": "Kadın"
 }

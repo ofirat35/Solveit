@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { AuthStorage } from "../Auth/auth-storage";
 import { keycloakService, KeycloakTokens } from "../Auth/keycloak";
 // import { authEvents } from "../events/authEvents";
 
@@ -31,7 +32,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const refreshed = await keycloakService.refreshAccessToken();
 
         if (!refreshed) {
-          await keycloakService.logout();
+          const stored = keycloakService.getStoredTokens();
+          if (stored?.idToken) {
+            await keycloakService.logout();
+          }
+          await AuthStorage.clearTokens();
           setTokens(null);
           return;
         }
@@ -39,6 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setTokens(refreshed);
       } catch (e) {
         await keycloakService.logout();
+        await AuthStorage.clearTokens();
         setTokens(null);
       } finally {
         setIsLoading(false);
@@ -47,6 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleUnauthorized = async () => {
       await keycloakService.logout();
+      await AuthStorage.clearTokens();
       setTokens(null);
     };
     // authEvents.on("unauthorized", handleUnauthorized);
@@ -71,7 +78,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logout = async () => {
-    await keycloakService.logout();
+    const stored = keycloakService.getStoredTokens();
+    if (stored?.idToken) {
+      await keycloakService.logout();
+    }
+    await AuthStorage.clearTokens();
     setTokens(null);
   };
 

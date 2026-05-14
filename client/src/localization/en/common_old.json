@@ -1,0 +1,12 @@
+{
+  "HomeScreen": "HomeScreen",
+  "Loading": {
+    "": "Loading..."
+  },
+  "settings": {
+    "apply": "settings.apply"
+  },
+  "Try 'House Cleaning'": {
+    "": "Try 'House Cleaning'..."
+  }
+}

@@ -21,7 +21,7 @@ export interface KeycloakConfig {
   redirectUri: string;
 }
 
-export class KeycloakService {
+class KeycloakService {
   private config: KeycloakConfig;
   private static instance: KeycloakService;
 
@@ -166,12 +166,44 @@ export class KeycloakService {
       return null;
     }
   }
+  async openChangePassword(): Promise<void> {
+    const discovery = await this.getDiscoveryDocument();
+
+    const authRequest = new AuthSession.AuthRequest({
+      clientId: this.config.clientId,
+      redirectUri: this.config.redirectUri,
+      scopes: ["openid"],
+      extraParams: {
+        kc_action: "UPDATE_PASSWORD",
+      },
+    });
+
+    await authRequest.promptAsync(discovery);
+  }
 
   async logout(): Promise<void> {
-    const discovery = await this.getDiscoveryDocument();
-    const refreshToken = AuthStorage.getRefreshToken();
-    await this.revokeToken(refreshToken!, discovery.revocationEndpoint);
-    await AuthStorage.clearTokens();
+    try {
+      const discovery = await this.getDiscoveryDocument();
+      const tokens = this.getStoredTokens();
+      const refreshToken = AuthStorage.getRefreshToken();
+
+      if (refreshToken) {
+        await this.revokeToken(refreshToken, discovery.revocationEndpoint);
+      }
+
+      const logoutUrl =
+        `${discovery.endSessionEndpoint}?` +
+        `post_logout_redirect_uri=${encodeURIComponent(this.config.redirectUri)}` +
+        `&id_token_hint=${tokens?.idToken}` +
+        `&client_id=${this.config.clientId}`;
+
+      await AuthStorage.clearTokens();
+
+      await WebBrowser.openAuthSessionAsync(logoutUrl, this.config.redirectUri);
+    } catch (error) {
+      console.error("Logout failed", error);
+      await AuthStorage.clearTokens();
+    }
   }
 
   isAuthenticated(): boolean {
@@ -260,8 +292,8 @@ export class KeycloakService {
 
 export const keycloakConfig: KeycloakConfig = {
   url: "http://10.0.2.2:8080",
-  realm: "ReservationApp",
-  clientId: "reservationapp-mobile",
+  realm: "SolveitApp",
+  clientId: "solveitapp-mobile",
   redirectUri: "com.firat35.client://redirect",
 };
 

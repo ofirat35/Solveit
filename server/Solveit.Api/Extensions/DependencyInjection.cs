@@ -42,7 +42,7 @@ namespace Solveit.Api.Extensions
             }
             services.AddScoped<IAppCacheService, InMemoryCacheService>();
             services.AddControllers();
-            services.AddDbContext<ReservationAppContext>(o =>
+            services.AddDbContext<SolveitAppContext>(o =>
             {
                 o.UseSqlServer(configuration.GetConnectionString("SqlConnectionString"));
             });
@@ -60,8 +60,8 @@ namespace Solveit.Api.Extensions
             {
                 opt.RequireHttpsMetadata = false;
                 opt.TokenValidationParameters.ValidIssuers = [
-                        "http://localhost:8080/realms/ReservationApp",
-                        "http://10.0.2.2:8080/realms/ReservationApp"
+                        "http://localhost:8080/realms/SolveitApp",
+                        "http://10.0.2.2:8080/realms/SolveitApp"
                     ];
                 opt.TokenValidationParameters.ValidateIssuer = true;
 

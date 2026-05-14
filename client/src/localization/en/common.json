@@ -1,3 +1,66 @@
 {
-  "HomeScreen": "HomeScreen"
+  "Already have an account?": "Already have an account?",
+  "Birthday": "Birthday",
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "Confirm Password": "Confirm Password",
+  "Create account": "Create account",
+  "DiscoveryTab": {
+    "TabNavTitle": "Discovery"
+  },
+  "Don't have an account?": "Don't have an account?",
+  "Email": "Email",
+  "Failed to update profile": "Failed to update profile.",
+  "First Name": "First Name",
+  "Forgot password?": "Forgot password?",
+  "Gender": "Gender",
+  "jobs": {
+    "myOrders": "My Orders",
+    "myServices": "My Services",
+    "title": "Jobs"
+  },
+  "JobsTab": {
+    "TabNavTitle": "Jobs"
+  },
+  "Last Name": "Last Name",
+  "Loading": "Loading",
+  "Man": "Man",
+  "NotificationTab": {
+    "TabNavTitle": "Notifications"
+  },
+  "Password": "Password",
+  "Phone": "Phone",
+  "Profile updated successfully!": "Profile updated successfully!",
+  "Register": "Register",
+  "Reset": "Reset",
+  "Reset Password": "Reset Password",
+  "settings": {
+    "account": "Account",
+    "changePassword": "Change Password",
+    "confirmLogout": "Confirm Logout",
+    "confirmLogoutMessage": "Are you sure you want to sign out?",
+    "editProfile": "Edit Profile",
+    "helpCenter": "Help Center",
+    "language": "Language",
+    "logout": "Logout",
+    "preferences": "Preferences",
+    "selectLanguage": "Select Language",
+    "support": "Support",
+    "termsPrivacy": "Terms & Privacy",
+    "version": "Version"
+  },
+  "SettingsTab": {
+    "TabNavTitle": "Settings"
+  },
+  "Sign in": "Sign in",
+  "Sign up to get started": "Sign up to get started",
+  "Successfully registered!": "Successfully registered!",
+  "Try 'House Cleaning'": "Try 'House Cleaning'",
+  "Update": "Update",
+  "Update Profile": "Update Profile",
+  "Welcome back": "Welcome back",
+  "What do you need help with?": "What do you need help with?",
+  "Woman": "Woman"
 }

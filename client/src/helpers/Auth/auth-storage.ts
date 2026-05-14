@@ -1,9 +1,9 @@
 import * as SecureStore from "expo-secure-store";
 import { KeycloakTokens } from "./keycloak";
 
-const ACCESS_TOKEN_KEY = "reservationapp_access_token";
-const REFRESH_TOKEN_KEY = "reservationapp_refresh_token";
-const ID_TOKEN_KEY = "reservationapp_id_token";
+const ACCESS_TOKEN_KEY = "solveitapp_access_token";
+const REFRESH_TOKEN_KEY = "solveitapp_refresh_token";
+const ID_TOKEN_KEY = "solveitapp_id_token";
 
 export class AuthStorage {
   private static async storeItem(key: string, value: string): Promise<void> {
