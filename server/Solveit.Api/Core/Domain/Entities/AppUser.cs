@@ -11,6 +11,8 @@ namespace Solveit.Api.Core.Domain.Entities
         public string Email { get; set; }
         public string? Phone { get; set; }
         public DateOnly? Birthday { get; set; }
+        public bool IsServiceProvider { get; set; }
+        public AppUserStatus Status { get; set; }
         public bool IsValid { get; set; }
     }
 }

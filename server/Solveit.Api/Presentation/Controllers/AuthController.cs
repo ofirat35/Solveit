@@ -1,6 +1,6 @@
-﻿using Solveit.Api.Core.Application.Features.Commands.Auth;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Solveit.Api.Core.Application.Features.Commands.Auth;
 
 namespace Solveit.Api.Presentation.Controllers
 {

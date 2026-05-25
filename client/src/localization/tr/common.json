@@ -1,41 +1,118 @@
 {
   "Already have an account?": "Zaten bir hesabınız var mı?",
-  "Birthday": "Doğum Günü",
   "common": {
     "cancel": "İptal",
-    "confirm": "Onayla"
+    "confirm": "Onayla",
+    "notNow": "common.notNow",
+    "search": "Ara..."
   },
-  "Confirm Password": "Parolayı yeniden girin",
-  "Create account": "Hesap Oluştur",
+  "createService": {
+    "active": "Aktif",
+    "activeDescription": "Diğer kullanıcılara görünür ve başvuru kabul ediyor",
+    "availability": "UYGUNLUK",
+    "cancel": "İptal",
+    "category": "KATEGORİ",
+    "categoryLabel": "Kategori",
+    "categoryPlaceholder": "Kategori seçin",
+    "createService": "Hizmet Oluştur",
+    "createSuccess": "Hizmet başarıyla oluşturuldu!",
+    "descriptionLabel": "Açıklama",
+    "descriptionPlaceholder": "Bu hizmet neleri kapsıyor?",
+    "fixed": "sabit",
+    "maxPrice": "Maksimum Fiyat",
+    "minPrice": "Minimum Fiyat",
+    "paused": "Durduruldu",
+    "pausedDescription": "Listelerden gizli, yeni başvuru alınmıyor",
+    "perDay": "/ gün",
+    "perHour": "/ saat",
+    "perSession": "/ seans",
+    "price": "Fiyat",
+    "priceRange": "Fiyat Aralığı",
+    "pricing": "FİYATLANDIRMA",
+    "serviceDetails": "HİZMET DETAYLARI",
+    "setMaxPrice": "Maksimum fiyat belirle",
+    "subcategoryLabel": "Alt Kategori",
+    "subcategoryPlaceholder": "Alt kategori seçin",
+    "subcategoryPlaceholderFirst": "Önce kategori seçin",
+    "title": "Yeni Hizmet",
+    "titleLabel": "Başlık",
+    "titlePlaceholder": "örn. Matematik Dersi, Köpek Gezisi, vb."
+  },
   "DiscoveryTab": {
     "TabNavTitle": "Keşfet"
   },
-  "Don't have an account?": "Hesap yok mu?",
+  "editProfile": {
+    "birthday": "Doğum Tarihi",
+    "email": "E-posta",
+    "firstName": "Ad",
+    "gender": "Cinsiyet",
+    "lastName": "Soyad",
+    "man": "Erkek",
+    "phone": "Telefon",
+    "title": "Profili Güncelle",
+    "update": "Güncelle",
+    "updateFailed": "Profil güncellenemedi.",
+    "updateSuccess": "Profil başarıyla güncellendi!",
+    "woman": "Kadın"
+  },
   "Email": "Email",
-  "Failed to update profile": "Profil güncellenemedi.",
-  "First Name": "İsim",
-  "Forgot password?": "Şifremi unuttum?",
-  "Gender": "Cinsiyet",
-  "jobs": {
-    "myOrders": "Siparişlerim",
-    "myServices": "Hizmetlerim",
-    "title": "İşler"
+  "home": {
+    "greeting": "Ne konuda yardıma ihtiyacınız var?",
+    "searchPlaceholder": "'Ev Temizliği' deneyin"
   },
-  "JobsTab": {
-    "TabNavTitle": "İşler"
-  },
-  "Last Name": "Soyisim",
   "Loading": "Loading",
-  "Man": "Erkek",
+  "login": {
+    "dontHaveAccount": "Hesabınız yok mu?",
+    "forgotPassword": "Şifremi unuttum?",
+    "register": "Kayıt ol",
+    "subtitle": "Tekrar hoş geldiniz",
+    "title": "Giriş yap"
+  },
   "NotificationTab": {
     "TabNavTitle": "Bildirimler"
   },
-  "Password": "Şifre",
-  "Phone": "Telefon",
-  "Profile updated successfully!": "Profil başarıyla güncellendi!",
-  "Register": "Kayıt Ol",
+  "register": {
+    "alreadyHaveAccount": "Zaten hesabınız var mı?",
+    "birthday": "Doğum Tarihi",
+    "confirmPassword": "Şifreyi Onayla",
+    "createAccount": "Hesap oluştur",
+    "email": "E-posta",
+    "firstName": "Ad",
+    "gender": "Cinsiyet",
+    "hide": "Gizle",
+    "lastName": "Soyad",
+    "man": "Erkek",
+    "password": "Şifre",
+    "phone": "Telefon",
+    "registerSuccess": "Kayıt başarıyla tamamlandı!",
+    "show": "Göster",
+    "signIn": "Giriş yap",
+    "subtitle": "Başlamak için kayıt olun",
+    "title": "Hesap oluştur",
+    "woman": "Kadın"
+  },
   "Reset": "Sıfırla",
   "Reset Password": "Şifre Sıfırla",
+  "services": {
+    "activate": "Etkinleştir",
+    "activateToOffer": "Kendi hizmetlerinizi sunmak için etkinleştirin",
+    "addService": "Hizmet Ekle",
+    "becomeProviderDescription": "Sağlayıcı modunu etkinleştirmek hizmetlerinizi müşterilere görünür kılar. İstediğiniz zaman kapatabilirsiniz.",
+    "becomeProviderTitle": "Sağlayıcı olmak ister misiniz?",
+    "defaultChanged": "Varsayılan {{tab}} olarak değiştirildi!",
+    "myOrders": "Siparişlerim",
+    "myServices": "Hizmetlerim",
+    "providerModeOff": "Sağlayıcı modu kapalı",
+    "providerModeOn": "Sağlayıcı modu açık",
+    "servicesVisible": "Hizmetleriniz müşterilere görünüyor",
+    "setAsDefault": "Varsayılan olarak ayarla",
+    "setAsDefaultDescription": "\"{{tab}}\" bu ekranda her seferinde varsayılan olarak açılacak.",
+    "setAsDefaultTitle": "Varsayılan sekme olarak ayarla?",
+    "title": "İşlerim"
+  },
+  "ServicesTab": {
+    "TabNavTitle": "ServicesTab.TabNavTitle"
+  },
   "settings": {
     "account": "Hesabım",
     "changePassword": "Şifre Değiştir",
@@ -54,13 +131,5 @@
   "SettingsTab": {
     "TabNavTitle": "Ayarlar"
   },
-  "Sign in": "Giriş Yap",
-  "Sign up to get started": "Başlamak için kayıt ol",
-  "Successfully registered!": "Başarıyla kayıt oldunuz!",
-  "Try 'House Cleaning'": "Try 'House Cleaning'",
-  "Update": "Güncelle",
-  "Update Profile": "Profili Güncelle",
-  "Welcome back": "Tekrar hoş geldiniz",
-  "What do you need help with?": "Ne konuda yardım istiyorsunuz?",
-  "Woman": "Kadın"
+  "Sign in": "Giriş Yap"
 }

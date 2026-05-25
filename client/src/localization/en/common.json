@@ -1,41 +1,118 @@
 {
   "Already have an account?": "Already have an account?",
-  "Birthday": "Birthday",
   "common": {
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "notNow": "common.notNow",
+    "search": "Search..."
   },
-  "Confirm Password": "Confirm Password",
-  "Create account": "Create account",
+  "createService": {
+    "active": "Active",
+    "activeDescription": "Visible to others and accepting applications",
+    "availability": "AVAILABILITY",
+    "cancel": "Cancel",
+    "category": "CATEGORY",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category",
+    "createService": "Create Service",
+    "createSuccess": "Service created successfully!",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What does this service include?",
+    "fixed": "fixed",
+    "maxPrice": "Maximum Price",
+    "minPrice": "Minimum Price",
+    "paused": "Paused",
+    "pausedDescription": "Hidden from listings, no new applications",
+    "perDay": "/ day",
+    "perHour": "/ hour",
+    "perSession": "/ session",
+    "price": "Price",
+    "priceRange": "Price Range",
+    "pricing": "PRICING",
+    "serviceDetails": "SERVICE DETAILS",
+    "setMaxPrice": "Set a maximum price",
+    "subcategoryLabel": "Subcategory",
+    "subcategoryPlaceholder": "Select a subcategory",
+    "subcategoryPlaceholderFirst": "Select a category first",
+    "title": "New Service",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Math Tutoring, Dog Walking, etc."
+  },
   "DiscoveryTab": {
     "TabNavTitle": "Discovery"
   },
-  "Don't have an account?": "Don't have an account?",
+  "editProfile": {
+    "birthday": "Birthday",
+    "email": "Email",
+    "firstName": "First Name",
+    "gender": "Gender",
+    "lastName": "Last Name",
+    "man": "Man",
+    "phone": "Phone",
+    "title": "Update Profile",
+    "update": "Update",
+    "updateFailed": "Failed to update profile.",
+    "updateSuccess": "Profile updated successfully!",
+    "woman": "Woman"
+  },
   "Email": "Email",
-  "Failed to update profile": "Failed to update profile.",
-  "First Name": "First Name",
-  "Forgot password?": "Forgot password?",
-  "Gender": "Gender",
-  "jobs": {
-    "myOrders": "My Orders",
-    "myServices": "My Services",
-    "title": "Jobs"
+  "home": {
+    "greeting": "What do you need help with?",
+    "searchPlaceholder": "Try 'House Cleaning'"
   },
-  "JobsTab": {
-    "TabNavTitle": "Jobs"
-  },
-  "Last Name": "Last Name",
   "Loading": "Loading",
-  "Man": "Man",
+  "login": {
+    "dontHaveAccount": "Don't have an account?",
+    "forgotPassword": "Forgot password?",
+    "register": "Register",
+    "subtitle": "Welcome back",
+    "title": "Sign in"
+  },
   "NotificationTab": {
     "TabNavTitle": "Notifications"
   },
-  "Password": "Password",
-  "Phone": "Phone",
-  "Profile updated successfully!": "Profile updated successfully!",
-  "Register": "Register",
+  "register": {
+    "alreadyHaveAccount": "Already have an account?",
+    "birthday": "Birthday",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create account",
+    "email": "Email",
+    "firstName": "First Name",
+    "gender": "Gender",
+    "hide": "Hide",
+    "lastName": "Last Name",
+    "man": "Man",
+    "password": "Password",
+    "phone": "Phone",
+    "registerSuccess": "Successfully registered!",
+    "show": "Show",
+    "signIn": "Sign in",
+    "subtitle": "Sign up to get started",
+    "title": "Create account",
+    "woman": "Woman"
+  },
   "Reset": "Reset",
   "Reset Password": "Reset Password",
+  "services": {
+    "activate": "Activate",
+    "activateToOffer": "Activate to offer your own services",
+    "addService": "Add Service",
+    "becomeProviderDescription": "Activating provider mode makes your services visible to customers. You can turn it off at any time.",
+    "becomeProviderTitle": "Become a provider?",
+    "defaultChanged": "Default changed to {{tab}}!",
+    "myOrders": "My orders",
+    "myServices": "My services",
+    "providerModeOff": "Provider mode off",
+    "providerModeOn": "Provider mode on",
+    "servicesVisible": "Your services are visible to customers",
+    "setAsDefault": "Set as default",
+    "setAsDefaultDescription": "\"{{tab}}\" will open by default every time you visit this screen.",
+    "setAsDefaultTitle": "Set as default tab?",
+    "title": "My Jobs"
+  },
+  "ServicesTab": {
+    "TabNavTitle": "ServicesTab.TabNavTitle"
+  },
   "settings": {
     "account": "Account",
     "changePassword": "Change Password",
@@ -54,13 +131,5 @@
   "SettingsTab": {
     "TabNavTitle": "Settings"
   },
-  "Sign in": "Sign in",
-  "Sign up to get started": "Sign up to get started",
-  "Successfully registered!": "Successfully registered!",
-  "Try 'House Cleaning'": "Try 'House Cleaning'",
-  "Update": "Update",
-  "Update Profile": "Update Profile",
-  "Welcome back": "Welcome back",
-  "What do you need help with?": "What do you need help with?",
-  "Woman": "Woman"
+  "Sign in": "Sign in"
 }

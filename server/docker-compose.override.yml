@@ -14,6 +14,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./Solveit.Api/Uploads:/app/Uploads 
     depends_on:
       - sqlserverdb
       
@@ -46,7 +47,7 @@ services:
     volumes:
       - keycloak_data:/opt/keycloak/data
  
-
-
-   
+volumes:
+  keycloak_data:
+  uploads_data:   
 

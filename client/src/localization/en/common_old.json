@@ -1,12 +1,54 @@
 {
+  "Birthday": "Birthday",
+  "Confirm Password": "Confirm Password",
+  "Create account": "Create account",
+  "Default tab changed!": "Default tab changed!",
+  "Description": "Description",
+  "Don't have an account?": "Don't have an account?",
+  "e": {
+    "g": {
+      " Math Tutoring, Dog Walking, etc": "e.g. Math Tutoring, Dog Walking, etc."
+    }
+  },
+  "Failed to update profile": "Failed to update profile.",
+  "First Name": "First Name",
+  "Forgot password?": "Forgot password?",
+  "Gender": "Gender",
   "HomeScreen": "HomeScreen",
+  "jobs": {
+    "myOrders": "My Orders",
+    "myServices": "My Services",
+    "title": "Jobs"
+  },
+  "JobsTab": {
+    "TabNavTitle": "Jobs"
+  },
+  "Last Name": "Last Name",
   "Loading": {
     "": "Loading..."
+  },
+  "login": {
+    "signIn": "Sign in"
+  },
+  "Man": "Man",
+  "Password": "Password",
+  "Phone": "Phone",
+  "Profile updated successfully!": "Profile updated successfully!",
+  "Register": "Register",
+  "services": {
+    "orders": "My orders",
+    "services": "My services"
   },
   "settings": {
     "apply": "settings.apply"
   },
-  "Try 'House Cleaning'": {
-    "": "Try 'House Cleaning'..."
-  }
+  "Sign up to get started": "Sign up to get started",
+  "Successfully registered!": "Successfully registered!",
+  "Title": "Title",
+  "Try 'House Cleaning'": "Try 'House Cleaning'",
+  "Update": "Update",
+  "Update Profile": "Update Profile",
+  "Welcome back": "Welcome back",
+  "What do you need help with?": "What do you need help with?",
+  "Woman": "Woman"
 }

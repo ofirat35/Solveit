@@ -1,12 +1,54 @@
 {
+  "Birthday": "Doğum Günü",
+  "Confirm Password": "Parolayı yeniden girin",
+  "Create account": "Hesap Oluştur",
+  "Default tab changed!": "Default tab changed!",
+  "Description": "Description",
+  "Don't have an account?": "Hesap yok mu?",
+  "e": {
+    "g": {
+      " Math Tutoring, Dog Walking, etc": "e.g. Math Tutoring, Dog Walking, etc."
+    }
+  },
+  "Failed to update profile": "Profil güncellenemedi.",
+  "First Name": "İsim",
+  "Forgot password?": "Şifremi unuttum?",
+  "Gender": "Cinsiyet",
   "HomeScreen": "HomeScreen",
+  "jobs": {
+    "myOrders": "Siparişlerim",
+    "myServices": "Hizmetlerim",
+    "title": "İşler"
+  },
+  "JobsTab": {
+    "TabNavTitle": "İşler"
+  },
+  "Last Name": "Soyisim",
   "Loading": {
     "": "Loading..."
+  },
+  "login": {
+    "signIn": "Giriş yap"
+  },
+  "Man": "Erkek",
+  "Password": "Şifre",
+  "Phone": "Telefon",
+  "Profile updated successfully!": "Profil başarıyla güncellendi!",
+  "Register": "Kayıt Ol",
+  "services": {
+    "orders": "Siparişlerim",
+    "services": "Hizmetlerim"
   },
   "settings": {
     "apply": "settings.apply"
   },
-  "Try 'House Cleaning'": {
-    "": "Try 'House Cleaning'..."
-  }
+  "Sign up to get started": "Başlamak için kayıt ol",
+  "Successfully registered!": "Başarıyla kayıt oldunuz!",
+  "Title": "Title",
+  "Try 'House Cleaning'": "Try 'House Cleaning'",
+  "Update": "Güncelle",
+  "Update Profile": "Profili Güncelle",
+  "Welcome back": "Tekrar hoş geldiniz",
+  "What do you need help with?": "Ne konuda yardım istiyorsunuz?",
+  "Woman": "Kadın"
 }

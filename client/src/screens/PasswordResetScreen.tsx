@@ -14,7 +14,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { PasswordResetFormData, passwordResetSchema } from "../helpers/schemas";
+import {
+  PasswordResetFormData,
+  passwordResetSchema,
+} from "../helpers/schemas/auth/passwordResetSchema";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 
 export function PasswordResetScreen() {

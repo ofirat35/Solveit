@@ -1,11 +1,10 @@
-﻿using Solveit.Api.Core.Application.Consts;
-using Solveit.Api.Core.Application.Enums;
+﻿using AutoMapper;
+using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Infrastructure.Context;
-using AutoMapper;
 
 namespace Solveit.Api.Infrastructure.Services
 {
@@ -90,6 +89,48 @@ namespace Solveit.Api.Infrastructure.Services
             return response
                 ? SuccessResult(true)
                 : FailResult<bool>(ExceptionMessages.DbOperationFailed, StatusCodes.Status500InternalServerError);
+        }
+
+        public async Task<Result<bool>> SetUserIsServiceProviderAsync(string userId, bool isServiceProvider)
+        {
+            await cacheService.RemoveAsync(GetUserCacheKey(userId));
+            var user = await GetByIdAsync(userId);
+            if (user is null)
+            {
+                LogEntityNotFound<AppUser>(userId);
+                return FailResult<bool>(ExceptionMessages.EntityNotFound, StatusCodes.Status404NotFound);
+            }
+
+            user.IsServiceProvider = isServiceProvider;
+            var response = await SaveChangesAsync(user, DbOperation.Update);
+
+            return response
+                ? SuccessResult(true)
+                : FailResult<bool>(ExceptionMessages.DbOperationFailed, StatusCodes.Status500InternalServerError);
+        }
+
+        public async Task<Result<bool>> CheckUserIsServiceProviderAsync(string userId)
+        {
+            var cacheKey = GetUserCacheKey(userId);
+            var cachedData = await cacheService.GetAsync<AppUserListDto>(cacheKey);
+
+            if (cachedData is null)
+            {
+                var user = await GetByIdAsync(userId);
+
+                if (user is null)
+                {
+                    LogEntityNotFound<AppUser>(userId);
+                    return FailResult<bool>(ExceptionMessages.EntityNotFound, StatusCodes.Status404NotFound);
+                }
+
+                cachedData = mapper.Map<AppUserListDto>(user);
+                await cacheService.SetAsync(cacheKey, cachedData, TimeSpan.FromMinutes(30));
+
+                return SuccessResult(user.IsServiceProvider);
+            }
+
+            return SuccessResult(cachedData.IsServiceProvider);
         }
     }
 }

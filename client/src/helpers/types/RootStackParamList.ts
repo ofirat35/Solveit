@@ -10,7 +10,7 @@ export type RootStackParamList = {
 
 export type RootTabParamList = {
   DiscoveryTab: NavigatorScreenParams<DiscoveryStackParamList>;
-  JobsTab: NavigatorScreenParams<JobsStackParamList>;
+  ServicesTab: NavigatorScreenParams<ServicesStackParamList>;
   NotificationTab: NavigatorScreenParams<NotificationStackParamList>;
   SettingsTab: NavigatorScreenParams<SettingsStackParamList>;
 };
@@ -19,8 +19,8 @@ export type DiscoveryStackParamList = {
   DiscoveryScreen: undefined;
 };
 
-export type JobsStackParamList = {
-  JobsScreen: undefined;
+export type ServicesStackParamList = {
+  ServicesScreen: undefined;
   CreateServiceScreen: undefined;
 };
 

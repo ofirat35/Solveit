@@ -5,15 +5,18 @@ import { JWTUtils } from "../helpers/Auth/jwt-utils";
 import { keycloakService } from "../helpers/Auth/keycloak";
 // import { authEvents } from "../helpers/events/authEvents";
 
+const getBaseUrl = () => {
+  if (__DEV__) {
+    return Platform.OS === "android"
+      ? process.env.EXPO_PUBLIC_API_BASE_URL
+      : "http://localhost:5000";
+  }
+  return process.env.EXPO_PUBLIC_API_BASE_URL;
+};
+
 const api = axios.create({
-  baseURL:
-    Platform.OS === "android"
-      ? "http://10.0.2.2:5000/api"
-      : "http://localhost:5000/api",
+  baseURL: `${getBaseUrl()}/api`,
   timeout: 20 * 1000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 let refreshPromise: Promise<string | null> | null = null;

@@ -1,10 +1,5 @@
-import {
-  GraduationCap,
-  Paintbrush,
-  Search,
-  Truck,
-  Zap,
-} from "lucide-react-native";
+import { useQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react-native";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,134 +10,25 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { CategoryCard } from "../../components/Home/CategoryCard";
-
-const CATEGORIES = [
-  {
-    id: "1",
-    name: "Cleaning",
-    icon: <Paintbrush color="#ff6b6b" />,
-    subcategories: [
-      {
-        id: "1",
-        name: "House Cleaning",
-        icon: <Paintbrush color="#ff6b6b" />,
-        color: "#fff5f5",
-      },
-      {
-        id: "2",
-        name: "Regular",
-        icon: <Paintbrush color="#ff6b6b" />,
-        color: "#fff5f5",
-      },
-      {
-        id: "3",
-        name: "Windows",
-        icon: <Paintbrush color="#ff6b6b" />,
-        color: "#fff5f5",
-      },
-      {
-        id: "4",
-        name: "Regular",
-        icon: <Paintbrush color="#ff6b6b" />,
-        color: "#fff5f5",
-      },
-      {
-        id: "5",
-        name: "Windows",
-        icon: <Paintbrush color="#ff6b6b" />,
-        color: "#fff5f5",
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Moving",
-    icon: <Truck color="#4dadf7" />,
-    subcategories: [
-      {
-        id: "6",
-        name: "Local",
-        icon: <Truck color="#4dadf7" />,
-        color: "#e7f5ff",
-      },
-      {
-        id: "7",
-        name: "Long Distance",
-        icon: <Truck color="#4dadf7" />,
-        color: "#e7f5ff",
-      },
-      {
-        id: "8",
-        name: "Packing",
-        icon: <Truck color="#4dadf7" />,
-        color: "#e7f5ff",
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "Electrician",
-    icon: <Zap color="#fcc419" />,
-    subcategories: [
-      {
-        id: "9",
-        name: "Installation",
-        icon: <Zap color="#fcc419" />,
-        color: "#fff9db",
-      },
-      {
-        id: "10",
-        name: "Repair",
-        icon: <Zap color="#fcc419" />,
-        color: "#fff9db",
-      },
-      {
-        id: "11",
-        name: "Inspection",
-        icon: <Zap color="#fcc419" />,
-        color: "#fff9db",
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Tutoring",
-    icon: <GraduationCap color="#51cf66" />,
-    subcategories: [
-      {
-        id: "12",
-        name: "Math",
-        icon: <GraduationCap color="#51cf66" />,
-        color: "#ebfbee",
-      },
-      {
-        id: "13",
-        name: "Science",
-        icon: <GraduationCap color="#51cf66" />,
-        color: "#ebfbee",
-      },
-      {
-        id: "14",
-        name: "Languages",
-        icon: <GraduationCap color="#51cf66" />,
-        color: "#ebfbee",
-      },
-    ],
-  },
-];
+import { SubcategoryCard } from "../../components/Home/SubcategoryCard";
+import { CategoryService } from "../../services/CategoryService";
 
 export function HomeScreen() {
   const { t } = useTranslation();
+  const { data: categories } = useQuery({
+    queryKey: ["categoriesWithSubcategories"],
+    queryFn: () => CategoryService.getCategoriesWithSubcategories(),
+  });
 
+  console.log(categories);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.greeting}> {t("What do you need help with?")}</Text>
+        <Text style={styles.greeting}> {t("home.greeting")}</Text>
         <View style={styles.searchBar}>
           <Search size={20} color="#888" />
           <TextInput
-            placeholder={`${t("Try 'House Cleaning'")}...`}
+            placeholder={`${t("home.searchPlaceholder")}...`}
             style={styles.searchInput}
           />
         </View>
@@ -153,22 +39,24 @@ export function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 20 }}
         style={styles.body}
       >
-        {CATEGORIES.map((cat) => (
-          <View key={cat.id}>
-            <Text style={styles.sectionTitle}>{cat.name}</Text>
-            <FlatList
-              data={cat.subcategories}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => <CategoryCard item={item} />}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={{
-                paddingHorizontal: 20,
-              }}
-            />
-          </View>
-        ))}
+        {categories &&
+          categories.map((cat) => (
+            <View key={cat.id}>
+              <Text style={styles.sectionTitle}>{cat.name}</Text>
+              <FlatList
+                data={cat.subcategories}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => <SubcategoryCard item={item} />}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={{
+                  paddingHorizontal: 20,
+                  paddingBottom: 20,
+                }}
+              />
+            </View>
+          ))}
       </ScrollView>
     </View>
   );

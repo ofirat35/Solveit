@@ -20,7 +20,10 @@ import { RadioButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomTextInput } from "../components/shared/Forms/CustomTextInput";
 import { GenderEnum } from "../helpers/enums/GenderEnum";
-import { RegisterFormData, registerSchema } from "../helpers/schemas";
+import {
+  RegisterFormData,
+  registerSchema,
+} from "../helpers/schemas/auth/registerSchema";
 import { showToast } from "../helpers/Toasts/DefaultToasts";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import { RegisterModel } from "../models/Auths/RegisterModel";
@@ -33,8 +36,10 @@ export function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { t } = useTranslation();
+
   const defaultBirthday = new Date();
   defaultBirthday.setFullYear(defaultBirthday.getFullYear() - 18);
+
   const {
     control,
     handleSubmit,
@@ -45,6 +50,7 @@ export function RegisterScreen() {
       birthday: defaultBirthday,
     },
   });
+
   const handleRegister = async (data: RegisterFormData) => {
     setLoading(true);
     const { confirmPassword, ...rest } = data;
@@ -55,7 +61,7 @@ export function RegisterScreen() {
     AuthService.register({ ...payload }).then((isSuccess) => {
       setLoading(false);
       if (isSuccess) {
-        showToast(t("Successfully registered!"));
+        showToast(t("register.registerSuccess"));
         navigate("LoginScreen");
       }
     });
@@ -77,13 +83,9 @@ export function RegisterScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View
-            style={{
-              marginBottom: 36,
-            }}
-          >
-            <Text style={styles.title}>{t("Create account")}</Text>
-            <Text style={styles.subtitle}>{t("Sign up to get started")}</Text>
+          <View style={{ marginBottom: 36 }}>
+            <Text style={styles.title}>{t("register.title")}</Text>
+            <Text style={styles.subtitle}>{t("register.subtitle")}</Text>
           </View>
 
           <View style={styles.form}>
@@ -94,15 +96,15 @@ export function RegisterScreen() {
                   name="firstName"
                   render={({ field: { onChange, value } }) => (
                     <CustomTextInput
-                      labelText={`${t("First Name")} *`}
+                      labelText={`${t("register.firstName")} *`}
                       value={value}
                       onChangeText={onChange}
-                      isError={errors.firstName ? true : false}
-                    ></CustomTextInput>
+                      isError={!!errors.firstName}
+                    />
                   )}
                 />
                 {errors.firstName && (
-                  <Text style={{ color: "red" }}>
+                  <Text style={styles.errorText}>
                     {errors.firstName.message}
                   </Text>
                 )}
@@ -114,15 +116,15 @@ export function RegisterScreen() {
                   name="lastName"
                   render={({ field: { onChange, value } }) => (
                     <CustomTextInput
-                      labelText={`${t("Last Name")} *`}
+                      labelText={`${t("register.lastName")} *`}
                       value={value}
                       onChangeText={onChange}
-                      isError={errors.lastName ? true : false}
-                    ></CustomTextInput>
+                      isError={!!errors.lastName}
+                    />
                   )}
                 />
                 {errors.lastName && (
-                  <Text style={{ color: "red" }}>
+                  <Text style={styles.errorText}>
                     {errors.lastName.message}
                   </Text>
                 )}
@@ -132,13 +134,14 @@ export function RegisterScreen() {
             <View style={styles.form}>
               <View style={styles.row}>
                 <View style={[styles.field, styles.rowField]}>
-                  <Text style={styles.label}>{`${t("Birthday")} *`}</Text>
+                  <Text
+                    style={styles.label}
+                  >{`${t("register.birthday")} *`}</Text>
                   <Controller
                     control={control}
                     name="birthday"
                     render={({ field: { onChange, value } }) => {
                       const dateValue = value ? new Date(value) : new Date();
-
                       return (
                         <>
                           <TouchableOpacity
@@ -192,13 +195,16 @@ export function RegisterScreen() {
                     }}
                   />
                   {errors.birthday && (
-                    <Text style={{ color: "red" }}>
+                    <Text style={styles.errorText}>
                       {errors.birthday.message}
                     </Text>
                   )}
                 </View>
+
                 <View style={[styles.field, styles.rowField]}>
-                  <Text style={styles.label}>{`${t("Gender")} *`}</Text>
+                  <Text
+                    style={styles.label}
+                  >{`${t("register.gender")} *`}</Text>
                   <Controller
                     control={control}
                     name="gender"
@@ -213,7 +219,7 @@ export function RegisterScreen() {
                           }
                           onPress={() => onChange(GenderEnum.Woman)}
                         />
-                        <Text>{t("Woman")}</Text>
+                        <Text>{t("register.woman")}</Text>
 
                         <RadioButton
                           value={GenderEnum.Man.toString()}
@@ -222,64 +228,65 @@ export function RegisterScreen() {
                           }
                           onPress={() => onChange(GenderEnum.Man)}
                         />
-                        <Text>{t("Man")}</Text>
+                        <Text>{t("register.man")}</Text>
                       </View>
                     )}
                   />
                   {errors.gender && (
-                    <Text style={{ color: "red" }}>
+                    <Text style={styles.errorText}>
                       {errors.gender.message}
                     </Text>
                   )}
                 </View>
               </View>
             </View>
+
             <View style={[styles.field, styles.rowField]}>
               <Controller
                 control={control}
                 name="email"
                 render={({ field: { onChange, value } }) => (
                   <CustomTextInput
-                    labelText={`${t("Email")} *`}
+                    labelText={`${t("register.email")} *`}
                     value={value}
                     onChangeText={onChange}
                     placeholder="you@example.com"
-                    secureTextEntry={true}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    isError={errors.email ? true : false}
-                  ></CustomTextInput>
+                    isError={!!errors.email}
+                  />
                 )}
               />
               {errors.email && (
-                <Text style={{ color: "red" }}>{errors.email.message}</Text>
+                <Text style={styles.errorText}>{errors.email.message}</Text>
               )}
             </View>
+
             <View style={[styles.field, styles.rowField]}>
               <Controller
                 control={control}
                 name="phone"
                 render={({ field: { onChange, value } }) => (
                   <CustomTextInput
-                    labelText={t("Phone")}
+                    labelText={t("register.phone")}
                     value={value ?? ""}
                     onChangeText={onChange}
                     placeholder="(123) 456-7890"
-                    secureTextEntry={true}
                     keyboardType="phone-pad"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    isError={errors.phone ? true : false}
-                  ></CustomTextInput>
+                    isError={!!errors.phone}
+                  />
                 )}
               />
               {errors.phone && (
-                <Text style={{ color: "red" }}>{errors.phone.message}</Text>
+                <Text style={styles.errorText}>{errors.phone.message}</Text>
               )}
             </View>
+
             <View style={[styles.field, styles.rowField]}>
-              <Text style={styles.label}>{`${t("Password")} *`}</Text>
+              <Text style={styles.label}>{`${t("register.password")} *`}</Text>
               <Controller
                 control={control}
                 name="password"
@@ -305,19 +312,21 @@ export function RegisterScreen() {
                       onPress={() => setShowPassword((p) => !p)}
                     >
                       <Text style={styles.toggleText}>
-                        {showPassword ? "Hide" : "Show"}
+                        {showPassword ? t("register.hide") : t("register.show")}
                       </Text>
                     </TouchableOpacity>
                   </View>
                 )}
               />
-              {errors.email && (
-                <Text style={{ color: "red" }}>{errors.password?.message}</Text>
+              {errors.password && (
+                <Text style={styles.errorText}>{errors.password.message}</Text>
               )}
             </View>
 
             <View style={[styles.field, styles.rowField]}>
-              <Text style={styles.label}>{`${t("Confirm Password")} *`}</Text>
+              <Text
+                style={styles.label}
+              >{`${t("register.confirmPassword")} *`}</Text>
               <Controller
                 control={control}
                 name="confirmPassword"
@@ -343,15 +352,17 @@ export function RegisterScreen() {
                       onPress={() => setShowConfirmPassword((p) => !p)}
                     >
                       <Text style={styles.toggleText}>
-                        {showConfirmPassword ? "Hide" : "Show"}
+                        {showConfirmPassword
+                          ? t("register.hide")
+                          : t("register.show")}
                       </Text>
                     </TouchableOpacity>
                   </View>
                 )}
               />
               {errors.confirmPassword && (
-                <Text style={{ color: "red" }}>
-                  {errors.confirmPassword?.message}
+                <Text style={styles.errorText}>
+                  {errors.confirmPassword.message}
                 </Text>
               )}
             </View>
@@ -360,9 +371,7 @@ export function RegisterScreen() {
           <Pressable
             style={({ pressed }) => [
               styles.button,
-              pressed && {
-                opacity: 0.8,
-              },
+              pressed && { opacity: 0.8 },
             ]}
             onPress={handleSubmit(handleRegister)}
             disabled={loading}
@@ -370,14 +379,8 @@ export function RegisterScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
-                {t("Create account")}
+              <Text style={{ color: "#fff", fontSize: 16, fontWeight: "600" }}>
+                {t("register.createAccount")}
               </Text>
             )}
           </Pressable>
@@ -389,23 +392,12 @@ export function RegisterScreen() {
               marginTop: 28,
             }}
           >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "#888",
-              }}
-            >
-              {t("Already have an account?")}{" "}
+            <Text style={{ fontSize: 14, color: "#888" }}>
+              {t("register.alreadyHaveAccount")}{" "}
             </Text>
             <TouchableOpacity onPress={() => navigate("LoginScreen")}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: "#111",
-                  fontWeight: "600",
-                }}
-              >
-                {t("Sign in")}
+              <Text style={{ fontSize: 14, color: "#111", fontWeight: "600" }}>
+                {t("register.signIn")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -457,6 +449,9 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#E05252",
+  },
+  errorText: {
+    color: "red",
   },
   passwordRow: {
     flexDirection: "row",

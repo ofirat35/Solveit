@@ -10,6 +10,7 @@ namespace Solveit.Api.Core.Domain.Dtos.AppUsers
         public GenderEnum Gender { get; set; }
         public string Email { get; set; } = default!;
         public string? Phone { get; set; }
+        public bool IsServiceProvider { get; set; }
         public DateOnly Birthday { get; set; }
         public DateTime CreatedDate { get; set; }
     }

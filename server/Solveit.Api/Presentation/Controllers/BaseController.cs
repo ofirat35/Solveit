@@ -1,6 +1,6 @@
-﻿using Solveit.Api.Core.Domain.Models;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Solveit.Api.Core.Domain.Models;
 
 namespace Solveit.Api.Presentation.Controllers
 {

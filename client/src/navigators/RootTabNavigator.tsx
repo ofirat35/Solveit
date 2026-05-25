@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../helpers/consts/ColorConts";
 import { DiscoveryTabNavigator } from "./DiscoveryTabNavigator";
-import { JobsTabNavigator } from "./JobsTabNavigator";
 import { NotificationTabNavigator } from "./NotificationTabNavigator";
+import { ServicesTabNavigator } from "./ServicesTabNavigator";
 import { SettingsTabNavigator } from "./SettingsTabNavigator";
 
 const Tab = createBottomTabNavigator();
@@ -44,7 +44,7 @@ export function RootTabNavigator() {
       />
       <Tab.Screen
         options={{
-          title: t("JobsTab.TabNavTitle"),
+          title: t("ServicesTab.TabNavTitle"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <FontAwesome5
@@ -56,8 +56,8 @@ export function RootTabNavigator() {
             />
           ),
         }}
-        name="JobsTab"
-        component={JobsTabNavigator}
+        name="ServicesTab"
+        component={ServicesTabNavigator}
       />
       <Tab.Screen
         options={{

@@ -1,13 +1,10 @@
-﻿using Solveit.Api.Core.Application.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
+using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Repositories;
 using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Solveit.Api.Core.Application.Repositories;
-using Solveit.Api.Core.Domain.Entities;
 using System.Diagnostics;
-using Solveit.Api.Extensions;
 
 namespace Solveit.Api.Infrastructure.Services
 {

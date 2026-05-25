@@ -291,7 +291,7 @@ class KeycloakService {
 }
 
 export const keycloakConfig: KeycloakConfig = {
-  url: "http://10.0.2.2:8080",
+  url: process.env.EXPO_PUBLIC_KEYCLOAK_SERVER_BASE_URL,
   realm: "SolveitApp",
   clientId: "solveitapp-mobile",
   redirectUri: "com.firat35.client://redirect",

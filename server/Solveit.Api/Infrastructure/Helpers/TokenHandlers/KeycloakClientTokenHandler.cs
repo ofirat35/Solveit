@@ -1,7 +1,7 @@
-﻿using Solveit.Api.Core.Domain.Dtos;
+﻿using Microsoft.Extensions.Options;
+using Solveit.Api.Core.Domain.Dtos;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace Solveit.Api.Infrastructure.Context.TokenHandlers
 {

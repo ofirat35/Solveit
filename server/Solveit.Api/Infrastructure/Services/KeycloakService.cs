@@ -1,14 +1,13 @@
-﻿using Solveit.Api.Core.Application.Consts;
+﻿using MediatR;
+using Microsoft.Extensions.Options;
+using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Services;
+using Solveit.Api.Core.Domain.Dtos;
 using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Extensions;
-using MediatR;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Solveit.Api.Infrastructure.Services;
-using Solveit.Api.Core.Domain.Dtos;
 
 namespace Solveit.Api.Infrastructure.Services
 {

@@ -11,5 +11,7 @@ namespace Solveit.Api.Core.Application.Services
         Task<Result<bool>> UpdateAppUserAsync(AppUserUpdateDto user);
         Task<Result<bool>> DeleteAppUserAsync(string id);
         Task<Result<bool>> CreateAppUserAsync(AppUserCreateDto user);
+        Task<Result<bool>> SetUserIsServiceProviderAsync(string userId, bool isServiceProvider);
+        Task<Result<bool>> CheckUserIsServiceProviderAsync(string userId);
     }
 }

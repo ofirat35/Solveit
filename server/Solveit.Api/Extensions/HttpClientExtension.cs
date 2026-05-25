@@ -1,5 +1,5 @@
-﻿using Solveit.Api.Core.Domain.Models;
-using MediatR;
+﻿using MediatR;
+using Solveit.Api.Core.Domain.Models;
 using System.Text;
 using System.Text.Json;
 

@@ -1,7 +1,5 @@
 ﻿using Solveit.Api.Core.Application.Repositories;
-using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Entities;
-using Solveit.Api.Core.Domain.Models;
 
 namespace Solveit.Api.Core.Application.Services
 {

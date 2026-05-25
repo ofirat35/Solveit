@@ -52,14 +52,14 @@ export function LoginScreen() {
               marginBottom: 36,
             }}
           >
-            <Text style={styles.title}>{t("Sign in")}</Text>
+            <Text style={styles.title}>{t("login.title")}</Text>
             <Text
               style={{
                 fontSize: 15,
                 color: "#888",
               }}
             >
-              {t("Welcome back")}
+              {t("login.subtitle")}
             </Text>
           </View>
 
@@ -103,7 +103,7 @@ export function LoginScreen() {
                 color: "#888",
               }}
             >
-              {t("Don't have an account?")}{" "}
+              {t("login.dontHaveAccount")}{" "}
             </Text>
             <TouchableOpacity onPress={() => navigate("RegisterScreen")}>
               <Text
@@ -113,7 +113,7 @@ export function LoginScreen() {
                   fontWeight: "600",
                 }}
               >
-                {t("Register")}
+                {t("login.register")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -131,7 +131,7 @@ export function LoginScreen() {
                 color: "#555",
               }}
             >
-              {t("Forgot password?")}
+              {t("login.forgotPassword")}
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,5 +1,5 @@
-﻿using Solveit.Api.Core.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Solveit.Api.Core.Domain.Entities;
 using System.Linq.Expressions;
 
 namespace Solveit.Api.Core.Application.Repositories

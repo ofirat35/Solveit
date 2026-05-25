@@ -1,6 +1,6 @@
-﻿using Solveit.Api.Core.Domain.Dtos.Auth;
+﻿using MediatR;
+using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Models;
-using MediatR;
 
 namespace Solveit.Api.Core.Application.Services
 {

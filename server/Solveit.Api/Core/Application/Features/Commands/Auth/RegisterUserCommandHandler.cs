@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using MediatR;
+using Solveit.Api.Core.Application.Enums;
+using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Models;
-using MediatR;
-using Solveit.Api.Core.Application.Services;
-using Solveit.Api.Core.Application.Enums;
 
 namespace Solveit.Api.Core.Application.Features.Commands.Auth
 {

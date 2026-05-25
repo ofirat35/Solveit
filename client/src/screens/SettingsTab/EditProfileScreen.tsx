@@ -21,7 +21,10 @@ import { CustomTextInput } from "../../components/shared/Forms/CustomTextInput";
 import { ScreenHeader } from "../../components/shared/ScreenHeader";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { GenderEnum } from "../../helpers/enums/GenderEnum";
-import { UserUpdateFormData, userUpdateSchema } from "../../helpers/schemas";
+import {
+  UserUpdateFormData,
+  userUpdateSchema,
+} from "../../helpers/schemas/users/userUpdateSchema";
 import { showToast } from "../../helpers/Toasts/DefaultToasts";
 import { useSettings } from "../../hooks/Settings/useSettings";
 import { AppUserUpdateModel } from "../../models/Users/AppUserUpdateModel";
@@ -31,9 +34,11 @@ export function EditProfileScreen() {
   const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { t } = useTranslation();
+
   const birthday = useMemo(() => {
     return user?.birthday ? new Date(user.birthday) : new Date();
   }, [user]);
+
   const {
     control,
     reset,
@@ -50,6 +55,7 @@ export function EditProfileScreen() {
       birthday: birthday,
     },
   });
+
   useEffect(() => {
     user &&
       reset({
@@ -71,8 +77,8 @@ export function EditProfileScreen() {
     };
     updateUser(payload)
       .then(
-        () => showToast(t("Profile updated successfully!")),
-        (error) => showToast(t("Failed to update profile.")),
+        () => showToast(t("editProfile.updateSuccess")),
+        () => showToast(t("editProfile.updateFailed")),
       )
       .finally(() => {
         setLoading(false);
@@ -82,7 +88,7 @@ export function EditProfileScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScreenHeader headerTitle={t("Update Profile")} />
+      <ScreenHeader headerTitle={t("editProfile.title")} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -105,15 +111,15 @@ export function EditProfileScreen() {
                   name="firstName"
                   render={({ field: { onChange, value } }) => (
                     <CustomTextInput
-                      labelText={t("First Name")}
+                      labelText={t("editProfile.firstName")}
                       value={value}
                       onChangeText={onChange}
-                      isError={errors.firstName ? true : false}
-                    ></CustomTextInput>
+                      isError={!!errors.firstName}
+                    />
                   )}
                 />
                 {errors.firstName && (
-                  <Text style={{ color: "red" }}>
+                  <Text style={styles.errorText}>
                     {errors.firstName.message}
                   </Text>
                 )}
@@ -125,255 +131,170 @@ export function EditProfileScreen() {
                   name="lastName"
                   render={({ field: { onChange, value } }) => (
                     <CustomTextInput
-                      labelText={t("Last Name")}
+                      labelText={t("editProfile.lastName")}
                       value={value}
                       onChangeText={onChange}
-                      isError={errors.lastName ? true : false}
-                    ></CustomTextInput>
+                      isError={!!errors.lastName}
+                    />
                   )}
                 />
                 {errors.lastName && (
-                  <Text style={{ color: "red" }}>
+                  <Text style={styles.errorText}>
                     {errors.lastName.message}
                   </Text>
                 )}
               </View>
             </View>
 
-            <View>
-              <View style={[styles.row]}>
-                <View style={[styles.field, styles.rowField]}>
-                  <Text style={styles.label}>{t("Birthday")}</Text>
-                  <Controller
-                    control={control}
-                    name="birthday"
-                    render={({ field: { onChange, value } }) => {
-                      const dateValue = value ? new Date(value) : new Date();
-
-                      return (
-                        <>
-                          <TouchableOpacity
-                            style={[
-                              styles.input,
-                              { paddingVertical: 0 },
-                              errors.lastName && styles.inputError,
-                            ]}
-                            onPress={() => setShowPicker(true)}
+            <View style={styles.row}>
+              <View style={[styles.field, styles.rowField]}>
+                <Text style={styles.label}>{t("editProfile.birthday")}</Text>
+                <Controller
+                  control={control}
+                  name="birthday"
+                  render={({ field: { onChange, value } }) => {
+                    const dateValue = value ? new Date(value) : new Date();
+                    return (
+                      <>
+                        <TouchableOpacity
+                          style={[
+                            styles.input,
+                            { paddingVertical: 0 },
+                            errors.birthday && styles.inputError,
+                          ]}
+                          onPress={() => setShowPicker(true)}
+                        >
+                          <View
+                            pointerEvents="none"
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
                           >
-                            <View
-                              pointerEvents="none"
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <View style={{ paddingRight: 5 }}>
-                                <FontAwesome5 name="calendar-alt" size={16} />
-                              </View>
-                              <TextInput
-                                value={dateValue.toLocaleDateString()}
-                                editable={false}
-                              />
+                            <View style={{ paddingRight: 5 }}>
+                              <FontAwesome5 name="calendar-alt" size={16} />
                             </View>
-                          </TouchableOpacity>
-
-                          {showPicker && (
-                            <DateTimePicker
-                              value={dateValue}
-                              mode="date"
-                              display={
-                                Platform.OS === "ios" ? "spinner" : "default"
-                              }
-                              maximumDate={(() => {
-                                const maxAge = new Date();
-                                maxAge.setFullYear(
-                                  new Date().getFullYear() - 18,
-                                );
-                                return maxAge;
-                              })()}
-                              onChange={(event, selectedDate) => {
-                                setShowPicker(Platform.OS === "ios");
-                                if (selectedDate) onChange(selectedDate);
-                              }}
+                            <TextInput
+                              value={dateValue.toLocaleDateString()}
+                              editable={false}
                             />
-                          )}
-                        </>
-                      );
-                    }}
-                  />
-                  {errors.birthday && (
-                    <Text style={{ color: "red" }}>
-                      {errors.birthday.message}
-                    </Text>
-                  )}
-                </View>
-                <View style={[styles.field, styles.rowField]}>
-                  <Text style={styles.label}>{t("Gender")}</Text>
-                  <Controller
-                    control={control}
-                    name="gender"
-                    render={({ field: { onChange, value } }) => (
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <RadioButton
-                          value={GenderEnum.Woman.toString()}
-                          status={
-                            value === GenderEnum.Woman ? "checked" : "unchecked"
-                          }
-                          onPress={() => onChange(GenderEnum.Woman)}
-                        />
-                        <Text>Woman</Text>
+                          </View>
+                        </TouchableOpacity>
 
-                        <RadioButton
-                          value={GenderEnum.Man.toString()}
-                          status={
-                            value === GenderEnum.Man ? "checked" : "unchecked"
-                          }
-                          onPress={() => onChange(GenderEnum.Man)}
-                        />
-                        <Text>Man</Text>
-                      </View>
-                    )}
-                  />
-                  {errors.gender && (
-                    <Text style={{ color: "red" }}>
-                      {errors.gender.message}
-                    </Text>
+                        {showPicker && (
+                          <DateTimePicker
+                            value={dateValue}
+                            mode="date"
+                            display={
+                              Platform.OS === "ios" ? "spinner" : "default"
+                            }
+                            maximumDate={(() => {
+                              const maxAge = new Date();
+                              maxAge.setFullYear(new Date().getFullYear() - 18);
+                              return maxAge;
+                            })()}
+                            onChange={(event, selectedDate) => {
+                              setShowPicker(Platform.OS === "ios");
+                              if (selectedDate) onChange(selectedDate);
+                            }}
+                          />
+                        )}
+                      </>
+                    );
+                  }}
+                />
+                {errors.birthday && (
+                  <Text style={styles.errorText}>
+                    {errors.birthday.message}
+                  </Text>
+                )}
+              </View>
+
+              <View style={[styles.field, styles.rowField]}>
+                <Text style={styles.label}>{t("editProfile.gender")}</Text>
+                <Controller
+                  control={control}
+                  name="gender"
+                  render={({ field: { onChange, value } }) => (
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <RadioButton
+                        value={GenderEnum.Woman.toString()}
+                        status={
+                          value === GenderEnum.Woman ? "checked" : "unchecked"
+                        }
+                        onPress={() => onChange(GenderEnum.Woman)}
+                      />
+                      <Text>{t("editProfile.woman")}</Text>
+
+                      <RadioButton
+                        value={GenderEnum.Man.toString()}
+                        status={
+                          value === GenderEnum.Man ? "checked" : "unchecked"
+                        }
+                        onPress={() => onChange(GenderEnum.Man)}
+                      />
+                      <Text>{t("editProfile.man")}</Text>
+                    </View>
                   )}
-                </View>
+                />
+                {errors.gender && (
+                  <Text style={styles.errorText}>{errors.gender.message}</Text>
+                )}
               </View>
             </View>
+
             <View style={[styles.field, styles.rowField]}>
               <Controller
                 control={control}
                 name="email"
                 render={({ field: { onChange, value } }) => (
                   <CustomTextInput
-                    labelText={t("Email")}
+                    labelText={t("editProfile.email")}
                     value={value}
                     onChangeText={onChange}
                     placeholder="you@example.com"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    isError={errors.email ? true : false}
-                  ></CustomTextInput>
+                    isError={!!errors.email}
+                  />
                 )}
               />
               {errors.email && (
-                <Text style={{ color: "red" }}>{errors.email.message}</Text>
+                <Text style={styles.errorText}>{errors.email.message}</Text>
               )}
             </View>
+
             <View style={[styles.field, styles.rowField]}>
               <Controller
                 control={control}
                 name="phone"
                 render={({ field: { onChange, value } }) => (
                   <CustomTextInput
-                    labelText={t("Phone")}
+                    labelText={t("editProfile.phone")}
                     value={value ?? ""}
                     onChangeText={onChange}
                     placeholder="(123) 456-7890"
-                    secureTextEntry={true}
                     keyboardType="phone-pad"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    isError={errors.phone ? true : false}
-                  ></CustomTextInput>
+                    isError={!!errors.phone}
+                  />
                 )}
               />
               {errors.phone && (
-                <Text style={{ color: "red" }}>{errors.phone.message}</Text>
+                <Text style={styles.errorText}>{errors.phone.message}</Text>
               )}
             </View>
-
-            {/* <View style={[styles.field, styles.rowField]}>
-              <Text style={styles.label}>{t("Password")}</Text>
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, value } }) => (
-                  <View
-                    style={[
-                      styles.input,
-                      styles.passwordRow,
-                      errors.password && styles.inputError,
-                    ]}
-                  >
-                    <TextInput
-                      style={styles.passwordInput}
-                      value={value}
-                      onChangeText={onChange}
-                      placeholder="••••••••"
-                      secureTextEntry={!showPassword}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      placeholderTextColor="#ABABAB"
-                    />
-                    <TouchableOpacity
-                      onPress={() => setShowPassword((p) => !p)}
-                    >
-                      <Text style={styles.toggleText}>
-                        {showPassword ? "Hide" : "Show"}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-              {errors.email && (
-                <Text style={{ color: "red" }}>{errors.password?.message}</Text>
-              )}
-            </View>
-
-            <View style={[styles.field, styles.rowField]}>
-              <Text style={styles.label}>{t("Confirm Password")}</Text>
-              <Controller
-                control={control}
-                name="confirmPassword"
-                render={({ field: { onChange, value } }) => (
-                  <View
-                    style={[
-                      styles.input,
-                      styles.passwordRow,
-                      errors.confirmPassword && styles.inputError,
-                    ]}
-                  >
-                    <TextInput
-                      style={styles.passwordInput}
-                      value={value}
-                      onChangeText={onChange}
-                      placeholder="••••••••"
-                      secureTextEntry={!showConfirmPassword}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      placeholderTextColor="#ABABAB"
-                    />
-                    <TouchableOpacity
-                      onPress={() => setShowConfirmPassword((p) => !p)}
-                    >
-                      <Text style={styles.toggleText}>
-                        {showConfirmPassword ? "Hide" : "Show"}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-              {errors.confirmPassword && (
-                <Text style={{ color: "red" }}>
-                  {errors.confirmPassword?.message}
-                </Text>
-              )}
-            </View> */}
           </View>
 
           <Pressable
             style={({ pressed }) => [
               styles.button,
-              pressed && {
-                opacity: 0.8,
-              },
+              pressed && { opacity: 0.8 },
             ]}
             onPress={handleSubmit(handleRegister)}
             disabled={loading}
@@ -381,14 +302,8 @@ export function EditProfileScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
-                {t("Update")}
+              <Text style={{ color: "#fff", fontSize: 16, fontWeight: "600" }}>
+                {t("editProfile.update")}
               </Text>
             )}
           </Pressable>
@@ -437,6 +352,9 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: "#E05252",
+  },
+  errorText: {
+    color: "red",
   },
   passwordRow: {
     flexDirection: "row",

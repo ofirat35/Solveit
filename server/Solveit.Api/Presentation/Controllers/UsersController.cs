@@ -1,7 +1,6 @@
-﻿using Solveit.Api.Core.Application.Features.Commands.Users;
+﻿using Microsoft.AspNetCore.Mvc;
+using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Application.Features.Queries.Users;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Solveit.Api.Presentation.Controllers
 {
@@ -24,6 +23,18 @@ namespace Solveit.Api.Presentation.Controllers
         public async Task<IActionResult> Update([FromBody] UserUpdateRequestCommand command)
         {
             return HandleResponse(await Mediator.Send(command));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetIsServiceProvider([FromBody] SetServiceProviderRequestCommand command)
+        {
+            return HandleResponse(await Mediator.Send(command));
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> CheckIsServiceProvider([FromRoute] CheckUserIsServiceProviderRequestQuery query)
+        {
+            return HandleResponse(await Mediator.Send(query));
         }
     }
 }

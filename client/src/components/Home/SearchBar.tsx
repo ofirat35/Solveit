@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import {
   StyleSheet,
   Text,
@@ -9,16 +10,18 @@ import {
 export function SearchBar({
   value,
   onChange,
+  placeholder,
 }: {
   value: string;
   onChange: (v: string) => void;
+  placeholder?: string;
 }) {
   return (
     <View style={styles.searchContainer}>
       <Text style={styles.searchIcon}>🔍</Text>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search restaurants, cuisine..."
+        placeholder={placeholder ?? t("common.search")}
         placeholderTextColor="#999"
         value={value}
         onChangeText={onChange}

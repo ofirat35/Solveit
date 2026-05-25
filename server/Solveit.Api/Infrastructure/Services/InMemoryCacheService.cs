@@ -1,5 +1,5 @@
-﻿using Solveit.Api.Core.Application.Services;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Solveit.Api.Core.Application.Services;
 
 namespace Solveit.Api.Infrastructure.Services
 {
