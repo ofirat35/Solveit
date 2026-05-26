@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Services;
-using Solveit.Api.Core.Application.Features.Queries.Categories;
 using Solveit.Api.Core.Application.Features.Queries.Services;
 
 namespace Solveit.Api.Presentation.Controllers
@@ -14,10 +13,15 @@ namespace Solveit.Api.Presentation.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> MyServices([FromQuery] int page, [FromQuery] int pageSize)
         {
             return Ok(await Mediator.Send(new MyServicesRequestQuery { Page = page, PageSize = pageSize }));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ServicesBySubcategoryId([FromQuery] int subcategoryId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            return Ok(await Mediator.Send(new GetServicesRequestQuery { SubcategoryId = subcategoryId, Page = page, PageSize = pageSize }));
         }
 
     }

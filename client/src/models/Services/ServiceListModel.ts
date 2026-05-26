@@ -1,5 +1,6 @@
 import { PricingUnitsEnum } from "../../helpers/enums/PricingUnitsEnum";
 import { ServiceStatusEnum } from "../../helpers/enums/ServiceStatusEnum";
+import { AppUserListModel } from "../Users/AppUserListModel";
 
 export type ServiceListModel = {
   id: number;
@@ -13,6 +14,7 @@ export type ServiceListModel = {
   status: ServiceStatusEnum;
   isActive: boolean;
   userId: string;
+  user: AppUserListModel | null;
   createdDate: string;
   updatedDate: string | null;
 };

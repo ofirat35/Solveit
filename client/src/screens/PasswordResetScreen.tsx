@@ -34,7 +34,6 @@ export function PasswordResetScreen() {
 
   const handleLogin = async (data: PasswordResetFormData) => {
     setLoading(true);
-    console.log(data);
     await new Promise((r) => setTimeout(r, 1500));
     setLoading(false);
   };

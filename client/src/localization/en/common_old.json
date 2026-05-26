@@ -2,6 +2,12 @@
   "Birthday": "Birthday",
   "Confirm Password": "Confirm Password",
   "Create account": "Create account",
+  "createService": {
+    "fixed": "fixed",
+    "perDay": "/ day",
+    "perHour": "/ hour",
+    "perSession": "/ session"
+  },
   "Default tab changed!": "Default tab changed!",
   "Description": "Description",
   "Don't have an account?": "Don't have an account?",

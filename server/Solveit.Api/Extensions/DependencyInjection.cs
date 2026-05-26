@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos;
+using Solveit.Api.Core.Domain.Options;
 using Solveit.Api.Infrastructure.Context;
 using Solveit.Api.Infrastructure.Context.TokenHandlers;
 using Solveit.Api.Infrastructure.Services;
@@ -82,6 +83,7 @@ namespace Solveit.Api.Extensions
                 //    }
                 //};
             });
+            services.Configure<MinioConfig>(configuration.GetSection("MinioConfig"));
             services.Configure<KeycloakConfig>(configuration.GetSection("KeycloakClientConfig"));
             services.AddHttpContextAccessor();
             services.AddHttpClient();

@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "expo-image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -43,9 +44,17 @@ export function SettingsScreen() {
       >
         <View style={styles.profileCard}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user?.firstName?.charAt(0) ?? "—"}
-            </Text>
+            {user?.profileImage ? (
+              <Image
+                style={styles.avatarImage}
+                source={{ uri: user?.profileImage }}
+                transition={200}
+              />
+            ) : (
+              <Text style={styles.avatarText}>
+                {user?.firstName?.charAt(0) ?? "—"}
+              </Text>
+            )}
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.profileName}>
@@ -168,6 +177,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#e7f5ff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  avatarImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    position: "relative",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   avatarText: { fontSize: 18, fontWeight: "600", color: "#185FA5" },
   profileName: { fontSize: 15, fontWeight: "600", color: "#1a1a1a" },

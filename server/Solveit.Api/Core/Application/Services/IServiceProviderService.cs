@@ -9,5 +9,6 @@ namespace Solveit.Api.Core.Application.Services
     {
         Task<Result<bool>> CreateServiceAsync(ServiceCreateDto service);
         Task<PaginatedItemsViewModel<ServiceListDto>> GetMyServicesAsync(int page, int pageSize);
+        Task<PaginatedItemsViewModel<ServiceListDto>> GetServicesBySubcategoryIdAsync(int subcategoryId, int page, int pageSize);
     }
 }

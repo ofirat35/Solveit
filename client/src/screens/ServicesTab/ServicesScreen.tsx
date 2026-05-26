@@ -24,21 +24,21 @@ export function ServicesScreen() {
   const { t } = useTranslation();
   const { navigate } = useAppNavigation();
   const [pendingDefaultTab, setPendingDefaultTab] = useState<
-    "orders" | "services" | null
+    "myOrders" | "myServices" | null
   >(null);
-  const [activeTab, setActiveTab] = useState<"orders" | "services">();
+  const [activeTab, setActiveTab] = useState<"myOrders" | "myServices">();
   const [isProvider, setIsProvider] = useState(false);
   const [showProviderModal, setShowProviderModal] = useState(false);
   const [showDefaultTabModal, setShowDefaultTabModal] = useState(false);
 
   const getDefaultTab = async () => {
     let selectedTab = await AsyncStorage.getItem(cacheName);
-    if (!selectedTab) selectedTab = "orders";
+    if (!selectedTab) selectedTab = "myOrders";
     await AsyncStorage.setItem(cacheName, selectedTab);
-    return selectedTab as "orders" | "services";
+    return selectedTab as "myOrders" | "myServices";
   };
 
-  const setDefaultTab = async (tab: "orders" | "services") => {
+  const setDefaultTab = async (tab: "myOrders" | "myServices") => {
     setPendingDefaultTab(tab);
     setShowDefaultTabModal(true);
   };
@@ -59,7 +59,7 @@ export function ServicesScreen() {
     } else {
       await UserService.SetIsServiceProviderAsync(false);
       setIsProvider(false);
-      if (activeTab === "services") setActiveTab("orders");
+      if (activeTab === "myServices") setActiveTab("myOrders");
     }
   };
 
@@ -134,15 +134,15 @@ export function ServicesScreen() {
           <TouchableOpacity
             style={[
               styles.segment,
-              activeTab === "orders" && styles.segmentActive,
+              activeTab === "myOrders" && styles.segmentActive,
             ]}
-            onPress={() => setActiveTab("orders")}
-            onLongPress={() => setDefaultTab("orders")}
+            onPress={() => setActiveTab("myOrders")}
+            onLongPress={() => setDefaultTab("myOrders")}
           >
             <Text
               style={[
                 styles.segmentText,
-                activeTab === "orders" && styles.segmentTextActive,
+                activeTab === "myOrders" && styles.segmentTextActive,
               ]}
             >
               {t("services.myOrders")}
@@ -151,15 +151,15 @@ export function ServicesScreen() {
           <TouchableOpacity
             style={[
               styles.segment,
-              activeTab === "services" && styles.segmentActive,
+              activeTab === "myServices" && styles.segmentActive,
             ]}
-            onPress={() => setActiveTab("services")}
-            onLongPress={() => setDefaultTab("services")}
+            onPress={() => setActiveTab("myServices")}
+            onLongPress={() => setDefaultTab("myServices")}
           >
             <Text
               style={[
                 styles.segmentText,
-                activeTab === "services" && styles.segmentTextActive,
+                activeTab === "myServices" && styles.segmentTextActive,
               ]}
             >
               {t("services.myServices")}
@@ -173,7 +173,7 @@ export function ServicesScreen() {
       )}
 
       <View style={styles.body}>
-        {isProvider && activeTab === "services" ? (
+        {isProvider && activeTab === "myServices" ? (
           <MyServicesTab />
         ) : (
           <MyOrdersTab />

@@ -86,9 +86,7 @@ namespace Solveit.Api.Infrastructure.Services
 
             var response = await SaveChangesAsync(user, DbOperation.Update);
 
-            return response
-                ? SuccessResult(true)
-                : FailResult<bool>(ExceptionMessages.DbOperationFailed, StatusCodes.Status500InternalServerError);
+            return SuccessResult(true);
         }
 
         public async Task<Result<bool>> SetUserIsServiceProviderAsync(string userId, bool isServiceProvider)

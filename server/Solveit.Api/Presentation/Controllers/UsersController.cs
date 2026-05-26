@@ -36,5 +36,17 @@ namespace Solveit.Api.Presentation.Controllers
         {
             return HandleResponse(await Mediator.Send(query));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadImage([FromForm] UploadUserImageRequestCommand command)
+        {
+            return HandleResponse(await Mediator.Send(command));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserImage([FromQuery] GetUserImageRequestQuery query)
+        {
+            return HandleResponse(await Mediator.Send(query));
+        }
     }
 }

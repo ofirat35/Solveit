@@ -8,6 +8,8 @@ services:
     image: mcr.microsoft.com/mssql/server
   keycloak:
     image: quay.io/keycloak/keycloak:26.5.2
+  minio:
+    image: quay.io/minio/minio:RELEASE.2022-02-18T01-50-10Z
 
 volumes:
   keycloak_data:

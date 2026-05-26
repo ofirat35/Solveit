@@ -6,6 +6,7 @@ export type AppUserListModel = {
   lastName: string;
   gender: GenderEnum;
   phone: string;
+  profileImage: string;
   email: string;
   birthday: string;
   createdDate: string;

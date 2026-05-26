@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Solveit.Api.Core.Application.Consts;
+﻿using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Infrastructure.Context;

@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
-using Solveit.Api.Core.Application.Enums;
+﻿using MediatR;
 using Solveit.Api.Core.Application.Services;
-using Solveit.Api.Core.Domain.Dtos.Services;
-using Solveit.Api.Core.Domain.Models;
-using Solveit.Api.Infrastructure.Services;
 
 namespace Solveit.Api.Core.Application.Features.Commands.Categories
 {

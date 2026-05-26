@@ -3,7 +3,11 @@
   "common": {
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "fixed": "fixed",
     "notNow": "common.notNow",
+    "perDay": "/ day",
+    "perHour": "/ hour",
+    "perSession": "/ session",
     "search": "Search..."
   },
   "createService": {
@@ -18,14 +22,10 @@
     "createSuccess": "Service created successfully!",
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "What does this service include?",
-    "fixed": "fixed",
     "maxPrice": "Maximum Price",
     "minPrice": "Minimum Price",
     "paused": "Paused",
     "pausedDescription": "Hidden from listings, no new applications",
-    "perDay": "/ day",
-    "perHour": "/ hour",
-    "perSession": "/ session",
     "price": "Price",
     "priceRange": "Price Range",
     "pricing": "PRICING",
@@ -42,12 +42,14 @@
     "TabNavTitle": "Discovery"
   },
   "editProfile": {
+    "addPhoto": "editProfile.addPhoto",
     "birthday": "Birthday",
     "email": "Email",
     "firstName": "First Name",
     "gender": "Gender",
     "lastName": "Last Name",
     "man": "Man",
+    "permissionDenied": "editProfile.permissionDenied",
     "phone": "Phone",
     "title": "Update Profile",
     "update": "Update",
@@ -70,6 +72,11 @@
   },
   "NotificationTab": {
     "TabNavTitle": "Notifications"
+  },
+  "providers": {
+    "loading": "providers.loading",
+    "noProviders": "providers.noProviders",
+    "noProvidersSubtitle": "providers.noProvidersSubtitle"
   },
   "register": {
     "alreadyHaveAccount": "Already have an account?",
@@ -111,7 +118,7 @@
     "title": "My Jobs"
   },
   "ServicesTab": {
-    "TabNavTitle": "ServicesTab.TabNavTitle"
+    "TabNavTitle": "Services"
   },
   "settings": {
     "account": "Account",

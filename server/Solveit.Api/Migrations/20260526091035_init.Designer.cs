@@ -12,8 +12,8 @@ using Solveit.Api.Infrastructure.Context;
 namespace Solveit.Api.Migrations
 {
     [DbContext(typeof(SolveitAppContext))]
-    [Migration("20260524110530_addimage")]
-    partial class addimage
+    [Migration("20260526091035_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,38 @@ namespace Solveit.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bucket")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppFiles");
+                });
+
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("AppFileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly?>("Birthday")
                         .HasColumnType("date");
@@ -67,6 +95,10 @@ namespace Solveit.Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppFileId")
+                        .IsUnique()
+                        .HasFilter("[AppFileId] IS NOT NULL");
 
                     b.ToTable("AppUsers");
                 });
@@ -183,6 +215,15 @@ namespace Solveit.Api.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Subcategories");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppFile", "AppFile")
+                        .WithOne()
+                        .HasForeignKey("Solveit.Api.Core.Domain.Entities.AppUser", "AppFileId");
+
+                    b.Navigation("AppFile");
                 });
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>

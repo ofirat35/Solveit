@@ -14,6 +14,7 @@ export function ServicesTabNavigator() {
           headerShown: false,
         }}
       />
+
       <Stack.Screen
         name="CreateServiceScreen"
         component={CreateServiceScreen}

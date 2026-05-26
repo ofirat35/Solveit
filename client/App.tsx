@@ -9,11 +9,19 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/helpers/contexts/AuthContext";
 import { RootStack } from "./src/navigators/RootStackNavigator";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10,
+    },
+  },
+});
 
 const linking = {
   prefixes: [Linking.createURL("/")],
-  config: {},
+  config: {
+    screens: {},
+  },
   getStateFromPath(path: any, options: any) {
     if (path.startsWith("redirect")) {
       return undefined;

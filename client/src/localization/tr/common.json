@@ -3,7 +3,11 @@
   "common": {
     "cancel": "İptal",
     "confirm": "Onayla",
+    "fixed": "fixed",
     "notNow": "common.notNow",
+    "perDay": "/ day",
+    "perHour": "/ hour",
+    "perSession": "/ session",
     "search": "Ara..."
   },
   "createService": {
@@ -18,14 +22,10 @@
     "createSuccess": "Hizmet başarıyla oluşturuldu!",
     "descriptionLabel": "Açıklama",
     "descriptionPlaceholder": "Bu hizmet neleri kapsıyor?",
-    "fixed": "sabit",
     "maxPrice": "Maksimum Fiyat",
     "minPrice": "Minimum Fiyat",
     "paused": "Durduruldu",
     "pausedDescription": "Listelerden gizli, yeni başvuru alınmıyor",
-    "perDay": "/ gün",
-    "perHour": "/ saat",
-    "perSession": "/ seans",
     "price": "Fiyat",
     "priceRange": "Fiyat Aralığı",
     "pricing": "FİYATLANDIRMA",
@@ -42,12 +42,14 @@
     "TabNavTitle": "Keşfet"
   },
   "editProfile": {
+    "addPhoto": "editProfile.addPhoto",
     "birthday": "Doğum Tarihi",
     "email": "E-posta",
     "firstName": "Ad",
     "gender": "Cinsiyet",
     "lastName": "Soyad",
     "man": "Erkek",
+    "permissionDenied": "editProfile.permissionDenied",
     "phone": "Telefon",
     "title": "Profili Güncelle",
     "update": "Güncelle",
@@ -70,6 +72,11 @@
   },
   "NotificationTab": {
     "TabNavTitle": "Bildirimler"
+  },
+  "providers": {
+    "loading": "providers.loading",
+    "noProviders": "providers.noProviders",
+    "noProvidersSubtitle": "providers.noProvidersSubtitle"
   },
   "register": {
     "alreadyHaveAccount": "Zaten hesabınız var mı?",
@@ -111,7 +118,7 @@
     "title": "İşlerim"
   },
   "ServicesTab": {
-    "TabNavTitle": "ServicesTab.TabNavTitle"
+    "TabNavTitle": "İşlerim"
   },
   "settings": {
     "account": "Hesabım",

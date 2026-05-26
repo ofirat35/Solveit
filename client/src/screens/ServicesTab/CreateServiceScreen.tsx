@@ -30,10 +30,10 @@ import { useCategories } from "../../hooks/useCategories";
 import { ServiceProviderService } from "../../services/ServiceProviderService";
 
 const getPricingUnits = (t: TFunction) => [
-  { label: t("createService.perSession"), value: PricingUnitsEnum.Session },
-  { label: t("createService.perHour"), value: PricingUnitsEnum.Hour },
-  { label: t("createService.perDay"), value: PricingUnitsEnum.Day },
-  { label: t("createService.fixed"), value: PricingUnitsEnum.Fixed },
+  { label: t("common.perSession"), value: PricingUnitsEnum.Session },
+  { label: t("common.perHour"), value: PricingUnitsEnum.Hour },
+  { label: t("common.perDay"), value: PricingUnitsEnum.Day },
+  { label: t("common.fixed"), value: PricingUnitsEnum.Fixed },
 ];
 
 export function CreateServiceScreen() {

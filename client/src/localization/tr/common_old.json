@@ -2,6 +2,12 @@
   "Birthday": "Doğum Günü",
   "Confirm Password": "Parolayı yeniden girin",
   "Create account": "Hesap Oluştur",
+  "createService": {
+    "fixed": "sabit",
+    "perDay": "/ gün",
+    "perHour": "/ saat",
+    "perSession": "/ seans"
+  },
   "Default tab changed!": "Default tab changed!",
   "Description": "Description",
   "Don't have an account?": "Hesap yok mu?",

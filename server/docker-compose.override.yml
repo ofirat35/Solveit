@@ -7,6 +7,10 @@ services:
       - "KeycloakClientConfig__base_url=http://keycloak:8080" 
       - "KeycloakClientConfig__openid_configuration_url=http://keycloak:8080/realms/SolveitApp/.well-known/openid-configuration" 
       - "Keycloak__auth-server-url=http://keycloak:8080"
+      - "MinioConfig__Endpoint=minio:9000"
+      - "MinioConfig__PublicEndpoint=192.168.1.103:9000"
+      - "MinioConfig__AccessKey=VXZ90YC2MH3Q8BCHD1DJ"
+      - "MinioConfig__SecretKey=iRRXkCl8vQmoMVJw++suJFbAZzhYdCvpcnbj9z7K"
     ports:
       - "5000:5000"
     volumes:
@@ -46,7 +50,19 @@ services:
       - "8080:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
- 
+  minio:
+    volumes:
+      - ./data:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: 'minio_user'
+      MINIO_ROOT_PASSWORD: 'minio_password'
+      MINIO_SERVER_URL: 'http://192.168.1.103:9000' 
+      MINIO_BROWSER_REDIRECT_URL: 'http://192.168.1.103:9001'
+    command: server /data --console-address ":9001"
+      
 volumes:
   keycloak_data:
   uploads_data:   

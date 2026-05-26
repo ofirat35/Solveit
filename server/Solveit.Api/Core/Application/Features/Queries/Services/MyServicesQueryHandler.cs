@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.Services;
-using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Models;
 
 namespace Solveit.Api.Core.Application.Features.Queries.Services
@@ -12,7 +10,7 @@ namespace Solveit.Api.Core.Application.Features.Queries.Services
     {
         public async Task<PaginatedItemsViewModel<ServiceListDto>> Handle(MyServicesRequestQuery request, CancellationToken cancellationToken)
         {
-            var response = await serviceProviderService.GetMyServicesAsync(request.Page,request.PageSize);
+            var response = await serviceProviderService.GetMyServicesAsync(request.Page, request.PageSize);
             return response;
         }
     }

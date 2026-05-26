@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Solveit.Api.Core.Application.Services;
+﻿using Solveit.Api.Core.Application.Services;
 
 namespace Solveit.Api.Infrastructure.Services
 {
     public class LocalFileService(
-        IWebHostEnvironment env, 
+        IWebHostEnvironment env,
         IHttpContextAccessor httpContextAccessor) : IFileService
     {
         public async Task<string> UploadFileAsync(IFormFile file, string folder)

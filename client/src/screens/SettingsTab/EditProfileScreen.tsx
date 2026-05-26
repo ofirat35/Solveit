@@ -1,9 +1,12 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker"; // 1. Import Image Picker
 import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -30,7 +33,7 @@ import { useSettings } from "../../hooks/Settings/useSettings";
 import { AppUserUpdateModel } from "../../models/Users/AppUserUpdateModel";
 
 export function EditProfileScreen() {
-  const { user, updateUser } = useSettings();
+  const { user, updateUser, uploadUserImage } = useSettings();
   const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { t } = useTranslation();
@@ -68,13 +71,37 @@ export function EditProfileScreen() {
       });
   }, [user]);
 
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      showToast(
+        t("editProfile.permissionDenied") ||
+          "Permission to access gallery was denied",
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled) {
+      await uploadUserImage(result.assets[0]);
+    }
+  };
+
   const handleRegister = async (data: UserUpdateFormData) => {
     setLoading(true);
+
     const payload: AppUserUpdateModel = {
       id: user!.id,
       ...data,
       birthday: data.birthday.toISOString().split("T")[0],
     };
+
     updateUser(payload)
       .then(
         () => showToast(t("editProfile.updateSuccess")),
@@ -104,6 +131,32 @@ export function EditProfileScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
+            {/* 6. Profile Image Selector UI */}
+            <View style={styles.imagePickerContainer}>
+              <TouchableOpacity
+                style={styles.avatarContainer}
+                onPress={() => pickImage()}
+              >
+                {user?.profileImage ? (
+                  <Image
+                    source={{ uri: user?.profileImage }}
+                    style={styles.avatarImage}
+                    transition={200}
+                  />
+                ) : (
+                  <View style={styles.avatarPlaceholder}>
+                    <FontAwesome5 name="camera" size={24} color="#888" />
+                    <Text style={styles.avatarText}>
+                      {t("editProfile.addPhoto") || "Add Photo"}
+                    </Text>
+                  </View>
+                )}
+                <View style={styles.editBadge}>
+                  <FontAwesome5 name="pen" size={10} color="#fff" />
+                </View>
+              </TouchableOpacity>
+            </View>
+
             <View style={styles.row}>
               <View style={[styles.field, styles.rowField]}>
                 <Controller
@@ -314,6 +367,52 @@ export function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  // 7. Added styles for image container and picker
+  imagePickerContainer: {
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  avatarContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#F0F0F0",
+    position: "relative",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  avatarImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  avatarPlaceholder: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarText: {
+    fontSize: 12,
+    color: "#888",
+    marginTop: 4,
+    fontWeight: "500",
+  },
+  editBadge: {
+    position: "absolute",
+    bottom: 2,
+    right: 2,
+    backgroundColor: "#111",
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
   title: {
     fontSize: 28,
     fontWeight: "700",
@@ -337,7 +436,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#333",
+    color: "#888",
     marginBottom: 8,
   },
   input: {

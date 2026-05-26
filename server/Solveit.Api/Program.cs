@@ -11,16 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDependencies(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IFileService, LocalFileService>();
+
 var app = builder.Build();
-
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
-    RequestPath = "/Uploads"
-});
-
 
 using (var scope = app.Services.CreateScope())
 {

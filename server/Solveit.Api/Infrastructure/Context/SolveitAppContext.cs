@@ -69,11 +69,23 @@ namespace Solveit.Api.Infrastructure.Context
               .WithMany()
               .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<AppUser>()
+              .HasOne(c => c.AppFile)
+              .WithOne()
+              .HasForeignKey<AppUser>(_ => _.AppFileId)
+              .IsRequired(false);
+
+            modelBuilder.Entity<AppUser>()
+                .Property(u => u.AppFileId)
+                .IsRequired(false)
+                .HasDefaultValue(null);
+
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
+        public DbSet<AppFile> AppFiles { get; set; }
     }
 }

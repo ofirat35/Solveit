@@ -1,4 +1,6 @@
 import axios from "axios";
+import { ImagePickerAsset } from "expo-image-picker";
+import { UserImageListDto } from "../models/UserImageListDto";
 import { AppUserListModel } from "../models/Users/AppUserListModel";
 import { AppUserUpdateModel } from "../models/Users/AppUserUpdateModel";
 import { api } from "./api";
@@ -40,6 +42,45 @@ export const UserService: IUserService = {
       return null;
     }
   },
+  async uploadImage(asset: ImagePickerAsset): Promise<UserImageListDto | null> {
+    try {
+      const formData = new FormData();
+
+      formData.append("file", {
+        uri: asset.uri,
+        name: asset.fileName ?? "photo.jpg",
+        type: asset.mimeType ?? "image/jpeg",
+      } as any);
+
+      const response = await api.post<UserImageListDto>(
+        "/users/uploadImage",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      return null;
+    }
+  },
+  async getUserImage(userId: string): Promise<UserImageListDto | null> {
+    try {
+      var response = await api.get<UserImageListDto>("/users/getUserImage", {
+        params: { userId: userId },
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data.errors[0]);
+      } else {
+        console.error("Non-Axios Error:", error);
+      }
+      return null;
+    }
+  },
   async SetIsServiceProviderAsync(isServiceProvider: boolean): Promise<any> {
     try {
       var result = await api.post(`/users/setIsServiceProvider`, {
@@ -55,6 +96,8 @@ export const UserService: IUserService = {
 interface IUserService {
   getUserById(userId: string): Promise<AppUserListModel>;
   updateUser(user: AppUserUpdateModel): Promise<any>;
+  uploadImage(file: ImagePickerAsset): Promise<UserImageListDto | null>;
+  getUserImage(userId: string): Promise<UserImageListDto | null>;
   checkIsServiceProviderByUserId(userId: string): Promise<boolean>;
   SetIsServiceProviderAsync(isServiceProvider: boolean): Promise<any>;
 }

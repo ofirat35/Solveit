@@ -1,4 +1,5 @@
 ﻿using Solveit.Api.Core.Application.Enums;
+using Solveit.Api.Core.Domain.Dtos.AppUsers;
 
 namespace Solveit.Api.Core.Domain.Dtos.Services
 {
@@ -15,7 +16,8 @@ namespace Solveit.Api.Core.Domain.Dtos.Services
         public ServiceStatusEnum Status { get; set; }
         public bool IsActive { get; set; }
         public string UserId { get; set; }
-        public DateTime CreatedDate { get; set; } 
+        public AppUserListDto User { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }
 }
