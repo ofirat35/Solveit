@@ -4,7 +4,7 @@ module.exports = {
   locales: ["en", "tr"],
   defaultValue: (lng, ns, key) => key,
   sort: true,
-  keepRemoved: false,
+  keepRemoved: true,
   keySeparator: ".",
   namespaceSeparator: false,
 };

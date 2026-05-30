@@ -1,5 +1,7 @@
 ﻿using Solveit.Api.Core.Application.Enums;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
+using Solveit.Api.Core.Domain.Dtos.Orders;
+using Solveit.Api.Core.Domain.Entities;
 
 namespace Solveit.Api.Core.Domain.Dtos.Services
 {
@@ -15,8 +17,10 @@ namespace Solveit.Api.Core.Domain.Dtos.Services
         public float? MaxPrice { get; set; }
         public ServiceStatusEnum Status { get; set; }
         public bool IsActive { get; set; }
-        public string UserId { get; set; }
-        public AppUserListDto User { get; set; }
+        public string ProviderId { get; set; }
+        public AppUserListDto Provider { get; set; }
+        public List<OrderListDto> Orders { get; set; }
+        public int TotalOrdersCount{ get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }

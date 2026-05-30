@@ -18,11 +18,13 @@ export type RootTabParamList = {
 export type DiscoveryStackParamList = {
   DiscoveryScreen: undefined;
   ServiceProvidersScreen: { subcategoryId: number; subcategoryName: string };
+  ServiceDetailScreen: { serviceId: number };
 };
 
 export type ServicesStackParamList = {
   ServicesScreen: undefined;
   CreateServiceScreen: undefined;
+  OrderDetailScreen: { serviceApplicationId: string };
 };
 
 export type NotificationStackParamList = {

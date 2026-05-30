@@ -22,38 +22,10 @@ namespace Solveit.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppFile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Bucket")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ObjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppFiles");
-                });
-
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("AppFileId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly?>("Birthday")
                         .HasColumnType("date");
@@ -71,6 +43,9 @@ namespace Solveit.Api.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsServiceProvider")
                         .HasColumnType("bit");
@@ -93,9 +68,9 @@ namespace Solveit.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppFileId")
+                    b.HasIndex("ImageId")
                         .IsUnique()
-                        .HasFilter("[AppFileId] IS NOT NULL");
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("AppUsers");
                 });
@@ -127,6 +102,128 @@ namespace Solveit.Api.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.ServiceFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bucket")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceFiles");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.UserFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bucket")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFiles");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("bit");
+
+                    b.Property<float?>("MaxPrice")
+                        .HasColumnType("real");
+
+                    b.Property<float>("MinPrice")
+                        .HasColumnType("real");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Pricing")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProviderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubcategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -154,6 +251,10 @@ namespace Solveit.Api.Migrations
                     b.Property<int>("Pricing")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProviderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -167,17 +268,13 @@ namespace Solveit.Api.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("SubcategoryId");
+                    b.HasIndex("ProviderId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("SubcategoryId");
 
                     b.ToTable("Services");
                 });
@@ -216,11 +313,52 @@ namespace Solveit.Api.Migrations
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppFile", "AppFile")
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.Files.UserFile", "Image")
                         .WithOne()
-                        .HasForeignKey("Solveit.Api.Core.Domain.Entities.AppUser", "AppFileId");
+                        .HasForeignKey("Solveit.Api.Core.Domain.Entities.AppUser", "ImageId");
 
-                    b.Navigation("AppFile");
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.ServiceFile", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.Service", "Service")
+                        .WithMany("Images")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.UserFile", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.Service", "Service")
+                        .WithMany("Orders")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
@@ -231,23 +369,23 @@ namespace Solveit.Api.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppUser", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Solveit.Api.Core.Domain.Entities.Subcategory", "Subcategory")
                         .WithMany()
                         .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Category");
 
-                    b.Navigation("Subcategory");
+                    b.Navigation("Provider");
 
-                    b.Navigation("User");
+                    b.Navigation("Subcategory");
                 });
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Subcategory", b =>
@@ -261,11 +399,23 @@ namespace Solveit.Api.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Services");
 
                     b.Navigation("Subcategories");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

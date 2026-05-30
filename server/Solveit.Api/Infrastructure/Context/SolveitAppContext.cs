@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Solveit.Api.Core.Domain.Entities;
+using Solveit.Api.Core.Domain.Entities.Files;
 
 namespace Solveit.Api.Infrastructure.Context
 {
@@ -61,7 +62,7 @@ namespace Solveit.Api.Infrastructure.Context
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Service>()
-              .HasOne(s => s.User)
+              .HasOne(s => s.Provider)
               .WithMany()
               .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Service>()
@@ -70,15 +71,15 @@ namespace Solveit.Api.Infrastructure.Context
               .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<AppUser>()
-              .HasOne(c => c.AppFile)
+              .HasOne(c => c.Image)
               .WithOne()
-              .HasForeignKey<AppUser>(_ => _.AppFileId)
+              .HasForeignKey<AppUser>(_ => _.ImageId)
               .IsRequired(false);
-
             modelBuilder.Entity<AppUser>()
-                .Property(u => u.AppFileId)
+                .Property(u => u.ImageId)
                 .IsRequired(false)
                 .HasDefaultValue(null);
+
 
             base.OnModelCreating(modelBuilder);
         }
@@ -86,6 +87,8 @@ namespace Solveit.Api.Infrastructure.Context
         public DbSet<Service> Services { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Subcategory> Subcategories { get; set; }
-        public DbSet<AppFile> AppFiles { get; set; }
+        public DbSet<UserFile> UserFiles { get; set; }
+        public DbSet<ServiceFile> ServiceFiles { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

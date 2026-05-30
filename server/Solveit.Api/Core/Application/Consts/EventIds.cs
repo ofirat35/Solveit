@@ -7,5 +7,6 @@
         public static readonly EventId CategoryService = new(1040, nameof(CategoryService));
         public static readonly EventId SubcategoryService = new(1050, nameof(SubcategoryService));
         public static readonly EventId ServiceProviderService = new(1060, nameof(ServiceProviderService));
+        public static readonly EventId OrderService = new(1070, nameof(OrderService));
     }
 }

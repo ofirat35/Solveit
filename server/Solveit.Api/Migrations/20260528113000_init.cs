@@ -12,21 +12,6 @@ namespace Solveit.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppFiles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Bucket = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ObjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Size = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppFiles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -40,34 +25,6 @@ namespace Solveit.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Birthday = table.Column<DateOnly>(type: "date", nullable: true),
-                    AppFileId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsServiceProvider = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    IsValid = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AppUsers_AppFiles_AppFileId",
-                        column: x => x.AppFileId,
-                        principalTable: "AppFiles",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -90,6 +47,29 @@ namespace Solveit.Api.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Birthday = table.Column<DateOnly>(type: "date", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsServiceProvider = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsValid = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,12 +110,65 @@ namespace Solveit.Api.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Bucket = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ObjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OwnerType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserFiles_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false),
+                    Bucket = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ObjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OwnerType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceFiles_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_AppUsers_AppFileId",
+                name: "IX_AppUsers_ImageId",
                 table: "AppUsers",
-                column: "AppFileId",
+                column: "ImageId",
                 unique: true,
-                filter: "[AppFileId] IS NOT NULL");
+                filter: "[ImageId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceFiles_ServiceId",
+                table: "ServiceFiles",
+                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_CategoryId",
@@ -156,25 +189,44 @@ namespace Solveit.Api.Migrations
                 name: "IX_Subcategories_CategoryId",
                 table: "Subcategories",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFiles_UserId",
+                table: "UserFiles",
+                column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AppUsers_UserFiles_ImageId",
+                table: "AppUsers",
+                column: "ImageId",
+                principalTable: "UserFiles",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Services");
+            migrationBuilder.DropForeignKey(
+                name: "FK_AppUsers_UserFiles_ImageId",
+                table: "AppUsers");
 
             migrationBuilder.DropTable(
-                name: "AppUsers");
+                name: "ServiceFiles");
+
+            migrationBuilder.DropTable(
+                name: "Services");
 
             migrationBuilder.DropTable(
                 name: "Subcategories");
 
             migrationBuilder.DropTable(
-                name: "AppFiles");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "UserFiles");
+
+            migrationBuilder.DropTable(
+                name: "AppUsers");
         }
     }
 }

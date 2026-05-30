@@ -5,6 +5,7 @@ using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Dtos.Categories;
+using Solveit.Api.Core.Domain.Dtos.Orders;
 using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Dtos.Subcategories;
 using Solveit.Api.Core.Domain.Entities;
@@ -31,6 +32,10 @@ namespace Solveit.Api.Core.Application.Mappings
 
             CreateMap<Category, CategoryListDto>();
             CreateMap<Subcategory, SubcategoryListDto>();
+
+            CreateMap<Service, OrderListDto>();
+            CreateMap<Order, OrderListDto>();
+            CreateMap<IServiceBase, Order>();
 
         }
     }

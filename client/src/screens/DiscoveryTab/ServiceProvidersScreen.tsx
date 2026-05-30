@@ -63,10 +63,15 @@ export function ServiceProvidersScreen() {
               <ProviderCard
                 item={item}
                 onPress={() =>
-                  //   navigate("ServiceProviderDetailScreen", {
-                  //     providerId: item.id,
-                  //   })
-                  console.log("")
+                  navigator.navigate("RootTabNavigationScreen", {
+                    screen: "DiscoveryTab",
+                    params: {
+                      screen: "ServiceDetailScreen",
+                      params: {
+                        serviceId: item.id,
+                      },
+                    },
+                  })
                 }
               />
             )}
@@ -110,7 +115,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignItems: "center",
   },
-  // Empty state
   emptyState: {
     flex: 1,
     alignItems: "center",

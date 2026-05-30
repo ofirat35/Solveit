@@ -12,15 +12,15 @@ namespace Solveit.Api.Core.Application.Features.Queries.Users
     {
         public async Task<ResponseModel<UserImageListDto>> Handle(GetUserImageRequestQuery request, CancellationToken cancellationToken)
         {
-            var user = await userService.GetAll().Include(_ => _.AppFile).FirstOrDefaultAsync(_ => _.Id == request.UserId && _.IsValid);
-            if (user is null || user.AppFile is null)
+            var user = await userService.GetAll().Include(_ => _.Image).FirstOrDefaultAsync(_ => _.Id == request.UserId && _.IsValid);
+            if (user is null || user.Image is null)
                 return ToFailResponseModel<UserImageListDto>(ExceptionMessages.EntityNotFound, StatusCodes.Status404NotFound);
 
             var mappedImage = new UserImageListDto
             {
-                CreatedDate = user.AppFile.CreatedDate,
-                Id = user.AppFile.Id,
-                ImagePath = await fileService.GetPresignedUrl(MinioBucket.UserImages, user.AppFile.ObjectName)
+                CreatedDate = user.Image.CreatedDate,
+                Id = user.Image.Id,
+                ImagePath = await fileService.GetPresignedUrl(MinioBucket.UserImages, user.Image.ObjectName)
             };
 
             return ToSuccessResponseModel(mappedImage);

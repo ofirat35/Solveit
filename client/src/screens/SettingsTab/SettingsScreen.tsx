@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -17,18 +16,13 @@ import {
 } from "../../components/SettingsTab/SettingRow";
 import { CustomModal } from "../../components/shared/CustomModal";
 import { LanguageModal } from "../../components/shared/LanguageModal";
+import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { useAuth } from "../../helpers/contexts/AuthContext";
 import { useSettings } from "../../hooks/Settings/useSettings";
-
-const LANGUAGES: { code: string; label: string; flag: string }[] = [
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
-];
-
 export function SettingsScreen() {
   const { logout } = useAuth();
-  const { user, isLoading } = useSettings();
+  const { user } = useSettings();
   const [changeLanguageVisible, setChangeLanguageVisible] = useState(false);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const { t, i18n } = useTranslation();
@@ -44,17 +38,11 @@ export function SettingsScreen() {
       >
         <View style={styles.profileCard}>
           <View style={styles.avatar}>
-            {user?.profileImage ? (
-              <Image
-                style={styles.avatarImage}
-                source={{ uri: user?.profileImage }}
-                transition={200}
-              />
-            ) : (
-              <Text style={styles.avatarText}>
-                {user?.firstName?.charAt(0) ?? "—"}
-              </Text>
-            )}
+            <UserAvatar
+              user={user}
+              containerStyle={styles.avatarImage}
+              imageStyle={styles.avatarImage}
+            ></UserAvatar>
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.profileName}>
@@ -121,9 +109,7 @@ export function SettingsScreen() {
         <LanguageModal
           visible={changeLanguageVisible}
           onDismiss={() => setChangeLanguageVisible(false)}
-          onConfirm={() => {
-            setChangeLanguageVisible(false);
-          }}
+          onConfirm={() => setChangeLanguageVisible(false)}
           selectedLang={selectedLang}
           setSelectedLang={(lang) => setSelectedLang(lang)}
         ></LanguageModal>
@@ -189,7 +175,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  avatarText: { fontSize: 18, fontWeight: "600", color: "#185FA5" },
   profileName: { fontSize: 15, fontWeight: "600", color: "#1a1a1a" },
   profileEmail: { fontSize: 13, color: "#888", marginTop: 2 },
 

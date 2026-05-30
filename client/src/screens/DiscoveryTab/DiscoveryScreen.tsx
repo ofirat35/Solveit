@@ -19,7 +19,6 @@ export function HomeScreen() {
     queryKey: ["categoriesWithSubcategories"],
     queryFn: () => CategoryService.getCategoriesWithSubcategories(),
   });
-  console.log(categories);
 
   return (
     <View style={styles.container}>

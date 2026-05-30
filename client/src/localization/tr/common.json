@@ -3,53 +3,57 @@
   "common": {
     "cancel": "İptal",
     "confirm": "Onayla",
-    "fixed": "fixed",
-    "notNow": "common.notNow",
-    "perDay": "/ day",
-    "perHour": "/ hour",
-    "perSession": "/ session",
-    "search": "Ara..."
+    "error": "Hata",
+    "fixed": "Sabit",
+    "goBack": "Geri Dön",
+    "n/a": "N/A",
+    "notNow": "Şimdi Değil",
+    "perDay": "/ gün",
+    "perHour": "/ saat",
+    "perSession": "/ oturum",
+    "search": "Ara...",
+    "success": "Başarılı"
   },
   "createService": {
     "active": "Aktif",
-    "activeDescription": "Diğer kullanıcılara görünür ve başvuru kabul ediyor",
+    "activeDescription": "Diğerleri tarafından görülebilir ve başvurulara açık",
     "availability": "UYGUNLUK",
     "cancel": "İptal",
     "category": "KATEGORİ",
     "categoryLabel": "Kategori",
-    "categoryPlaceholder": "Kategori seçin",
+    "categoryPlaceholder": "Bir kategori seçin",
     "createService": "Hizmet Oluştur",
     "createSuccess": "Hizmet başarıyla oluşturuldu!",
     "descriptionLabel": "Açıklama",
-    "descriptionPlaceholder": "Bu hizmet neleri kapsıyor?",
+    "descriptionPlaceholder": "Bu hizmet neleri içeriyor?",
     "maxPrice": "Maksimum Fiyat",
     "minPrice": "Minimum Fiyat",
-    "paused": "Durduruldu",
-    "pausedDescription": "Listelerden gizli, yeni başvuru alınmıyor",
+    "paused": "Duraklatıldı",
+    "pausedDescription": "Listelerden gizlenir, yeni başvuru alınmaz",
     "price": "Fiyat",
     "priceRange": "Fiyat Aralığı",
     "pricing": "FİYATLANDIRMA",
     "serviceDetails": "HİZMET DETAYLARI",
-    "setMaxPrice": "Maksimum fiyat belirle",
+    "setMaxPrice": "Maksimum bir fiyat belirleyin",
     "subcategoryLabel": "Alt Kategori",
-    "subcategoryPlaceholder": "Alt kategori seçin",
-    "subcategoryPlaceholderFirst": "Önce kategori seçin",
+    "subcategoryPlaceholder": "Bir alt kategori seçin",
+    "subcategoryPlaceholderFirst": "Önce bir kategori seçin",
     "title": "Yeni Hizmet",
     "titleLabel": "Başlık",
-    "titlePlaceholder": "örn. Matematik Dersi, Köpek Gezisi, vb."
+    "titlePlaceholder": "Örn. Matematik Özel Dersi, Köpek Gezdirme vb."
   },
   "DiscoveryTab": {
     "TabNavTitle": "Keşfet"
   },
   "editProfile": {
-    "addPhoto": "editProfile.addPhoto",
+    "addPhoto": "Fotoğraf Ekle",
     "birthday": "Doğum Tarihi",
     "email": "E-posta",
     "firstName": "Ad",
     "gender": "Cinsiyet",
     "lastName": "Soyad",
     "man": "Erkek",
-    "permissionDenied": "editProfile.permissionDenied",
+    "permissionDenied": "İzin reddedildi",
     "phone": "Telefon",
     "title": "Profili Güncelle",
     "update": "Güncelle",
@@ -57,32 +61,66 @@
     "updateSuccess": "Profil başarıyla güncellendi!",
     "woman": "Kadın"
   },
-  "Email": "Email",
+  "Email": "E-posta",
+  "errors": {
+    "failedLoadOrder": "Sipariş detayları yüklenemedi."
+  },
   "home": {
     "greeting": "Ne konuda yardıma ihtiyacınız var?",
-    "searchPlaceholder": "'Ev Temizliği' deneyin"
+    "searchPlaceholder": "Şunu deneyin: 'Ev Temizliği'"
   },
-  "Loading": "Loading",
+  "Loading": "Yükleniyor",
   "login": {
     "dontHaveAccount": "Hesabınız yok mu?",
-    "forgotPassword": "Şifremi unuttum?",
-    "register": "Kayıt ol",
+    "forgotPassword": "Şifrenizi mi unuttunuz?",
+    "register": "Kayıt Ol",
     "subtitle": "Tekrar hoş geldiniz",
-    "title": "Giriş yap"
+    "title": "Giriş Yap"
   },
   "NotificationTab": {
     "TabNavTitle": "Bildirimler"
   },
+  "orders": {
+    "cancelOrder": "Siparişi İptal Et",
+    "emptyOrdersSubtitle": "Aktif ve geçmiş hizmet talepleriniz burada listelenir.",
+    "location": "Konum",
+    "noOrdersYet": "Henüz sipariş yok",
+    "notes": "Notlar",
+    "orderCanceled": "Sipariş İptal Edildi!",
+    "orderDetails": "Sipariş Detayları",
+    "orderedOn": "Sipariş Tarihi",
+    "orderedOnDate": "Sipariş tarihi: {{date}}",
+    "orderId": "Sipariş Kodu",
+    "orderInfo": "Sipariş Bilgisi",
+    "scheduledFor": "Planlanan Zaman"
+  },
+  "pricingUnits": {
+    "Fixed": "Sabit",
+    "Hourly": "Saatlik",
+    "Item": "Adet Başına"
+  },
+  "providerDetail": {
+    "about": "Hakkında",
+    "applyButton": "Başvur",
+    "applyError": "Başvuru sırasında bir hata oluştu",
+    "applySuccess": "Başvuru başarıyla gönderildi!",
+    "contact": "İletişim",
+    "errorLoading": "Veriler yüklenirken hata oluştu",
+    "location": "Konum",
+    "noDescription": "Açıklama bulunmuyor",
+    "phone": "Telefon",
+    "startingFrom": "Şu fiyattan başlayan"
+  },
   "providers": {
-    "loading": "providers.loading",
-    "noProviders": "providers.noProviders",
-    "noProvidersSubtitle": "providers.noProvidersSubtitle"
+    "loading": "Yükleniyor...",
+    "noProviders": "Hizmet sağlayıcı bulunamadı",
+    "noProvidersSubtitle": "Bu kategori için henüz bir sağlayıcı bulunmuyor."
   },
   "register": {
-    "alreadyHaveAccount": "Zaten hesabınız var mı?",
+    "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
     "birthday": "Doğum Tarihi",
     "confirmPassword": "Şifreyi Onayla",
-    "createAccount": "Hesap oluştur",
+    "createAccount": "Hesap Oluştur",
     "email": "E-posta",
     "firstName": "Ad",
     "gender": "Cinsiyet",
@@ -91,52 +129,71 @@
     "man": "Erkek",
     "password": "Şifre",
     "phone": "Telefon",
-    "registerSuccess": "Kayıt başarıyla tamamlandı!",
+    "registerSuccess": "Başarıyla kayıt olundu!",
     "show": "Göster",
-    "signIn": "Giriş yap",
+    "signIn": "Giriş Yap",
     "subtitle": "Başlamak için kayıt olun",
-    "title": "Hesap oluştur",
+    "title": "Hesap Oluştur",
     "woman": "Kadın"
   },
   "Reset": "Sıfırla",
-  "Reset Password": "Şifre Sıfırla",
+  "Reset Password": "Şifreyi Sıfırla",
   "services": {
-    "activate": "Etkinleştir",
-    "activateToOffer": "Kendi hizmetlerinizi sunmak için etkinleştirin",
+    "activate": "Aktifleştir",
+    "activateToOffer": "Hizmet sunmaya başlamak için aktifleştirin",
     "addService": "Hizmet Ekle",
-    "becomeProviderDescription": "Sağlayıcı modunu etkinleştirmek hizmetlerinizi müşterilere görünür kılar. İstediğiniz zaman kapatabilirsiniz.",
-    "becomeProviderTitle": "Sağlayıcı olmak ister misiniz?",
-    "defaultChanged": "Varsayılan {{tab}} olarak değiştirildi!",
+    "applicationsCount_one": "{{count}} başvuru",
+    "applicationsCount_other": "{{count}} başvuru",
+    "becomeProviderDescription": "Sağlayıcı modunu aktifleştirerek özel hizmet ilanları oluşturabilir ve müşteri talepleri almaya başlayabilirsiniz.",
+    "becomeProviderTitle": "Hizmet Sağlayıcı Olun",
+    "defaultChanged": "Varsayılan sekme {{tab}} olarak değiştirildi",
+    "emptyServicesSubtitle": "Oluşturduğunuz aktif ve özel hizmet ilanları burada görüntülenecektir.",
     "myOrders": "Siparişlerim",
     "myServices": "Hizmetlerim",
-    "providerModeOff": "Sağlayıcı modu kapalı",
-    "providerModeOn": "Sağlayıcı modu açık",
-    "servicesVisible": "Hizmetleriniz müşterilere görünüyor",
-    "setAsDefault": "Varsayılan olarak ayarla",
-    "setAsDefaultDescription": "\"{{tab}}\" bu ekranda her seferinde varsayılan olarak açılacak.",
-    "setAsDefaultTitle": "Varsayılan sekme olarak ayarla?",
-    "title": "İşlerim"
+    "noApplications": "Henüz başvuru yok",
+    "noServicesYet": "Henüz hizmet yok",
+    "price": "Fiyat",
+    "providerModeOff": "Sağlayıcı Modu Kapalı",
+    "providerModeOn": "Sağlayıcı Modu Açık",
+    "serviceProvider": "Hizmet Sağlayıcı",
+    "servicesVisible": "Hizmetleriniz müşteriler tarafından görülebilir",
+    "setAsDefault": "Varsayılan Yap",
+    "setAsDefaultDescription": "\"{{tab}}\" sekmesini varsayılan açılış görünümünüz yapmak istediğinize emin misiniz?",
+    "setAsDefaultTitle": "Varsayılan Sekme Yap",
+    "title": "Hizmetler",
+    "viewService": "Hizmeti Görüntüle"
   },
   "ServicesTab": {
-    "TabNavTitle": "İşlerim"
+    "TabNavTitle": "Hizmetler"
   },
   "settings": {
-    "account": "Hesabım",
+    "account": "Hesap",
     "changePassword": "Şifre Değiştir",
-    "confirmLogout": "Çıkış Onayı",
-    "confirmLogoutMessage": "Çıkış yapmak istediğinize emin misiniz?",
-    "editProfile": "Profil Düzenle",
+    "confirmLogout": "Çıkışı Onayla",
+    "confirmLogoutMessage": "Oturumu kapatmak istediğinize emin misiniz?",
+    "editProfile": "Profili Düzenle",
     "helpCenter": "Yardım Merkezi",
     "language": "Dil",
-    "logout": "Çıkış",
+    "logout": "Çıkış Yap",
     "preferences": "Tercihler",
-    "selectLanguage": "Dil Seç",
+    "selectLanguage": "Dil Seçin",
     "support": "Destek",
-    "termsPrivacy": "Şartlar ve Gizlilik",
-    "version": "Sürüm"
+    "termsPrivacy": "Koşullar & Gizlilik",
+    "version": "Versiyon"
   },
   "SettingsTab": {
     "TabNavTitle": "Ayarlar"
   },
-  "Sign in": "Giriş Yap"
+  "Sign in": "Giriş Yap",
+  "status": {
+    "accepted": "Kabul Edildi",
+    "active": "Aktif",
+    "cancelled": "İptal Edildi",
+    "completed": "Tamamlandı",
+    "paused": "Duraklatıldı",
+    "pending": "Beklemede",
+    "rejected": "Reddedildi",
+    "unknown": "Bilinmiyor",
+    "upcoming": "Yaklaşan"
+  }
 }

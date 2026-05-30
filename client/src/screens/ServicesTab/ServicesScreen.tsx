@@ -33,7 +33,7 @@ export function ServicesScreen() {
 
   const getDefaultTab = async () => {
     let selectedTab = await AsyncStorage.getItem(cacheName);
-    if (!selectedTab) selectedTab = "myOrders";
+    if (!selectedTab) return "myOrders";
     await AsyncStorage.setItem(cacheName, selectedTab);
     return selectedTab as "myOrders" | "myServices";
   };
@@ -72,12 +72,10 @@ export function ServicesScreen() {
   useEffect(() => {
     UserService.checkIsServiceProviderByUserId(
       keycloakService.getCurrentUserId()!,
-    )
-      .then((isServiceProvider) => setIsProvider(isServiceProvider))
-      .catch((error) =>
-        console.error("Error fetching provider status:", error),
-      );
-    getDefaultTab().then((tab) => setActiveTab(tab));
+    ).then((isServiceProvider) => setIsProvider(isServiceProvider));
+    getDefaultTab().then((tab) => {
+      setActiveTab(tab);
+    });
   }, []);
 
   return (

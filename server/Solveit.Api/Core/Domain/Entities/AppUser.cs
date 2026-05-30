@@ -1,5 +1,6 @@
 ﻿
 using Solveit.Api.Core.Application.Enums;
+using Solveit.Api.Core.Domain.Entities.Files;
 
 namespace Solveit.Api.Core.Domain.Entities
 {
@@ -11,8 +12,9 @@ namespace Solveit.Api.Core.Domain.Entities
         public string Email { get; set; }
         public string? Phone { get; set; }
         public DateOnly? Birthday { get; set; }
-        public Guid? AppFileId { get; set; }
-        public AppFile? AppFile { get; set; }
+        public Guid? ImageId { get; set; }
+        public UserFile? Image { get; set; }
+        public List<Order> Orders { get; set; }
         public bool IsServiceProvider { get; set; }
         public AppUserStatus Status { get; set; }
         public bool IsValid { get; set; }

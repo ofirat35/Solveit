@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
 import { ServiceListModel } from "../../models/Services/ServiceListModel";
+import { UserAvatar } from "../UserAvatar";
 
 export function ProviderCard({
   item,
@@ -12,7 +13,6 @@ export function ProviderCard({
   onPress: () => void;
 }) {
   const { t } = useTranslation();
-
   return (
     <TouchableOpacity
       style={styles.card}
@@ -20,27 +20,18 @@ export function ProviderCard({
       activeOpacity={0.85}
     >
       <View style={styles.cardTop}>
-        {/* Avatar */}
-        {/* {item.photoUrl ? (
-          <Image
-            source={{ uri: `${API_BASE_URL}/${item.photoUrl}` }}
-            style={styles.avatar}
-          />
-        ) : ( */}
-        <View style={styles.avatarFallback}>
-          <Text style={styles.avatarInitial}>
-            {/* {item.name.charAt(0).toUpperCase()} */}T
-          </Text>
+        <View>
+          <UserAvatar
+            user={item.provider}
+            containerStyle={{ width: 52, height: 52, borderRadius: 26 }}
+            imageStyle={{ width: 52, height: 52, borderRadius: 26 }}
+          ></UserAvatar>
         </View>
-        {/* )} */}
-
-        {/* Info */}
         <View style={styles.cardInfo}>
           <Text style={styles.providerName} numberOfLines={1}>
-            {item.user?.firstName}
+            {item.provider?.firstName}
           </Text>
 
-          {/* Rating */}
           <View style={styles.ratingRow}>
             <Star size={13} color="#f59e0b" fill="#f59e0b" />
             {/* <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text> */}
@@ -103,26 +94,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
 
-  // Avatar
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "#e7f5ff",
-  },
-  avatarFallback: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "#e7f5ff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatarInitial: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#185FA5",
-  },
   footerLoader: {
     paddingVertical: 20,
     alignItems: "center",

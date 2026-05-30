@@ -12,7 +12,7 @@ using Solveit.Api.Infrastructure.Context;
 namespace Solveit.Api.Migrations
 {
     [DbContext(typeof(SolveitAppContext))]
-    [Migration("20260526091035_init")]
+    [Migration("20260528113000_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -25,38 +25,10 @@ namespace Solveit.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppFile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Bucket")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ObjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppFiles");
-                });
-
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("AppFileId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly?>("Birthday")
                         .HasColumnType("date");
@@ -74,6 +46,9 @@ namespace Solveit.Api.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsServiceProvider")
                         .HasColumnType("bit");
@@ -96,9 +71,9 @@ namespace Solveit.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppFileId")
+                    b.HasIndex("ImageId")
                         .IsUnique()
-                        .HasFilter("[AppFileId] IS NOT NULL");
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("AppUsers");
                 });
@@ -128,6 +103,83 @@ namespace Solveit.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.ServiceFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bucket")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceFiles");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.UserFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bucket")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFiles");
                 });
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
@@ -219,11 +271,33 @@ namespace Solveit.Api.Migrations
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppFile", "AppFile")
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.Files.UserFile", "Image")
                         .WithOne()
-                        .HasForeignKey("Solveit.Api.Core.Domain.Entities.AppUser", "AppFileId");
+                        .HasForeignKey("Solveit.Api.Core.Domain.Entities.AppUser", "ImageId");
 
-                    b.Navigation("AppFile");
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.ServiceFile", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.Service", "Service")
+                        .WithMany("Images")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Files.UserFile", b =>
+                {
+                    b.HasOne("Solveit.Api.Core.Domain.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
@@ -269,6 +343,11 @@ namespace Solveit.Api.Migrations
                     b.Navigation("Services");
 
                     b.Navigation("Subcategories");
+                });
+
+            modelBuilder.Entity("Solveit.Api.Core.Domain.Entities.Service", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

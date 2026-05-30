@@ -6,6 +6,7 @@ using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Entities;
+using Solveit.Api.Core.Domain.Entities.Files;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Extensions;
 
@@ -37,24 +38,24 @@ namespace Solveit.Api.Core.Application.Features.Commands.Users
 
                 var objectPath = $"{userId}/{Guid.NewGuid()}{extension}";
                 response = await fileService.UploadFileAsync(request.File, MinioBucket.UserImages, objectPath);
-                var image = new AppFile
+                var image = new UserFile
                 {
                     Bucket = MinioBucket.UserImages,
                     ObjectName = response.ObjectName,
                     Size = response.Size,
                 };
-                var user = await userService.GetByIdAsync(userId, true, _ => _.AppFile);
-                if (user.AppFile is null)
+                var user = await userService.GetByIdAsync(userId, true, _ => _.Image);
+                if (user.Image is null)
                 {
-                    user.AppFile = image;
+                    user.Image = image;
                 }
                 else
                 {
-                    await fileService.DeleteFileAsync(user.AppFile.Bucket, user.AppFile.ObjectName);
-                    user.AppFile.Bucket = MinioBucket.UserImages;
-                    user.AppFile.ObjectName = response.ObjectName;
-                    user.AppFile.Size = response.Size;
-                    user.AppFile.CreatedDate = DateTime.Now;
+                    await fileService.DeleteFileAsync(user.Image.Bucket, user.Image.ObjectName);
+                    user.Image.Bucket = MinioBucket.UserImages;
+                    user.Image.ObjectName = response.ObjectName;
+                    user.Image.Size = response.Size;
+                    user.Image.CreatedDate = DateTime.Now;
                 }
 
                 await userService.SaveChangesAsync();

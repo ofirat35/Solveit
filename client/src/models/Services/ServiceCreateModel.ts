@@ -9,5 +9,5 @@ export type ServiceCreateModel = {
   minPrice: number;
   maxPrice: number | null | undefined;
   isActive: boolean;
-  userId: string;
+  providerId: string;
 };

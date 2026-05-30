@@ -29,6 +29,6 @@ namespace Solveit.Api.Core.Application.Features.Commands.Services
         public float MinPrice { get; set; }
         public float? MaxPrice { get; set; }
         public bool IsActive { get; set; }
-        public string UserId { get; set; }
+        public string ProviderId { get; set; }
     }
 }

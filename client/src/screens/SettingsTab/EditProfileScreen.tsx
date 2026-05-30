@@ -1,7 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker"; // 1. Import Image Picker
 import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,6 +21,7 @@ import {
 import { RadioButton } from "react-native-paper";
 import { CustomTextInput } from "../../components/shared/Forms/CustomTextInput";
 import { ScreenHeader } from "../../components/shared/ScreenHeader";
+import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { GenderEnum } from "../../helpers/enums/GenderEnum";
 import {
@@ -74,10 +74,7 @@ export function EditProfileScreen() {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      showToast(
-        t("editProfile.permissionDenied") ||
-          "Permission to access gallery was denied",
-      );
+      showToast(t("editProfile.permissionDenied"));
       return;
     }
 
@@ -90,6 +87,7 @@ export function EditProfileScreen() {
 
     if (!result.canceled) {
       await uploadUserImage(result.assets[0]);
+      showToast("Profile image updated");
     }
   };
 
@@ -137,20 +135,11 @@ export function EditProfileScreen() {
                 style={styles.avatarContainer}
                 onPress={() => pickImage()}
               >
-                {user?.profileImage ? (
-                  <Image
-                    source={{ uri: user?.profileImage }}
-                    style={styles.avatarImage}
-                    transition={200}
-                  />
-                ) : (
-                  <View style={styles.avatarPlaceholder}>
-                    <FontAwesome5 name="camera" size={24} color="#888" />
-                    <Text style={styles.avatarText}>
-                      {t("editProfile.addPhoto") || "Add Photo"}
-                    </Text>
-                  </View>
-                )}
+                <UserAvatar
+                  user={user}
+                  imageStyle={styles.avatarImage}
+                  containerStyle={styles.avatarImage}
+                ></UserAvatar>
                 <View style={styles.editBadge}>
                   <FontAwesome5 name="pen" size={10} color="#fff" />
                 </View>
@@ -367,7 +356,6 @@ export function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  // 7. Added styles for image container and picker
   imagePickerContainer: {
     alignItems: "center",
     marginBottom: 32,
@@ -389,17 +377,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
   },
-  avatarPlaceholder: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  avatarText: {
-    fontSize: 12,
-    color: "#888",
-    marginTop: 4,
-    fontWeight: "500",
-  },
   editBadge: {
     position: "absolute",
     bottom: 2,
@@ -418,10 +395,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#111",
     marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: "#888",
   },
   row: {
     flexDirection: "row",
@@ -454,23 +427,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-  },
-  passwordRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 0,
-  },
-  passwordInput: {
-    flex: 1,
-    fontSize: 15,
-    color: "#111",
-    paddingVertical: 12,
-  },
-  toggleText: {
-    fontSize: 13,
-    color: "#555",
-    fontWeight: "500",
-    paddingRight: 4,
   },
   button: {
     backgroundColor: "#111",

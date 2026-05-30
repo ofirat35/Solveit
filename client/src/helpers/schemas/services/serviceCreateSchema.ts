@@ -27,7 +27,7 @@ export const serviceCreateSchema = yup.object({
 
   isActive: yup.boolean().required("Active status is required"),
   // userId: yup.string().uuid("Invalid user ID").required("User ID is required"),
-  userId: yup.string().required("User ID is required"),
+  providerId: yup.string().required("User ID is required"),
 });
 
 export type ServiceCreateFormData = yup.InferType<typeof serviceCreateSchema>;

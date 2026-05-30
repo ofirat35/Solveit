@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TFunction } from "i18next";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -59,7 +59,7 @@ export function CreateServiceScreen() {
       minPrice: 0,
       maxPrice: null,
       isActive: true,
-      userId: userId,
+      providerId: userId,
     },
   });
 
@@ -73,10 +73,6 @@ export function CreateServiceScreen() {
   const { categories, subcategories } = useCategories({
     selectedCategoryId: selectedCategoryId || 0,
   });
-
-  useEffect(() => {
-    console.log("Form errors:", errors);
-  }, [errors]);
 
   return (
     <KeyboardAvoidingView
