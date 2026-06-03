@@ -3,11 +3,10 @@ import { PricingUnitsEnum } from "../../helpers/enums/PricingUnitsEnum";
 export type ServiceCreateModel = {
   title: string;
   description: string;
-  categoryId: string;
-  subcategoryId: string;
+  categoryId: number;
+  subcategoryId: number;
   pricing: PricingUnitsEnum;
   minPrice: number;
   maxPrice: number | null | undefined;
-  isActive: boolean;
   providerId: string;
 };

@@ -8,13 +8,13 @@ using Solveit.Api.Core.Domain.Models;
 namespace Solveit.Api.Core.Application.Features.Queries.Users
 {
     public class GetUserImageQueryHandler(IMinioFileService fileService, IAppUserService userService)
-       : BaseQueryHandler, IRequestHandler<GetUserImageRequestQuery, ResponseModel<UserImageListDto>>
+       : BaseQueryHandler, IRequestHandler<GetUserImageRequestQuery, Result<UserImageListDto>>
     {
-        public async Task<ResponseModel<UserImageListDto>> Handle(GetUserImageRequestQuery request, CancellationToken cancellationToken)
+        public async Task<Result<UserImageListDto>> Handle(GetUserImageRequestQuery request, CancellationToken cancellationToken)
         {
             var user = await userService.GetAll().Include(_ => _.Image).FirstOrDefaultAsync(_ => _.Id == request.UserId && _.IsValid);
             if (user is null || user.Image is null)
-                return ToFailResponseModel<UserImageListDto>(ExceptionMessages.EntityNotFound, StatusCodes.Status404NotFound);
+                return ToFailResult<UserImageListDto>([ExceptionMessages.EntityNotFound], StatusCodes.Status404NotFound);
 
             var mappedImage = new UserImageListDto
             {
@@ -23,11 +23,11 @@ namespace Solveit.Api.Core.Application.Features.Queries.Users
                 ImagePath = await fileService.GetPresignedUrl(MinioBucket.UserImages, user.Image.ObjectName)
             };
 
-            return ToSuccessResponseModel(mappedImage);
+            return ToSuccessResult(mappedImage);
         }
     }
 
-    public class GetUserImageRequestQuery : IRequest<ResponseModel<UserImageListDto>>
+    public class GetUserImageRequestQuery : IRequest<Result<UserImageListDto>>
     {
         public string UserId { get; set; }
     }

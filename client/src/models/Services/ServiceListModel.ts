@@ -7,13 +7,12 @@ export type ServiceListModel = {
   id: number;
   title: string;
   description: string;
-  categoryId: string;
-  subcategoryId: string;
+  categoryId: number;
+  subcategoryId: number;
   pricing: PricingUnitsEnum;
   minPrice: number;
   maxPrice: number | null | undefined;
   status: ServiceStatusEnum;
-  isActive: boolean;
   providerId: string;
   provider: AppUserListModel | null;
   orders: OrderListModel[];

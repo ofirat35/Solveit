@@ -1,6 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { keycloakService } from "../helpers/Auth/keycloak";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../helpers/queryKeys";
 import { CategoryService } from "../services/CategoryService";
 
 export const useCategories = ({
@@ -8,16 +7,13 @@ export const useCategories = ({
 }: {
   selectedCategoryId: number;
 }) => {
-  const userId = useMemo(() => keycloakService.getCurrentUserId()!, []);
-  const queryClient = useQueryClient();
-
   const { data: categories } = useQuery({
-    queryKey: ["categories"],
+    queryKey: queryKeys.categories.all,
     queryFn: () => CategoryService.getCategories(),
   });
 
   const { data: subcategories } = useQuery({
-    queryKey: ["subcategories", selectedCategoryId],
+    queryKey: queryKeys.categories.subcategories(selectedCategoryId),
     queryFn: () =>
       CategoryService.getSubcategoriesByCategoryId(selectedCategoryId),
     enabled: !!selectedCategoryId,

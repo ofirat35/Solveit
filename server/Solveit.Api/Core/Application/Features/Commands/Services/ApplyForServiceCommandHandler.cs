@@ -1,23 +1,21 @@
-﻿using AutoMapper;
-using MediatR;
-using Solveit.Api.Core.Application.Enums;
+﻿using MediatR;
+using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Services;
-using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Models;
 
 namespace Solveit.Api.Core.Application.Features.Commands.Services
 {
     public class ApplyForServiceCommandHandler(IServiceProviderService serviceProviderService)
-        : BaseCommandHandler, IRequestHandler<ApplyForServiceRequestCommand, ResponseModel<bool>>
+        : BaseCommandHandler, IRequestHandler<ApplyForServiceRequestCommand, Result<bool>>
     {
-        public async Task<ResponseModel<bool>> Handle(ApplyForServiceRequestCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(ApplyForServiceRequestCommand request, CancellationToken cancellationToken)
         {
             var response = await serviceProviderService.ApplyForServiceAsync(request.ServiceId);
-            return ToSuccessResponseModel(response.Value, StatusCodes.Status201Created);
+            return response.ToResult();
         }
     }
 
-    public class ApplyForServiceRequestCommand : IRequest<ResponseModel<bool>>
+    public class ApplyForServiceRequestCommand : IRequest<Result<bool>>
     {
         public int ServiceId { get; set; }
     }

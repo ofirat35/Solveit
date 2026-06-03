@@ -13,17 +13,16 @@ namespace Solveit.Api.Presentation.Controllers
             return HandleResponse(await Mediator.Send(command));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MyServices([FromQuery] int page, [FromQuery] int pageSize)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateServiceRequestCommand command)
         {
-            return Ok(await Mediator.Send(new MyServicesRequestQuery { Page = page, PageSize = pageSize }));
+            return HandleResponse(await Mediator.Send(command));
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> GetOrderById([FromQuery] Guid orderId)
+        public async Task<IActionResult> GetUserServices([FromQuery] string userId, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            return HandleResponse(await Mediator.Send(new GetOrderByIdRequestQuery { OrderId = orderId }));
+            return Ok(await Mediator.Send(new GetUserServicesRequestQuery { UserId = userId, Page = page, PageSize = pageSize }));
         }
 
         [HttpGet]

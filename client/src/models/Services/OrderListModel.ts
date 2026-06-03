@@ -1,4 +1,4 @@
-import { OrderStausEnum } from "../../helpers/enums/OrderStatusEnum";
+import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
 import { PricingUnitsEnum } from "../../helpers/enums/PricingUnitsEnum";
 import { AppUserListModel } from "../Users/AppUserListModel";
 import { ServiceListModel } from "./ServiceListModel";
@@ -7,8 +7,8 @@ export type OrderListModel = {
   id: string;
   title: string;
   description: string;
-  categoryId: string;
-  subcategoryId: string;
+  categoryId: number;
+  subcategoryId: number;
   pricing: PricingUnitsEnum;
   minPrice: number;
   maxPrice: number | null | undefined;
@@ -17,7 +17,7 @@ export type OrderListModel = {
   serviceId: number;
   service: ServiceListModel;
   user: AppUserListModel;
-  orderStatus: OrderStausEnum;
+  orderStatus: OrderStatusEnum;
   createdDate: string;
   updatedDate: string | null;
 };

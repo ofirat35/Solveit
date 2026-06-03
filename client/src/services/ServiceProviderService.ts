@@ -1,5 +1,6 @@
 import { ServiceCreateModel } from "../models/Services/ServiceCreateModel";
 import { ServiceListModel } from "../models/Services/ServiceListModel";
+import { ServiceUpdateModel } from "../models/Services/ServiceUpdateModel";
 import { PaginatedItemsViewModel } from "./../models/PaginatedItemsViewModel";
 import { api } from "./api";
 
@@ -13,15 +14,25 @@ export const ServiceProviderService: IServiceProviderService = {
       throw error;
     }
   },
-  async getMyServices(
+  async updateService(service: ServiceUpdateModel): Promise<boolean> {
+    try {
+      var result = await api.put<boolean>(`/serviceProviders/update`, service);
+      return result.data;
+    } catch (error) {
+      console.error("api error222:", error);
+      throw error;
+    }
+  },
+  async getUserServices(
+    userId: string,
     page: number = 1,
     pageSize: number = 10,
   ): Promise<PaginatedItemsViewModel<ServiceListModel>> {
     try {
       var result = await api.get<PaginatedItemsViewModel<ServiceListModel>>(
-        `/ServiceProviders/MyServices`,
+        `/ServiceProviders/GetUserServices`,
         {
-          params: { page, pageSize },
+          params: { userId, page, pageSize },
         },
       );
       return result.data;
@@ -78,7 +89,9 @@ export const ServiceProviderService: IServiceProviderService = {
 
 interface IServiceProviderService {
   createService(service: ServiceCreateModel): Promise<boolean>;
-  getMyServices(
+  updateService(service: ServiceUpdateModel): Promise<boolean>;
+  getUserServices(
+    userId: string,
     page?: number,
     pageSize?: number,
   ): Promise<PaginatedItemsViewModel<ServiceListModel>>;

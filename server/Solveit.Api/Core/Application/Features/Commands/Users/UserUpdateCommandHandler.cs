@@ -5,33 +5,38 @@ using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Dtos.Auth;
 using Solveit.Api.Core.Domain.Models;
+using Solveit.Api.Extensions;
 
 namespace Solveit.Api.Core.Application.Features.Commands.Users
 {
     public class UserUpdateCommandHandler(
         IAppUserService userService,
         IKeycloakService keycloakService,
+        IHttpContextAccessor httpContext,
         IMapper mapper)
-        : BaseCommandHandler, IRequestHandler<UserUpdateRequestCommand, ResponseModel<Unit>>
+        : BaseCommandHandler, IRequestHandler<UserUpdateRequestCommand, Result<Unit>>
     {
-        public async Task<ResponseModel<Unit>> Handle(UserUpdateRequestCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(UserUpdateRequestCommand request, CancellationToken cancellationToken)
         {
+            if(request.Id != httpContext.GetUserId())
+                return ToFailResult<Unit>(["Unauthorized"], StatusCodes.Status401Unauthorized);
+
             var keyCloakModel = mapper.Map<KeyCloakUserUpdateDto>(request);
             var userModel = mapper.Map<AppUserUpdateDto>(request);
 
             var keyCloakResponse = await keycloakService.UpdateUserAsync(keyCloakModel, request.Id);
             if (!keyCloakResponse.IsSuccess)
-                return ToFailResponseModel<Unit>(keyCloakResponse.Error, keyCloakResponse.StatusCode);
+                return ToFailResult<Unit>(keyCloakResponse.Errors, keyCloakResponse.StatusCode);
 
             var userResponse = await userService.UpdateAppUserAsync(userModel);
             if (!userResponse.IsSuccess)
-                return ToFailResponseModel<Unit>(userResponse.Error, userResponse.StatusCode);
+                return ToFailResult<Unit>(userResponse.Errors, userResponse.StatusCode);
 
-            return ToSuccessResponseModel(Unit.Value);
+            return ToSuccessResult(Unit.Value);
         }
     }
 
-    public class UserUpdateRequestCommand : IRequest<ResponseModel<Unit>>
+    public class UserUpdateRequestCommand : IRequest<Result<Unit>>
     {
         public string Id { get; set; }
         // Auth

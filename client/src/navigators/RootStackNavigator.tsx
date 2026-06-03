@@ -4,10 +4,12 @@ import * as React from "react";
 import { TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomActivityIndicator } from "../components/shared/CustomActivityIndicator";
+import { ScreenHeader } from "../components/shared/ScreenHeader";
 import { useAuth } from "../helpers/contexts/AuthContext";
 import { LoginScreen } from "../screens/LoginScreen";
 import { PasswordResetScreen } from "../screens/PasswordResetScreen";
 import { RegisterScreen } from "../screens/RegisterScreen";
+import { UserProfileScreen } from "../screens/UserProfileScreen";
 import { RootTabNavigator } from "./RootTabNavigator";
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,7 @@ const AUTH_SCREENS = [
   { name: "RegisterScreen", component: RegisterScreen },
   { name: "PasswordResetScreen", component: PasswordResetScreen },
 ] as const;
+
 const transparentHeaderOptions = {
   headerTransparent: true,
   header: (params: any) => <TransparentBackHeader {...params} />,
@@ -47,6 +50,15 @@ export function RootStack() {
             component={RootTabNavigator}
             options={{
               headerShown: false,
+              statusBarStyle: "dark",
+            }}
+          />
+          <Stack.Screen
+            name="UserProfileScreen"
+            component={UserProfileScreen}
+            options={{
+              header: (props) => <ScreenHeader props={props} />,
+              statusBarStyle: "dark",
             }}
           />
         </>

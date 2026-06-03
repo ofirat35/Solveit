@@ -20,9 +20,9 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { CustomTextInput } from "../../components/shared/Forms/CustomTextInput";
-import { ScreenHeader } from "../../components/shared/ScreenHeader";
 import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { GenderEnum } from "../../helpers/enums/GenderEnum";
 import {
   UserUpdateFormData,
@@ -30,6 +30,7 @@ import {
 } from "../../helpers/schemas/users/userUpdateSchema";
 import { showToast } from "../../helpers/Toasts/DefaultToasts";
 import { useSettings } from "../../hooks/Settings/useSettings";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { AppUserUpdateModel } from "../../models/Users/AppUserUpdateModel";
 
 export function EditProfileScreen() {
@@ -37,7 +38,7 @@ export function EditProfileScreen() {
   const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { t } = useTranslation();
-
+  const { setOptions } = useAppNavigation();
   const birthday = useMemo(() => {
     return user?.birthday ? new Date(user.birthday) : new Date();
   }, [user]);
@@ -70,6 +71,12 @@ export function EditProfileScreen() {
         birthday: birthday,
       });
   }, [user]);
+
+  useEffect(() => {
+    setOptions({
+      title: t("editProfile.title"),
+    });
+  }, []);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -112,8 +119,7 @@ export function EditProfileScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScreenHeader headerTitle={t("editProfile.title")} />
+    <View style={{ flex: 1, backgroundColor: Colors.background.base }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -129,7 +135,6 @@ export function EditProfileScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
-            {/* 6. Profile Image Selector UI */}
             <View style={styles.imagePickerContainer}>
               <TouchableOpacity
                 style={styles.avatarContainer}
@@ -218,6 +223,11 @@ export function EditProfileScreen() {
                               <FontAwesome5 name="calendar-alt" size={16} />
                             </View>
                             <TextInput
+                              style={{
+                                color: "#414141",
+                                fontSize: 15,
+                                fontWeight: "500",
+                              }}
                               value={dateValue.toLocaleDateString()}
                               editable={false}
                             />

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { showToast } from "../../helpers/Toasts/DefaultToasts";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { UserService } from "../../services/UserService";
@@ -258,8 +259,9 @@ export function ServicesScreen() {
     </View>
   );
 }
+
 export const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8f9fa" },
+  container: { flex: 1, backgroundColor: Colors.background.base },
 
   header: {
     paddingHorizontal: 20,
@@ -269,7 +271,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  heading: { fontSize: 22, fontWeight: "700", color: "#1a1a1a" },
+  heading: { fontSize: 17, fontWeight: "700", color: "#1a1a1a" },
   addBtn: {
     flexDirection: "row",
     alignItems: "center",

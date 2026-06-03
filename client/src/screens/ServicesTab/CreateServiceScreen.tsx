@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import { TFunction } from "i18next";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -17,8 +19,8 @@ import {
 } from "react-native";
 import { DropdownPicker } from "../../components/shared/DropdownPicker";
 import { CustomTextInput } from "../../components/shared/Forms/CustomTextInput";
-import { ScreenHeader } from "../../components/shared/ScreenHeader";
 import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { PricingUnitsEnum } from "../../helpers/enums/PricingUnitsEnum";
 import {
   ServiceCreateFormData,
@@ -38,7 +40,7 @@ const getPricingUnits = (t: TFunction) => [
 
 export function CreateServiceScreen() {
   const userId = useMemo(() => keycloakService.getCurrentUserId()!, []);
-  const { goBack } = useAppNavigation();
+  const { goBack, setOptions } = useAppNavigation();
   const [hasMaxPrice, setHasMaxPrice] = useState(false);
   const { t } = useTranslation();
   const PRICING_UNITS = getPricingUnits(t);
@@ -53,13 +55,24 @@ export function CreateServiceScreen() {
     defaultValues: {
       title: "",
       description: "",
-      categoryId: "",
-      subcategoryId: "",
+      categoryId: 0,
+      subcategoryId: 0,
       pricing: PricingUnitsEnum.Session,
       minPrice: 0,
       maxPrice: null,
-      isActive: true,
       providerId: userId,
+    },
+  });
+
+  const { mutate: createService } = useMutation({
+    mutationFn: (data: ServiceCreateFormData) =>
+      ServiceProviderService.createService(data),
+    onSuccess: () => {
+      showToast(t("createService.createSuccess"));
+      goBack();
+    },
+    onError: (err) => {
+      Alert.alert(t("common.error", "Error"), err.message);
     },
   });
 
@@ -74,12 +87,17 @@ export function CreateServiceScreen() {
     selectedCategoryId: selectedCategoryId || 0,
   });
 
+  useEffect(() => {
+    setOptions({
+      title: t("createService.title"),
+    });
+  }, []);
+
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: "#f8f8f8" }}
+      style={{ flex: 1, backgroundColor: Colors.background.base }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <ScreenHeader headerTitle={t("createService.title")} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
@@ -149,9 +167,8 @@ export function CreateServiceScreen() {
                     value
                       ? {
                           label:
-                            categories?.find((c) => c.id.toString() === value)
-                              ?.name || "",
-                          value: value,
+                            categories?.find((c) => c.id === value)?.name || "",
+                          value: value.toString(),
                         }
                       : null
                   }
@@ -164,7 +181,7 @@ export function CreateServiceScreen() {
                   onSelect={(id) => {
                     if (!id) return;
                     setSelectedCategoryId(parseInt(id));
-                    setValue("subcategoryId", "");
+                    setValue("subcategoryId", 0);
                     onChange(id);
                   }}
                 />
@@ -188,10 +205,9 @@ export function CreateServiceScreen() {
                   selectedOption={
                     value
                       ? {
-                          label: subcategories?.find(
-                            (s) => s.id.toString() === value,
-                          )?.name,
-                          value: value,
+                          label: subcategories?.find((s) => s.id === value)
+                            ?.name,
+                          value: value.toString(),
                         }
                       : null
                   }
@@ -331,50 +347,10 @@ export function CreateServiceScreen() {
           </View>
         </View>
 
-        {/* Availability */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
-            {t("createService.availability")}
-          </Text>
-          <Controller
-            control={control}
-            name="isActive"
-            render={({ field: { onChange, value } }) => (
-              <View style={[styles.card, styles.toggleRow]}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.toggleTitle}>
-                    {value
-                      ? t("createService.active")
-                      : t("createService.paused")}
-                  </Text>
-                  <Text style={styles.toggleSub}>
-                    {value
-                      ? t("createService.activeDescription")
-                      : t("createService.pausedDescription")}
-                  </Text>
-                </View>
-                <Switch
-                  value={value}
-                  onValueChange={onChange}
-                  trackColor={{ false: "#e0e0e0", true: "#cce3f8" }}
-                  thumbColor={value ? "#185FA5" : "#aaa"}
-                />
-              </View>
-            )}
-          />
-        </View>
-
         {/* Submit */}
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={handleSubmit((data) => {
-            ServiceProviderService.createService(data).then((result) => {
-              if (result) {
-                showToast(t("createService.createSuccess"));
-                goBack();
-              }
-            });
-          })}
+          onPress={handleSubmit((data) => createService(data))}
           activeOpacity={0.85}
         >
           <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />

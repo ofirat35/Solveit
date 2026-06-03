@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Extensions;
 using Solveit.Api.Infrastructure.Context;

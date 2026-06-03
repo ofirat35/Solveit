@@ -6,16 +6,16 @@ using Solveit.Api.Core.Domain.Models;
 namespace Solveit.Api.Core.Application.Features.Queries.Orders
 {
     public class GetOrderByIdQueryHandler(IOrderService orderService)
-        : BaseQueryHandler, IRequestHandler<GetOrderByIdRequestQuery, ResponseModel<OrderListDto>>
+        : BaseQueryHandler, IRequestHandler<GetOrderByIdRequestQuery, Result<OrderListDto>>
     {
-        public async Task<ResponseModel<OrderListDto>> Handle(GetOrderByIdRequestQuery request, CancellationToken cancellationToken)
+        public async Task<Result<OrderListDto>> Handle(GetOrderByIdRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await orderService.GetOrderByIdAsync(request.OrderId);
-            return ToSuccessResponseModel(response.Value);
+            return ToSuccessResult(response.Value);
         }
     }
 
-    public class GetOrderByIdRequestQuery : IRequest<ResponseModel<OrderListDto>>
+    public class GetOrderByIdRequestQuery : IRequest<Result<OrderListDto>>
     {
         public Guid OrderId { get; set; }
     }

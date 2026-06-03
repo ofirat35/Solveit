@@ -9,8 +9,8 @@ export const serviceCreateSchema = yup.object({
     .string()
     .min(10, "Description must be at least 10 characters")
     .required("Description is required"),
-  categoryId: yup.string().required("Category is required"),
-  subcategoryId: yup.string().required("Subcategory is required"),
+  categoryId: yup.number().required("Category is required"),
+  subcategoryId: yup.number().required("Subcategory is required"),
   pricing: yup
     .mixed<PricingUnitsEnum>()
     .oneOf(Object.values(PricingUnitsEnum) as PricingUnitsEnum[])
@@ -20,13 +20,6 @@ export const serviceCreateSchema = yup.object({
     .min(0, "Minimum price must be a positive number")
     .required("Minimum price is required"),
   maxPrice: yup.number().optional().nullable().default(null),
-  // .min(
-  //   yup.ref("minPrice"),
-  //   "Maximum price must be greater than or equal to minimum price",
-  // )
-
-  isActive: yup.boolean().required("Active status is required"),
-  // userId: yup.string().uuid("Invalid user ID").required("User ID is required"),
   providerId: yup.string().required("User ID is required"),
 });
 

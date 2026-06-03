@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Application.Features.Queries.Users;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Solveit.Api.Presentation.Controllers
 {
@@ -13,10 +14,10 @@ namespace Solveit.Api.Presentation.Controllers
             return HandleResponse(await Mediator.Send(query));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] UserDeleteRequestCommand command)
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
         {
-            return HandleResponse(await Mediator.Send(command));
+            return HandleResponse(await Mediator.Send(new UserDeleteRequestCommand()));
         }
 
         [HttpPut]

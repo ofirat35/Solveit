@@ -13,6 +13,7 @@ namespace Solveit.Api.Core.Domain.Entities
         public float MinPrice { get; set; }
         public float? MaxPrice { get; set; }
         public string ProviderId { get; set; }
+        public AppUser Provider { get; set; }
 
         public string UserId { get; set; }
         public AppUser User { get; set; }

@@ -39,9 +39,16 @@ const styles = StyleSheet.create({
   card: {
     width: 150,
     marginRight: 12,
+    borderWidth: 0.2,
+    borderColor: "#e0e0e0",
     borderRadius: 12,
     overflow: "hidden",
     backgroundColor: "#f5f5f5",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   image: {
     width: "100%",

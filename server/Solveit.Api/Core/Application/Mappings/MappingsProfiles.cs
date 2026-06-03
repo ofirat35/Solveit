@@ -37,6 +37,8 @@ namespace Solveit.Api.Core.Application.Mappings
             CreateMap<Order, OrderListDto>();
             CreateMap<IServiceBase, Order>();
 
+            CreateMap<UpdateServiceRequestCommand, ServiceUpdateDto>();
+            CreateMap<ServiceUpdateDto, Service>();
         }
     }
 }

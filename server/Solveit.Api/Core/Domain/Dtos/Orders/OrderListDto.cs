@@ -1,8 +1,6 @@
 ﻿using Solveit.Api.Core.Application.Enums;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
-using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Entities;
-using Solveit.Api.Core.Domain.Entities.Files;
 
 namespace Solveit.Api.Core.Domain.Dtos.Orders
 {

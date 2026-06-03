@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Orders;
-using Solveit.Api.Core.Application.Features.Commands.Services;
 using Solveit.Api.Core.Application.Features.Queries.Orders;
-using Solveit.Api.Core.Application.Features.Queries.Services;
 
 namespace Solveit.Api.Presentation.Controllers
 {
@@ -20,8 +18,14 @@ namespace Solveit.Api.Presentation.Controllers
             return HandleResponse(await Mediator.Send(new GetOrderByIdRequestQuery { OrderId = orderId }));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CancelOrder([FromBody] CancelOrderRequestCommand order)
+        [HttpGet]
+        public async Task<IActionResult> GetOrdersByServiceId([FromQuery] int serviceId, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            return Ok(await Mediator.Send(new GetOrdersByServiceIdRequestQuery { ServiceId = serviceId, Page = page, PageSize = pageSize }));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusRequestCommand order)
         {
             return HandleResponse(await Mediator.Send(order));
         }

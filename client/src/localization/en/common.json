@@ -3,16 +3,19 @@
   "common": {
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "error": "common.error",
+    "created": "Created",
+    "error": "Error",
+    "errorOccurred": "Error Occurred",
     "fixed": "fixed",
     "goBack": "Go Back",
-    "n/a": "common.n/a",
+    "n/a": "n/a",
     "notNow": "Cancel",
     "perDay": "/ day",
     "perHour": "/ hour",
     "perSession": "/ session",
     "search": "Search...",
-    "success": "common.success"
+    "success": "Success",
+    "updated": "Updated"
   },
   "createService": {
     "active": "Active",
@@ -46,20 +49,25 @@
     "TabNavTitle": "Discovery"
   },
   "editProfile": {
-    "addPhoto": "editProfile.addPhoto",
+    "addPhoto": "Fotoğraf ekle",
     "birthday": "Birthday",
     "email": "Email",
     "firstName": "First Name",
     "gender": "Gender",
     "lastName": "Last Name",
     "man": "Man",
-    "permissionDenied": "editProfile.permissionDenied",
+    "permissionDenied": "Permission Denied",
     "phone": "Phone",
     "title": "Update Profile",
     "update": "Update",
     "updateFailed": "Failed to update profile.",
     "updateSuccess": "Profile updated successfully!",
     "woman": "Woman"
+  },
+  "editService": {
+    "saveChanges": "Save Changes",
+    "title": "Edit Service",
+    "updateSuccess": "Service updated successfully!"
   },
   "Email": "Email",
   "errors": {
@@ -68,6 +76,11 @@
   "home": {
     "greeting": "What do you need help with?",
     "searchPlaceholder": "Try 'House Cleaning'"
+  },
+  "language": {
+    "english": "English",
+    "german": "German",
+    "turkish": "Turkish"
   },
   "Loading": "Loading",
   "login": {
@@ -81,9 +94,19 @@
     "TabNavTitle": "Notifications"
   },
   "orders": {
+    "activate": "Activate",
     "cancelOrder": "Cancel Order",
+    "changeStatusConfirmMessage": "Are you sure you want to change the status?",
+    "changeStatusTitle": "Change Status",
+    "complete": "Complete",
+    "completed": "Completed",
+    "currentStatus": "Current Status",
+    "customer": "Customer",
     "emptyOrdersSubtitle": "Your active and past service requests will show up here.",
+    "failedToLoad": "Error occured while loading",
     "location": "Location",
+    "manageStatus": "Manage Status",
+    "noMoreOrders": "No more orders",
     "noOrdersYet": "No orders yet",
     "notes": "Notes",
     "orderCanceled": "Order Canceled!",
@@ -92,7 +115,16 @@
     "orderedOnDate": "Ordered on: {{date}}",
     "orderId": "Order ID",
     "orderInfo": "Order Info",
-    "scheduledFor": "Scheduled For"
+    "price": "Price",
+    "scheduledFor": "Scheduled For",
+    "serviceProvider": "Service Provider",
+    "statusManagement": "Status Management",
+    "statusUpdatedSuccess": "Status updated successfully!",
+    "statusUpdateFailed": "Failed to update status.",
+    "title": "My Order",
+    "totalOrdersCount_one": "Total {{count}} order",
+    "totalOrdersCount_other": "Total {{count}} orders",
+    "viewService": "View Service"
   },
   "pricingUnits": {
     "Fixed": "Fixed",
@@ -100,21 +132,22 @@
     "Item": "Per Item"
   },
   "providerDetail": {
-    "about": "providerDetail.about",
-    "applyButton": "providerDetail.applyButton",
-    "applyError": "providerDetail.applyError",
-    "applySuccess": "providerDetail.applySuccess",
-    "contact": "providerDetail.contact",
-    "errorLoading": "providerDetail.errorLoading",
-    "location": "providerDetail.location",
-    "noDescription": "providerDetail.noDescription",
-    "phone": "providerDetail.phone",
-    "startingFrom": "providerDetail.startingFrom"
+    "about": "About service",
+    "applyButton": "Apply",
+    "applyError": "Error during application",
+    "applySuccess": "Application sent successfully",
+    "contact": "Contact",
+    "errorLoading": "Error while loading",
+    "location": "Location",
+    "noDescription": "No description",
+    "offeredBy": "Offered by",
+    "phone": "Phone",
+    "startingFrom": "Starting from"
   },
   "providers": {
-    "loading": "providers.loading",
-    "noProviders": "providers.noProviders",
-    "noProvidersSubtitle": "providers.noProvidersSubtitle"
+    "loading": "Loading...",
+    "noProviders": "Provider not found",
+    "noProvidersSubtitle": "No provider subtitle"
   },
   "register": {
     "alreadyHaveAccount": "Already have an account?",
@@ -138,6 +171,10 @@
   },
   "Reset": "Reset",
   "Reset Password": "Reset Password",
+  "serviceDetail": {
+    "confirmApplicationBody": "Are you sure you want to buy this service",
+    "confirmApplicationTitle": "Confirm Application"
+  },
   "services": {
     "activate": "Activate",
     "activateToOffer": "Activate to start offering services",
@@ -155,12 +192,17 @@
     "price": "Price",
     "providerModeOff": "Provider Mode Off",
     "providerModeOn": "Provider Mode On",
+    "serviceDetails": "Service Details",
+    "serviceNotFound": "Service Not Found",
     "serviceProvider": "Service Provider",
     "servicesVisible": "Your services are visible to clients",
     "setAsDefault": "Set as Default",
     "setAsDefaultDescription": "Are you sure you want to set \"{{tab}}\" as your default landing view?",
     "setAsDefaultTitle": "Set as Default Tab",
     "title": "Services",
+    "totalServices": "{{count}} Services",
+    "totalOrders_one": "Total {{count}} order",
+    "totalOrders_other": "Total {{count}} orders",
     "viewService": "View Service"
   },
   "ServicesTab": {
@@ -188,12 +230,15 @@
   "status": {
     "accepted": "Accepted",
     "active": "Active",
-    "cancelled": "Cancelled",
+    "canceled": "Canceled",
     "completed": "Completed",
     "paused": "Paused",
     "pending": "Pending",
     "rejected": "Rejected",
     "unknown": "Unknown",
     "upcoming": "Upcoming"
+  },
+  "users": {
+    "userProfile": "User Profile"
   }
 }

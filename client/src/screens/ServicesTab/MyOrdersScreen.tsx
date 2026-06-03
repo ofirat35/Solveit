@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next"; // Added Hook Import
 import {
   ActivityIndicator,
@@ -10,20 +10,22 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
-import { OrderStausEnum } from "../../helpers/enums/OrderStatusEnum";
-import { formatLocaleDate } from "../../helpers/formatLocaleDate";
+import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
+import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
+import { queryKeys } from "../../helpers/queryKeys";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { OrderService } from "../../services/OrderService";
 
 export function MyOrdersTab() {
-  const { t } = useTranslation(); // Initiated translation
+  const { t } = useTranslation();
   const { navigate } = useAppNavigation();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["myOrders"],
+      queryKey: queryKeys.orders.myOrders,
       queryFn: ({ pageParam = 1 }) => OrderService.getMyOrders(pageParam, 10),
       getNextPageParam: (lastPage, allPages) => {
         const totalFetched = allPages.flatMap((p) => p.data).length;
@@ -34,20 +36,10 @@ export function MyOrdersTab() {
       initialPageParam: 1,
     });
 
-  const orders = data?.pages.flatMap((p) => p.data) ?? [];
-
-  const getStatusStyle = (status: OrderStausEnum) => {
-    switch (status) {
-      case OrderStausEnum.Upcoming:
-        return { bg: "#E3F2FD", text: "#1E88E5", labelKey: "status.upcoming" };
-      case OrderStausEnum.Completed:
-        return { bg: "#E8F5E9", text: "#43A047", labelKey: "status.completed" };
-      case OrderStausEnum.Canceled:
-        return { bg: "#FFEBEE", text: "#E53935", labelKey: "status.canceled" };
-      default:
-        return { bg: "#F5F5F5", text: "#757575", labelKey: "status.unknown" };
-    }
-  };
+  const orders = useMemo(
+    () => data?.pages.flatMap((p) => p.data) ?? [],
+    [data],
+  );
 
   return (
     <FlatList
@@ -61,8 +53,6 @@ export function MyOrdersTab() {
       }}
       onEndReachedThreshold={0.5}
       renderItem={({ item }) => {
-        const statusConfig = getStatusStyle(item.orderStatus);
-
         return (
           <TouchableOpacity
             style={styles.card}
@@ -73,7 +63,7 @@ export function MyOrdersTab() {
                 params: {
                   screen: "OrderDetailScreen",
                   params: {
-                    serviceApplicationId: item.id,
+                    orderId: item.id,
                   },
                 },
               })
@@ -81,13 +71,9 @@ export function MyOrdersTab() {
           >
             <View style={[styles.row, { justifyContent: "space-between" }]}>
               <Text style={styles.cardTitle}>{item.title}</Text>
-              <View
-                style={[styles.badge, { backgroundColor: statusConfig.bg }]}
-              >
-                <Text style={[styles.badgeText, { color: statusConfig.text }]}>
-                  {t(statusConfig.labelKey)}
-                </Text>
-              </View>
+              <Badge
+                status={OrderStatusEnum[item.orderStatus].toLowerCase()}
+              ></Badge>
             </View>
 
             <View style={styles.divider} />
@@ -134,7 +120,12 @@ export function MyOrdersTab() {
           <View style={styles.footerLoader}>
             <ActivityIndicator color="#185FA5" />
           </View>
-        ) : null
+        ) : (
+          <Text style={{ textAlign: "center", color: "#aaa", padding: 10 }}>
+            {t("orders.totalOrdersCount", { count: orders.length })}
+            {t("orders.noMoreOrders")}
+          </Text>
+        )
       }
     />
   );

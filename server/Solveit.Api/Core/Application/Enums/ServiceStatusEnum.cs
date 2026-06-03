@@ -5,6 +5,6 @@
         Active = 0,
         Paused = 1,
         Pending = 2,
-        Reejected = 3,
+        Rejected = 3
     }
 }

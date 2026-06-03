@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Repositories;
 using Solveit.Api.Core.Domain.Entities;
@@ -35,8 +36,11 @@ namespace Solveit.Api.Infrastructure.Services
         public async Task<bool> SaveChangesAsync<T>(T? entity, string operation)
             where T : class
         {
-            var response = await base.SaveChangesAsync() > 0;
-            if (!response)
+            var hasChanges = DbContext.ChangeTracker.HasChanges();
+            var rowsAffected = await base.SaveChangesAsync();
+
+            var isSuccess = rowsAffected > 0 || !hasChanges;
+            if (!isSuccess)
             {
                 logger.DbOperationFailed(eventId, entity, operation, CurrentUserId);
                 return false;
@@ -70,8 +74,8 @@ namespace Solveit.Api.Infrastructure.Services
         public Result<T> SuccessResult<T>(T value, int? statusCode = null)
             => Result<T>.Success(value, statusCode);
 
-        public Result<T> FailResult<T>(string error, int? statusCode = null)
-            => Result<T>.Fail(error, statusCode);
+        public Result<T> FailResult<T>(List<string> errors, int? statusCode = null)
+            => Result<T>.Fail(errors, statusCode);
 
     }
 
@@ -123,8 +127,8 @@ namespace Solveit.Api.Infrastructure.Services
         public Result<T> SuccessResult<T>(T value, int? statusCode = null)
             => Result<T>.Success(value, statusCode);
 
-        public Result<T> FailResult<T>(string error, int? statusCode = null)
-            => Result<T>.Fail(error, statusCode);
+        public Result<T> FailResult<T>(List<string> errors, int? statusCode = null)
+            => Result<T>.Fail(errors, statusCode);
     }
 
 
@@ -137,6 +141,6 @@ namespace Solveit.Api.Infrastructure.Services
         void LogError(string? message, params object?[] args);
         void LogWarning(string? message, params object?[] args);
         Result<T> SuccessResult<T>(T value, int? statusCode = null);
-        Result<T> FailResult<T>(string error, int? statusCode = null);
+        Result<T> FailResult<T>(List<string> errors, int? statusCode = null);
     }
 }

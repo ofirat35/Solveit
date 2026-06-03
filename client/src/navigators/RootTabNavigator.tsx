@@ -2,10 +2,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../helpers/consts/ColorConts";
-import { DiscoveryTabNavigator } from "./DiscoveryTabNavigator";
-import { NotificationTabNavigator } from "./NotificationTabNavigator";
-import { ServicesTabNavigator } from "./ServicesTabNavigator";
-import { SettingsTabNavigator } from "./SettingsTabNavigator";
+import { DiscoveryStackNavigator } from "./DiscoveryStackNavigator";
+import { NotificationStackNavigator } from "./NotificationStackNavigator";
+import { ServicesStackNavigator } from "./ServicesStackNavigator";
+import { SettingsStackNavigator } from "./SettingsStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +27,7 @@ export function RootTabNavigator() {
     >
       <Tab.Screen
         name="DiscoveryTab"
-        component={DiscoveryTabNavigator}
+        component={DiscoveryStackNavigator}
         options={{
           title: t("DiscoveryTab.TabNavTitle"),
           headerShown: false,
@@ -57,7 +57,7 @@ export function RootTabNavigator() {
           ),
         }}
         name="ServicesTab"
-        component={ServicesTabNavigator}
+        component={ServicesStackNavigator}
       />
       <Tab.Screen
         options={{
@@ -74,7 +74,7 @@ export function RootTabNavigator() {
           ),
         }}
         name="NotificationTab"
-        component={NotificationTabNavigator}
+        component={NotificationStackNavigator}
       />
       <Tab.Screen
         options={{
@@ -91,7 +91,7 @@ export function RootTabNavigator() {
           ),
         }}
         name="SettingsTab"
-        component={SettingsTabNavigator}
+        component={SettingsStackNavigator}
       />
     </Tab.Navigator>
   );

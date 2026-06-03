@@ -50,7 +50,7 @@ namespace Solveit.Api.Infrastructure.Services
                 var msj = "Keycloak did not return user location for new user [{FirstName} {LastName}- {Email}]";
                 LogError(msj, user.FirstName, user.LastName, user.Email);
 
-                return FailResult<string>(string.Format(msj, user.FirstName, user.LastName, user.Email));
+                return FailResult<string>([string.Format(msj, user.FirstName, user.LastName, user.Email)]);
             }
 
             var keycloakUserId = location.Split('/').Last();
@@ -59,7 +59,7 @@ namespace Solveit.Api.Infrastructure.Services
             {
                 LogError("{ErrorMsg} - [{FirstName} {LastName}- {Email}]",
                     response.ErrorMessage, user.FirstName, user.LastName, user.Email);
-                return FailResult<string>(response.ErrorMessage, response.StatusCode);
+                return FailResult<string>([response.ErrorMessage], response.StatusCode);
             }
 
             return SuccessResult(keycloakUserId, response.StatusCode);
@@ -73,7 +73,7 @@ namespace Solveit.Api.Infrastructure.Services
 
             return response.IsSuccess
                ? SuccessResult(response.Data!, response.StatusCode)
-               : FailResult<KeyCloakUserListDto>(response.ErrorMessage, response.StatusCode);
+               : FailResult<KeyCloakUserListDto>([response.ErrorMessage], response.StatusCode);
         }
 
         public async Task<Result<Unit>> UpdateUserAsync(KeyCloakUserUpdateDto userDto, string id)
@@ -84,7 +84,7 @@ namespace Solveit.Api.Infrastructure.Services
 
             return response.IsSuccess
                ? SuccessResult(response.Data!, response.StatusCode)
-               : FailResult<Unit>(response.ErrorMessage, response.StatusCode);
+               : FailResult<Unit>([response.ErrorMessage], response.StatusCode);
         }
 
         public async Task<Result<Unit>> DeleteUserAsync(string id)
@@ -94,7 +94,7 @@ namespace Solveit.Api.Infrastructure.Services
 
             return response.IsSuccess
                ? SuccessResult(response.Data!, response.StatusCode)
-               : FailResult<Unit>(response.ErrorMessage, response.StatusCode);
+               : FailResult<Unit>([response.ErrorMessage], response.StatusCode);
         }
 
         public async Task<Result<Unit>> AssignClientRoleAsync(string userId, string roleName)
@@ -143,7 +143,7 @@ namespace Solveit.Api.Infrastructure.Services
         {
             var res = await _clientHttpClient.GetAsync<KeycloakRoleDto>(roleUrl);
             if (!res.IsSuccess)
-                return FailResult<Unit>(res.ErrorMessage, res.StatusCode);
+                return FailResult<Unit>([res.ErrorMessage], res.StatusCode);
 
             var rolePayload = new[] { new { id = res.Data.Id, name = roleName } };
 
@@ -151,14 +151,14 @@ namespace Solveit.Api.Infrastructure.Services
 
             return response.IsSuccess
                 ? SuccessResult(Unit.Value!, response.StatusCode)
-                : FailResult<Unit>(response.ErrorMessage, response.StatusCode);
+                : FailResult<Unit>([response.ErrorMessage], response.StatusCode);
         }
 
         private async Task<Result<Unit>> RemoveRoleAsync(string userId, string roleName, string roleUrl, string mappingUrl)
         {
             var res = await _clientHttpClient.GetAsync<KeycloakRoleDto>(roleUrl);
             if (!res.IsSuccess)
-                return FailResult<Unit>(res.ErrorMessage, res.StatusCode);
+                return FailResult<Unit>([res.ErrorMessage], res.StatusCode);
 
             var rolePayload = new[] { new { id = res.Data.Id, name = roleName } };
 
@@ -166,7 +166,7 @@ namespace Solveit.Api.Infrastructure.Services
 
             return response.IsSuccess
                 ? SuccessResult(Unit.Value!, response.StatusCode)
-                : FailResult<Unit>(response.ErrorMessage, response.StatusCode);
+                : FailResult<Unit>([response.ErrorMessage], response.StatusCode);
         }
 
         public class KeycloakRoleDto

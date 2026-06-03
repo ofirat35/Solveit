@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { useMemo } from "react";
 import { keycloakService } from "../../helpers/Auth/keycloak";
+import { queryKeys } from "../../helpers/queryKeys";
 import { UserImageListDto } from "../../models/UserImageListDto";
 import { AppUserUpdateModel } from "../../models/Users/AppUserUpdateModel";
 import { UserService } from "../../services/UserService";
@@ -10,7 +11,7 @@ export const useSettings = () => {
   const userId = useMemo(() => keycloakService.getCurrentUserId()!, []);
   const queryClient = useQueryClient();
   const { isLoading, data: userData } = useQuery({
-    queryKey: ["user", userId],
+    queryKey: queryKeys.users.getById(userId),
     queryFn: () => {
       return UserService.getUserById(userId);
     },
@@ -24,7 +25,9 @@ export const useSettings = () => {
       return UserService.updateUser(payload);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user", userId] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.users.getById(userId),
+      });
     },
   });
 
@@ -33,7 +36,7 @@ export const useSettings = () => {
       return UserService.uploadImage(image);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["userImage", userId], () => {
+      queryClient.setQueryData(queryKeys.users.images(userId), () => {
         return { ...data } as UserImageListDto;
       });
     },

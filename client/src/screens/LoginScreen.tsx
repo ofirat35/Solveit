@@ -16,6 +16,7 @@ import { LanguageModal } from "../components/shared/LanguageModal";
 import { useAuth } from "../helpers/contexts/AuthContext";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import i18n from "../localization";
+
 export function LoginScreen() {
   const { t } = useTranslation();
   const { navigate } = useAppNavigation();
@@ -157,15 +158,6 @@ const styles = StyleSheet.create({
   form: {
     marginBottom: 8,
   },
-  field: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 8,
-  },
   input: {
     borderWidth: 1,
     borderColor: "#E0E0E0",
@@ -175,14 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#111",
     backgroundColor: "#FAFAFA",
-  },
-  inputError: {
-    borderColor: "#E05252",
-  },
-  passwordRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 0,
   },
   button: {
     backgroundColor: "#111",

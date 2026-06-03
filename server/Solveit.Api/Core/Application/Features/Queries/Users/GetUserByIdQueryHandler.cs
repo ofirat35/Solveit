@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Solveit.Api.Core.Application.Extensions;
+using Solveit.Api.Core.Application.Features.Commands;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Models;
@@ -6,18 +8,16 @@ using Solveit.Api.Core.Domain.Models;
 namespace Solveit.Api.Core.Application.Features.Queries.Users
 {
     public class GetUserByIdQueryHandler(IAppUserService userService)
-        : BaseQueryHandler, IRequestHandler<GetUserByIdRequestQuery, ResponseModel<AppUserListDto>>
+        : BaseQueryHandler, IRequestHandler<GetUserByIdRequestQuery, Result<AppUserListDto>>
     {
-        public async Task<ResponseModel<AppUserListDto>> Handle(GetUserByIdRequestQuery request, CancellationToken cancellationToken)
+        public async Task<Result<AppUserListDto>> Handle(GetUserByIdRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await userService.GetAppUserByIdAsync(request.Id);
-            return response.IsSuccess
-                 ? ToSuccessResponseModel(response.Value)
-                 : ToFailResponseModel<AppUserListDto>(response.Error, StatusCodes.Status404NotFound);
+            return response.ToResult();
         }
     }
 
-    public class GetUserByIdRequestQuery : IRequest<ResponseModel<AppUserListDto>>
+    public class GetUserByIdRequestQuery : IRequest<Result<AppUserListDto>>
     {
         public string Id { get; set; }
     }

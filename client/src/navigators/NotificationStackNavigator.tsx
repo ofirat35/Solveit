@@ -3,7 +3,7 @@ import { NotificationScreen } from "../screens/NotificationTab/NotificationScree
 
 const Stack = createNativeStackNavigator();
 
-export function NotificationTabNavigator() {
+export function NotificationStackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen

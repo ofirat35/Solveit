@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Badge } from "../../components/ServicesTab/Badge";
+import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
+import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
 import { ServiceStatusEnum } from "../../helpers/enums/ServiceStatusEnum";
-import { formatLocaleDate } from "../../helpers/formatLocaleDate";
+import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { useMyServices } from "../../hooks/Services/useMyServices";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 
@@ -26,21 +27,6 @@ export function MyServicesTab() {
     isFetchingNextPage,
   } = useMyServices();
 
-  const getServiceStatusStyle = (status: ServiceStatusEnum) => {
-    switch (status) {
-      case ServiceStatusEnum.Active:
-        return { bg: "#E3F2FD", text: "#1E88E5", labelKey: "status.upcoming" };
-      case ServiceStatusEnum.Paused:
-        return { bg: "#E8F5E9", text: "#43A047", labelKey: "status.completed" };
-      case ServiceStatusEnum.Pending:
-        return { bg: "#FFEBEE", text: "#e5e535", labelKey: "status.canceled" };
-      case ServiceStatusEnum.Reejected:
-        return { bg: "#FFEBEE", text: "#E53935", labelKey: "status.canceled" };
-      default:
-        return { bg: "#F5F5F5", text: "#757575", labelKey: "status.unknown" };
-    }
-  };
-
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -51,57 +37,89 @@ export function MyServicesTab() {
         <FlatList
           data={services}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View key={item.id} style={styles.card}>
-              <View style={styles.row}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardSubtitle}>
-                    {item.minPrice}
-                    {item.maxPrice ? ` - ${item.maxPrice}` : ""}
-                  </Text>
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigate("RootTabNavigationScreen", {
+                    screen: "ServicesTab",
+                    params: {
+                      screen: "ServiceApplicantsScreen",
+                      params: {
+                        serviceId: item.id,
+                      },
+                    },
+                  })
+                }
+                key={item.id}
+                style={styles.card}
+              >
+                <View style={styles.row}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.cardTitle}>{item.title}</Text>
+                    <Text style={styles.cardSubtitle}>
+                      {item.minPrice}
+                      {item.maxPrice ? ` - ${item.maxPrice}` : ""}
+                    </Text>
+                  </View>
+                  <Badge
+                    status={ServiceStatusEnum[item.status].toLowerCase()}
+                  ></Badge>
                 </View>
-                <Badge status={getServiceStatusStyle(item.status).labelKey} />
-              </View>
 
-              <View style={styles.divider} />
+                <View style={styles.divider} />
 
-              {/* Applications */}
-              {item.totalOrdersCount === 0 ? (
-                <Text style={styles.emptyText}>
-                  {t("services.noApplications")}
-                </Text>
-              ) : (
-                <>
-                  <Text style={styles.sectionMini}>
-                    {t("services.applicationsCount", {
-                      count: item.totalOrdersCount,
-                    })}
+                {/* Applications */}
+                {item.totalOrdersCount === 0 ? (
+                  <Text style={styles.emptyText}>
+                    {t("services.noApplications")}
                   </Text>
-                  {item.orders.map((order) => (
-                    <TouchableOpacity
-                      key={order.id}
-                      style={styles.applicantRow}
-                      onPress={() => {}}
-                    >
-                      <View style={styles.avatar}>
-                        <UserAvatar user={order.user}></UserAvatar>
-                      </View>
-                      <View style={{ flex: 1 }}>
-                        <Text style={styles.applicantName}>
-                          {order.user.firstName}
-                        </Text>
-                        <Text style={styles.applicantDate}>
-                          {formatLocaleDate(order.createdDate)}
-                        </Text>
-                      </View>
-                      <Badge status={"active"} />
-                    </TouchableOpacity>
-                  ))}
-                </>
-              )}
-            </View>
-          )}
+                ) : (
+                  <>
+                    <Text style={styles.sectionMini}>
+                      {t("services.applicationsCount", {
+                        count: item.totalOrdersCount,
+                      })}
+                    </Text>
+                    {item.orders.map((order) => (
+                      <TouchableOpacity
+                        key={order.id}
+                        style={styles.applicantRow}
+                        onPress={() =>
+                          navigate("RootTabNavigationScreen", {
+                            screen: "ServicesTab",
+                            params: {
+                              screen: "OrderDetailScreen",
+                              params: {
+                                orderId: order.id,
+                              },
+                            },
+                          })
+                        }
+                      >
+                        <View style={styles.avatar}>
+                          <UserAvatar user={order.user}></UserAvatar>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.applicantName}>
+                            {order.user.firstName}
+                          </Text>
+                          <Text style={styles.applicantDate}>
+                            {formatLocaleDate(order.createdDate)}
+                          </Text>
+                        </View>
+                        <Badge
+                          status={OrderStatusEnum[
+                            order.orderStatus
+                          ].toLowerCase()}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </>
+                )}
+              </TouchableOpacity>
+            );
+          }}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           onEndReached={() => {
@@ -130,10 +148,8 @@ export function MyServicesTab() {
   );
 }
 
-// ... styles remain identical
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
   separator: { height: 12 },
   footerLoader: {
     paddingVertical: 20,
@@ -175,7 +191,6 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", alignItems: "center", gap: 10 },
   divider: { height: 0.5, backgroundColor: "#f0f0f0", marginVertical: 10 },
   sectionMini: { fontSize: 12, color: "#888", marginBottom: 8 },
-
   applicantRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -194,34 +209,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  avatarImage: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    position: "relative",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  avatarText: { fontSize: 11, fontWeight: "600" },
-
   badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20 },
-  badgeText: { fontSize: 11, fontWeight: "500" },
-
-  providerName: { flex: 1, fontSize: 13, color: "#555" },
   price: { fontSize: 14, fontWeight: "600", color: "#1a1a1a" },
-
-  addCard: {
-    borderWidth: 0.5,
-    borderStyle: "dashed",
-    borderColor: "#ccc",
-    borderRadius: 14,
-    padding: 16,
-    alignItems: "center",
-    gap: 6,
-    marginTop: 4,
-  },
-  addText: { fontSize: 13, color: "#aaa" },
 });

@@ -3,6 +3,7 @@ import { NavigatorScreenParams } from "@react-navigation/native";
 export type RootStackParamList = {
   RootTabNavigationScreen: NavigatorScreenParams<RootTabParamList>;
 
+  UserProfileScreen: { userId: string };
   LoginScreen: undefined;
   RegisterScreen: undefined;
   PasswordResetScreen: undefined;
@@ -24,7 +25,9 @@ export type DiscoveryStackParamList = {
 export type ServicesStackParamList = {
   ServicesScreen: undefined;
   CreateServiceScreen: undefined;
-  OrderDetailScreen: { serviceApplicationId: string };
+  EditServiceScreen: { serviceId: number };
+  OrderDetailScreen: { orderId: string };
+  ServiceApplicantsScreen: { serviceId: number };
 };
 
 export type NotificationStackParamList = {

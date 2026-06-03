@@ -1,6 +1,5 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -11,45 +10,35 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProviderCard } from "../../components/Home/ProviderCard";
-import { ScreenHeader } from "../../components/shared/ScreenHeader";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { DiscoveryStackParamList } from "../../helpers/types/RootStackParamList";
+import { useServiceProviders } from "../../hooks/Services/useServiceProviders";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-import { ServiceProviderService } from "../../services/ServiceProviderService";
 type ServiceProvidersRouteProp = RouteProp<
   DiscoveryStackParamList,
   "ServiceProvidersScreen"
 >;
 
 export function ServiceProvidersScreen() {
-  //   const { subcategoryId, subcategoryName } = route.params;
   const { t } = useTranslation();
-  const navigator = useAppNavigation();
+  const { navigate, setOptions } = useAppNavigation();
   const route = useRoute<ServiceProvidersRouteProp>();
   const { subcategoryId, subcategoryName } = route.params;
-
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["serviceProviders", subcategoryId],
-      queryFn: ({ pageParam = 1 }) =>
-        ServiceProviderService.getServicesBySubcategoryId(
-          subcategoryId,
-          pageParam,
-          10,
-        ),
-      getNextPageParam: (lastPage, allPages) => {
-        const totalFetched = allPages.flatMap((p) => p.data).length;
-        return totalFetched < lastPage.totalEntities
-          ? allPages.length + 1
-          : undefined;
-      },
-      initialPageParam: 1,
+  const {
+    providers,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useServiceProviders({ subcategoryId });
+  useEffect(() => {
+    setOptions({
+      title: subcategoryName,
     });
+  }, []);
 
-  const providers = data?.pages.flatMap((p) => p.data) ?? [];
   return (
     <View style={styles.container}>
-      <ScreenHeader headerTitle={subcategoryName} />
-
       <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
         {isLoading ? (
           <View style={styles.emptyState}>
@@ -63,7 +52,7 @@ export function ServiceProvidersScreen() {
               <ProviderCard
                 item={item}
                 onPress={() =>
-                  navigator.navigate("RootTabNavigationScreen", {
+                  navigate("RootTabNavigationScreen", {
                     screen: "DiscoveryTab",
                     params: {
                       screen: "ServiceDetailScreen",
@@ -105,7 +94,7 @@ export function ServiceProvidersScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8f9fa" },
+  container: { flex: 1, backgroundColor: Colors.background.base },
   list: {
     padding: 16,
     paddingBottom: 32,

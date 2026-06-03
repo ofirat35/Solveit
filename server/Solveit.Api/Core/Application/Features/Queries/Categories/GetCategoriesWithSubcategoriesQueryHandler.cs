@@ -11,16 +11,16 @@ namespace Solveit.Api.Core.Application.Features.Queries.Categories
         ICategoryService categoryService,
         IMapper mapper
         )
-        : BaseQueryHandler, IRequestHandler<GetCategoriesWithSubcategoriesRequestQuery, ResponseModel<List<CategoryListDto>>>
+        : BaseQueryHandler, IRequestHandler<GetCategoriesWithSubcategoriesRequestQuery, Result<List<CategoryListDto>>>
     {
-        public async Task<ResponseModel<List<CategoryListDto>>> Handle(GetCategoriesWithSubcategoriesRequestQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<CategoryListDto>>> Handle(GetCategoriesWithSubcategoriesRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await categoryService.GetAll().Include(c => c.Subcategories).ToListAsync();
-            return ToSuccessResponseModel(mapper.Map<List<CategoryListDto>>(response));
+            return ToSuccessResult(mapper.Map<List<CategoryListDto>>(response));
         }
     }
 
-    public class GetCategoriesWithSubcategoriesRequestQuery : IRequest<ResponseModel<List<CategoryListDto>>>
+    public class GetCategoriesWithSubcategoriesRequestQuery : IRequest<Result<List<CategoryListDto>>>
     {
     }
 }

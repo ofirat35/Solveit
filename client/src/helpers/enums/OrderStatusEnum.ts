@@ -1,5 +1,6 @@
-export enum OrderStausEnum {
-  Upcoming = 0,
+export enum OrderStatusEnum {
+  Pending = 0,
   Completed = 1,
   Canceled = 2,
+  Active = 3,
 }

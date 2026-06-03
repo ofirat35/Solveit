@@ -7,6 +7,7 @@ export type AppUserListModel = {
   gender: GenderEnum;
   phone: string;
   profileImage: string;
+  isServiceProvider: boolean;
   email: string;
   birthday: string;
   createdDate: string;

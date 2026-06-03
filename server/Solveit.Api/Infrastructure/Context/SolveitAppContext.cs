@@ -80,6 +80,11 @@ namespace Solveit.Api.Infrastructure.Context
                 .IsRequired(false)
                 .HasDefaultValue(null);
 
+            modelBuilder.Entity<Order>()
+            .HasOne(o => o.Provider)
+            .WithMany() 
+            .HasForeignKey(o => o.ProviderId)
+            .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,0 +1,226 @@
+{
+  "Already have an account?": "Haben Sie bereits ein Konto?",
+  "common": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "error": "Fehler",
+    "fixed": "Festpreis",
+    "goBack": "Zurückgehen",
+    "n/a": "N/A",
+    "notNow": "Nicht jetzt",
+    "perDay": "/ Tag",
+    "perHour": "/ Stunde",
+    "perSession": "/ Sitzung",
+    "search": "Suchen...",
+    "success": "Erfolgreich"
+  },
+  "createService": {
+    "active": "Aktiv",
+    "activeDescription": "Für andere sichtbar und offen für Bewerbungen",
+    "availability": "VERFÜGBARKEIT",
+    "cancel": "Abbrechen",
+    "category": "KATEGORIE",
+    "categoryLabel": "Kategorie",
+    "categoryPlaceholder": "Wählen Sie eine Kategorie",
+    "createService": "Dienstleistung erstellen",
+    "createSuccess": "Dienstleistung erfolgreich erstellt!",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Was beinhaltet diese Dienstleistung?",
+    "maxPrice": "Maximalpreis",
+    "minPrice": "Minimalpreis",
+    "paused": "Pausiert",
+    "pausedDescription": "In Listen ausgeblendet, keine neuen Bewerbungen",
+    "price": "Preis",
+    "priceRange": "Preisspanne",
+    "pricing": "PREISGESTALTUNG",
+    "serviceDetails": "DETAILS DER DIENSTLEISTUNG",
+    "setMaxPrice": "Legen Sie einen Maximalpreis fest",
+    "subcategoryLabel": "Unterkategorie",
+    "subcategoryPlaceholder": "Wählen Sie eine Unterkategorie",
+    "subcategoryPlaceholderFirst": "Wählen Sie zuerst eine Kategorie",
+    "title": "Neue Dienstleistung",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Z.B. Nachhilfe in Mathematik, Hundesitting etc."
+  },
+  "DiscoveryTab": {
+    "TabNavTitle": "Entdecken"
+  },
+  "editProfile": {
+    "addPhoto": "Foto hinzufügen",
+    "birthday": "Geburtsdatum",
+    "email": "E-Mail",
+    "firstName": "Vorname",
+    "gender": "Geschlecht",
+    "lastName": "Nachname",
+    "man": "Mann",
+    "permissionDenied": "Berechtigung verweigert",
+    "phone": "Telefon",
+    "title": "Profil aktualisieren",
+    "update": "Aktualisieren",
+    "updateFailed": "Profil konnte nicht aktualisiert werden.",
+    "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "woman": "Frau"
+  },
+  "Email": "E-Mail",
+  "errors": {
+    "failedLoadOrder": "Bestelldetails konnten nicht geladen werden."
+  },
+  "home": {
+    "greeting": "Wobei benötigen Sie Hilfe?",
+    "searchPlaceholder": "Versuchen Sie: 'Hausreinigung'"
+  },
+  "Loading": "Wird geladen...",
+  "login": {
+    "dontHaveAccount": "Haben Sie noch kein Konto?",
+    "forgotPassword": "Passwort vergessen?",
+    "register": "Registrieren",
+    "subtitle": "Willkommen zurück",
+    "title": "Einloggen"
+  },
+  "NotificationTab": {
+    "TabNavTitle": "Benachrichtigungen"
+  },
+   "users": {
+    "userProfile": "Benutzerprofil"
+  },
+  "orders": {
+    "completed": "Abschließen",
+    "activate":"Aktivieren",
+    "currentStatus": "Aktueller Status",
+    "title": "Meine Bestellung",
+    "cancelOrder": "Bestellung stornieren",
+    "customer": "Kunde",
+    "emptyOrdersSubtitle": "Ihre aktiven und vergangenen Serviceanfragen werden hier aufgelistet.",
+    "failedToLoad": "Beim Laden ist ein Fehler aufgetreten",
+    "location": "Standort",
+    "noOrdersYet": "Noch keine Bestellungen vorhanden",
+    "notes": "Notizen",
+    "orderCanceled": "Bestellung storniert!",
+    "orderDetails": "Bestelldetails",
+    "orderedOn": "Bestelldatum",
+    "orderedOnDate": "Bestelldatum: {{date}}",
+    "orderId": "Bestellnummer",
+    "orderInfo": "Bestellinformationen",
+    "price": "Preis",
+    "scheduledFor": "Geplante Zeit",
+    "serviceProvider": "Dienstleister",
+    "viewService": "Dienstleistung anzeigen"
+  },
+  "pricingUnits": {
+    "Fixed": "Festpreis",
+    "Hourly": "Stündlich",
+    "Item": "Pro Stück"
+  },
+  "providerDetail": {
+    "about": "Über die Dienstleistung",
+    "applyButton": "Bewerben",
+    "applyError": "Bei der Bewerbung ist ein Fehler aufgetreten",
+    "applySuccess": "Bewerbung erfolgreich gesendet!",
+    "contact": "Kontakt",
+    "errorLoading": "Fehler beim Laden der Daten",
+    "location": "Standort",
+    "noDescription": "Keine Beschreibung verfügbar",
+    "offeredBy": "Angeboten von",
+    "phone": "Telefon",
+    "startingFrom": "Ab"
+  },
+  "providers": {
+    "loading": "Wird geladen...",
+    "noProviders": "Keine Dienstleister gefunden",
+    "noProvidersSubtitle": "Für diese Kategorie gibt es noch keine Anbieter."
+  },
+  "register": {
+    "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "birthday": "Geburtsdatum",
+    "confirmPassword": "Passwort bestätigen",
+    "createAccount": "Konto erstellen",
+    "email": "E-Mail",
+    "firstName": "Vorname",
+    "gender": "Geschlecht",
+    "hide": "Ausblenden",
+    "lastName": "Nachname",
+    "man": "Mann",
+    "password": "Passwort",
+    "phone": "Telefon",
+    "registerSuccess": "Erfolgreich registriert!",
+    "show": "Anzeigen",
+    "signIn": "Einloggen",
+    "subtitle": "Registrieren Sie sich, um zu beginnen",
+    "title": "Konto erstellen",
+    "woman": "Frau"
+  },
+  "Reset": "Zurücksetzen",
+  "Reset Password": "Passwort zurücksetzen",
+  "serviceDetail": {
+    "confirmApplicationBody": "Sind Sie sicher, dass Sie diese Dienstleistung buchen möchten?",
+    "confirmApplicationTitle": "Dienstleistung bestätigen"
+  },
+  "services": {
+    "totalServices": "{{count}} Dienstleistungen",
+     "totalOrders_one": "{{count}} Bestellung",
+    "totalOrders_other": "{{count}} Bestellungen",
+    "activate": "Aktivieren",
+    "activateToOffer": "Aktivieren, um Dienstleistungen anzubieten",
+    "addService": "Dienstleistung hinzufügen",
+    "applicationsCount_one": "{{count}} Bewerbung",
+    "applicationsCount_other": "{{count}} Bewerbungen",
+    "becomeProviderDescription": "Durch Aktivierung des Dienstleister-Modus können Sie maßgeschneiderte Service-Anzeigen erstellen und Kundenanfragen erhalten.",
+    "becomeProviderTitle": "Werden Sie Dienstleister",
+    "defaultChanged": "Standard-Tab wurde in {{tab}} geändert",
+    "emptyServicesSubtitle": "Ihre erstellten aktiven und benutzerdefinierten Service-Anzeigen werden hier angezeigt.",
+    "myOrders": "Meine Bestellungen",
+    "myServices": "Meine Dienstleistungen",
+    "noApplications": "Noch keine Bewerbungen",
+    "noServicesYet": "Noch keine Dienstleistungen",
+    "price": "Preis",
+    "providerModeOff": "Dienstleister-Modus Aus",
+    "providerModeOn": "Dienstleister-Modus An",
+    "serviceDetails": "Details der Dienstleistung",
+    "serviceNotFound": "Dienstleistung nicht gefunden",
+    "serviceProvider": "Dienstleister",
+    "servicesVisible": "Ihre Dienstleistungen sind für Kunden sichtbar",
+    "setAsDefault": "Als Standard festlegen",
+    "setAsDefaultDescription": "Sind Sie sicher, dass Sie den Tab \"{{tab}}\" als Ihre Standardansicht beim Öffnen festlegen möchten?",
+    "setAsDefaultTitle": "Als Standard-Tab festlegen",
+    "title": "Dienstleistungen",
+    "viewService": "Dienstleistung anzeigen"
+  },
+  "ServicesTab": {
+    "TabNavTitle": "Dienstleistungen"
+  },
+  "settings": {
+    "account": "Konto",
+    "changePassword": "Passwort ändern",
+    "confirmLogout": "Abmeldung bestätigen",
+    "confirmLogoutMessage": "Sind Sie sicher, dass Sie sich abmelden möchten?",
+    "editProfile": "Profil bearbeiten",
+    "helpCenter": "Hilfecenter",
+    "language": "Sprache",
+    "logout": "Abmelden",
+    "preferences": "Einstellungen",
+    "selectLanguage": "Sprache wählen",
+    "support": "Support",
+    "termsPrivacy": "Bedingungen & Datenschutz",
+    "version": "Version"
+  },
+  "SettingsTab": {
+    "TabNavTitle": "Einstellungen"
+  },
+  "Sign in": "Einloggen",
+  "status": {
+    "accepted": "Akzeptiert",
+    "active": "Aktiv",
+    "canceled": "Storniert",
+    "completed": "Abgeschlossen",
+    "paused": "Pausiert",
+    "pending": "Ausstehend",
+    "rejected": "Abgelehnt",
+    "unknown": "Unbekannt",
+    "upcoming": "Anstehend"
+  },
+  "language":{
+  "english":"Englisch",
+  "german":"Deutsch",
+  "turkish":"Türkisch"
+  }
+}

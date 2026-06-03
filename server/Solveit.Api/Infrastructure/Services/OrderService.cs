@@ -48,24 +48,44 @@ namespace Solveit.Api.Infrastructure.Services
             return result;
         }
 
+        public async Task<PaginatedItemsViewModel<OrderListDto>> GetOrdersByServiceId(int serviceId, int page, int pageSize)
+        {
+            var query = DbContext.Orders
+                .Where(_ => _.ServiceId == serviceId)
+                .Include(_ => _.User);
+            var totalCount = await query.CountAsync();
+            var orders = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            var orderDtos = mapper.Map<List<OrderListDto>>(orders);
+            var result = new PaginatedItemsViewModel<OrderListDto>(
+                page,
+                pageSize,
+                totalCount,
+                orderDtos);
+
+            return result;
+        }
+
         public async Task<Result<OrderListDto>> GetOrderByIdAsync(Guid id)
         {
-            var application = await GetSingleAsync(a => a.Id == id);
-            var provider = await userService.GetSingleAsync(_ => _.Id == application.ProviderId);
-
+            var application = await GetAll()
+                .Where(a => a.Id == id)
+                .Include(_ => _.User)
+                .Include(_ => _.Provider)
+                .FirstOrDefaultAsync();
             var serviceApplication = mapper.Map<OrderListDto>(application);
-            serviceApplication.Provider = mapper.Map<AppUserListDto>(provider);
-
             return SuccessResult(serviceApplication);
         }
 
-        public async Task<Result<bool>> CancelOrderAsync(Guid orderId)
+        public async Task<Result<bool>> UpdateOrderStausAsync(Guid orderId, OrderStatusEnum orderStatus)
         {
             var serviceApplication = await GetSingleAsync(_ => _.Id == orderId);
-            serviceApplication.OrderStatus = OrderStatusEnum.Canceled;
+            serviceApplication.OrderStatus = orderStatus;
             var result = await SaveChangesAsync(serviceApplication, DbOperation.Create);
 
-            return result ? SuccessResult(true) : FailResult<bool>(ExceptionMessages.DbOperationFailed);
+            return result ? SuccessResult(true) : FailResult<bool>([ExceptionMessages.DbOperationFailed]);
         }
     }
 }

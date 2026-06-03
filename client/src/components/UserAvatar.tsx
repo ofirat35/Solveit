@@ -10,6 +10,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { queryKeys } from "../helpers/queryKeys";
 import { AppUserListModel } from "../models/Users/AppUserListModel";
 import { UserService } from "../services/UserService";
 
@@ -23,7 +24,7 @@ export function UserAvatar({
   imageStyle?: StyleProp<ImageStyle>;
 }) {
   const { data: userImageData, isLoading } = useQuery({
-    queryKey: ["userImage", user?.id],
+    queryKey: queryKeys.users.images(user?.id ?? ""),
     queryFn: () => UserService.getUserImage(user!.id),
     enabled: !!user,
   });

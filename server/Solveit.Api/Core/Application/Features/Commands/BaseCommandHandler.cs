@@ -5,17 +5,17 @@ namespace Solveit.Api.Core.Application.Features.Commands
 {
     public class BaseCommandHandler
     {
-        protected ResponseModel<TResp> ToSuccessResponseModel<TResp>(TResp? data, int? statusCode = null)
+        protected Result<TResp> ToSuccessResult<TResp>(TResp? data, int? statusCode = null)
         {
-            return ResponseModel<TResp>.Success(
+            return Result<TResp>.Success(
                 data ?? default,
                 statusCode ?? StatusCodes.Status200OK);
         }
 
-        protected ResponseModel<TResp> ToFailResponseModel<TResp>(string? errorMessage, int? statusCode)
+        protected Result<TResp> ToFailResult<TResp>(List<string>? errorMessages, int? statusCode)
         {
-            return ResponseModel<TResp>.Fail(
-                errorMessage ?? ExceptionMessages.UnexpectedException,
+            return Result<TResp>.Fail(
+                errorMessages ?? [ExceptionMessages.UnexpectedException],
                 statusCode ?? StatusCodes.Status500InternalServerError);
         }
 

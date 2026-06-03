@@ -1,103 +1,29 @@
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react"; // 1. Added useState
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  Animated,
-  StatusBar,
+  Alert,
+  Modal, // 2. Added Modal for the bottom sheet
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { InfoRow } from "../../components/ServicesTab/InfoRow";
+import { SectionCard } from "../../components/ServicesTab/SectionCard";
+import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
-import { OrderStausEnum } from "../../helpers/enums/OrderStatusEnum";
-import { formatLocaleDate } from "../../helpers/formatLocaleDate";
+import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
+import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
+import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
 import { ServicesStackParamList } from "../../helpers/types/RootStackParamList";
+import { useOrderDetail } from "../../hooks/Services/useOrderDetail";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-import { OrderService } from "../../services/OrderService";
-
-// ─── Status helpers ───────────────────────────────────────────────────────────
-
-const STATUS_CONFIG: Record<
-  OrderStausEnum,
-  { bg: string; text: string; icon: string; label: string }
-> = {
-  [OrderStausEnum.Upcoming]: {
-    bg: "#E3F2FD",
-    text: "#1565C0",
-    icon: "time-outline",
-    label: "Upcoming",
-  },
-  [OrderStausEnum.Completed]: {
-    bg: "#E8F5E9",
-    text: "#2E7D32",
-    icon: "checkmark-circle-outline",
-    label: "Completed",
-  },
-  [OrderStausEnum.Canceled]: {
-    bg: "#FFEBEE",
-    text: "#C62828",
-    icon: "close-circle-outline",
-    label: "Canceled",
-  },
-};
-
-const getStatusConfig = (status: OrderStausEnum) =>
-  STATUS_CONFIG[status] ?? {
-    bg: "#F5F5F5",
-    text: "#757575",
-    icon: "ellipse-outline",
-    label: "Unknown",
-  };
-
-// ─── Section components ────────────────────────────────────────────────────────
-
-function SectionCard({
-  title,
-  children,
-}: {
-  title?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <View style={styles.sectionCard}>
-      {title ? <Text style={styles.sectionTitle}>{title}</Text> : null}
-      {children}
-    </View>
-  );
-}
-
-function InfoRow({
-  icon,
-  label,
-  value,
-  accent,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <View style={styles.infoRow}>
-      <View style={styles.infoIconWrap}>
-        <Ionicons name={icon as any} size={16} color="#185FA5" />
-      </View>
-      <View style={styles.infoTextWrap}>
-        <Text style={styles.infoLabel}>{label}</Text>
-        <Text style={[styles.infoValue, accent && styles.infoValueAccent]}>
-          {value}
-        </Text>
-      </View>
-    </View>
-  );
-}
-
-// ─── Main screen ──────────────────────────────────────────────────────────────
 
 type ServiceProvidersRouteProp = RouteProp<
   ServicesStackParamList,
@@ -107,27 +33,21 @@ type ServiceProvidersRouteProp = RouteProp<
 export function OrderDetailScreen() {
   const { t } = useTranslation();
   const route = useRoute<ServiceProvidersRouteProp>();
-  const { serviceApplicationId } = route.params;
-  const { goBack, navigate } = useAppNavigation();
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const { orderId } = route.params;
+  const { goBack, navigate, setOptions } = useAppNavigation();
 
-  const {
-    data: order,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["orderDetail", serviceApplicationId],
-    queryFn: () => OrderService.getOrderById(serviceApplicationId),
-  });
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const currentUserId = keycloakService.getCurrentUserId();
 
-  // ── Header animation ──
-  const headerOpacity = scrollY.interpolate({
-    inputRange: [0, 60],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
-  });
+  useEffect(() => {
+    setOptions({
+      title: t("orders.title"),
+    });
+  }, []);
 
-  // ── Loading / Error ──
+  const { order, isLoading, isError, updateStatus, isUpdatingStatus } =
+    useOrderDetail(orderId);
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -140,65 +60,61 @@ export function OrderDetailScreen() {
     return (
       <View style={styles.centered}>
         <Ionicons name="alert-circle-outline" size={48} color="#E53935" />
-        <Text style={styles.errorText}>Failed to load order details.</Text>
+        <Text style={styles.errorText}>{t("orders.failedToLoad")}</Text>
         <TouchableOpacity style={styles.retryBtn} onPress={goBack}>
-          <Text style={styles.retryBtnText}>Go Back</Text>
+          <Text style={styles.retryBtnText}>{t("common.goBack")}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  const statusConfig = getStatusConfig(order.orderStatus);
+  const isOrderOwner =
+    currentUserId === order.user.id || currentUserId === order.user?.id;
+  const isProvider = currentUserId === order.providerId;
+
+  const handleStatusSelect = (newStatus: OrderStatusEnum) => {
+    setPickerVisible(false);
+    updateStatus({ status: newStatus });
+  };
+
+  const handleCustomerCancel = () => {
+    Alert.alert(
+      t("orders.changeStatusTitle"),
+      t("orders.changeStatusConfirmMessage"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        {
+          text: t("common.confirm"),
+          onPress: () => updateStatus({ status: OrderStatusEnum.Canceled }),
+        },
+      ],
+    );
+  };
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f7f9fc" />
-
-      {/* ── Animated floating header title ── */}
-      <Animated.View
-        style={[styles.floatingHeader, { opacity: headerOpacity }]}
-        pointerEvents="none"
-      >
-        <Text style={styles.floatingHeaderTitle} numberOfLines={1}>
-          {order.title}
-        </Text>
-      </Animated.View>
-
-      {/* ── Top bar ── */}
-      <View style={styles.topBar}>
-        <TouchableOpacity style={styles.backBtn} onPress={goBack}>
-          <Ionicons name="chevron-back" size={22} color="#1a1a1a" />
-        </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Order Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
-
-      <Animated.ScrollView
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true },
-        )}
-        scrollEventThrottle={16}
       >
-        {/* ── Hero card ── */}
         <View style={styles.heroCard}>
-          <View style={styles.heroTop}>
+          <TouchableOpacity
+            onPress={() => {
+              navigate("RootTabNavigationScreen", {
+                screen: "DiscoveryTab",
+                params: {
+                  screen: "ServiceDetailScreen",
+                  params: { serviceId: order.serviceId },
+                },
+              });
+            }}
+            style={styles.heroTop}
+          >
             <Text style={styles.heroTitle}>{order.title}</Text>
-            <View
-              style={[styles.statusBadge, { backgroundColor: statusConfig.bg }]}
-            >
-              <Ionicons
-                name={statusConfig.icon as any}
-                size={12}
-                color={statusConfig.text}
-              />
-              <Text style={[styles.statusText, { color: statusConfig.text }]}>
-                {statusConfig.label}
-              </Text>
-            </View>
-          </View>
+            <Badge
+              status={OrderStatusEnum[order.orderStatus].toLowerCase()}
+            ></Badge>
+          </TouchableOpacity>
 
           {order.description ? (
             <Text style={styles.heroDescription}>{order.description}</Text>
@@ -206,9 +122,8 @@ export function OrderDetailScreen() {
 
           <View style={styles.heroDivider} />
 
-          {/* Price */}
           <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Price</Text>
+            <Text style={styles.priceLabel}>{t("orders.price")}</Text>
             <View style={styles.priceRight}>
               <Text style={styles.priceValue}>
                 {order.minPrice}
@@ -216,51 +131,101 @@ export function OrderDetailScreen() {
                 <Text style={styles.priceCurrency}>TRY</Text>
               </Text>
               <Text style={styles.pricePer}>
-                / {getPricingUnit(t, order.pricing)}
+                {getPricingUnit(t, order.pricing)}
               </Text>
             </View>
           </View>
         </View>
 
-        {/* ── Provider section ── */}
-        <SectionCard title="Service Provider">
+        {order.user ? (
+          <SectionCard title={t("orders.customer") || "Customer"}>
+            <View style={styles.providerRow}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigate("UserProfileScreen", { userId: order.user.id })
+                }
+              >
+                <UserAvatar
+                  user={order.user}
+                  containerStyle={{ width: 40, height: 40, borderRadius: 20 }}
+                  imageStyle={{ width: 40, height: 40, borderRadius: 20 }}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigate("UserProfileScreen", { userId: order.user.id })
+                }
+                style={{ flex: 1 }}
+              >
+                <Text style={styles.providerName}>
+                  {order.user?.firstName} {order.user?.lastName ?? ""}
+                </Text>
+                {order.user?.email ? (
+                  <Text style={styles.providerSub}>{order.user.email}</Text>
+                ) : null}
+              </TouchableOpacity>
+              {currentUserId !== order.user?.id && (
+                <TouchableOpacity style={styles.contactBtn}>
+                  <Ionicons
+                    name="chatbubble-ellipses-outline"
+                    size={18}
+                    color="#185FA5"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          </SectionCard>
+        ) : null}
+
+        <SectionCard title={t("orders.serviceProvider")}>
           <View style={styles.providerRow}>
-            <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigate("UserProfileScreen", { userId: order.providerId })
+              }
+            >
               <UserAvatar
                 user={order.provider}
                 containerStyle={{ width: 40, height: 40, borderRadius: 20 }}
                 imageStyle={{ width: 40, height: 40, borderRadius: 20 }}
-              ></UserAvatar>
-            </View>
-            <View style={{ flex: 1 }}>
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigate("UserProfileScreen", { userId: order.providerId })
+              }
+              style={{ flex: 1 }}
+            >
               <Text style={styles.providerName}>
                 {order.provider?.firstName} {order.provider?.lastName ?? ""}
               </Text>
               {order.provider?.phone ? (
                 <Text style={styles.providerSub}>{order.provider.phone}</Text>
               ) : null}
-            </View>
-            <TouchableOpacity style={styles.contactBtn}>
-              <Ionicons
-                name="chatbubble-ellipses-outline"
-                size={18}
-                color="#185FA5"
-              />
             </TouchableOpacity>
+            {currentUserId !== order.provider?.id && (
+              <TouchableOpacity style={styles.contactBtn}>
+                <Ionicons
+                  name="chatbubble-ellipses-outline"
+                  size={18}
+                  color="#185FA5"
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </SectionCard>
 
-        {/* ── Order info section ── */}
-        <SectionCard title="Order Info">
+        <SectionCard title={t("orders.orderInfo")}>
           <InfoRow
             icon="receipt-outline"
-            label="Order ID"
+            label={t("orders.orderId")}
             value={`#${order.id}`}
           />
           <View style={styles.infoSeparator} />
           <InfoRow
             icon="calendar-outline"
-            label="Ordered On"
+            label={t("orders.orderedOn")}
             value={formatLocaleDate(order.createdDate) ?? "—"}
           />
           {order.scheduledDate ? (
@@ -268,7 +233,7 @@ export function OrderDetailScreen() {
               <View style={styles.infoSeparator} />
               <InfoRow
                 icon="alarm-outline"
-                label="Scheduled For"
+                label={t("orders.scheduledFor")}
                 value={order.scheduledDate}
               />
             </>
@@ -278,7 +243,7 @@ export function OrderDetailScreen() {
               <View style={styles.infoSeparator} />
               <InfoRow
                 icon="location-outline"
-                label="Location"
+                label={t("orders.location")}
                 value={order.location}
               />
             </>
@@ -287,13 +252,82 @@ export function OrderDetailScreen() {
 
         {/* ── Notes section ── */}
         {order.notes ? (
-          <SectionCard title="Notes">
+          <SectionCard title={t("orders.notes")}>
             <Text style={styles.notesText}>{order.notes}</Text>
           </SectionCard>
         ) : null}
 
-        {/* ── Action buttons ── */}
         <View style={styles.actionArea}>
+          {isUpdatingStatus && (
+            <ActivityIndicator color="#185FA5" style={{ marginVertical: 12 }} />
+          )}
+
+          {isProvider &&
+            !isUpdatingStatus &&
+            (order.orderStatus === OrderStatusEnum.Pending ||
+              order.orderStatus === OrderStatusEnum.Active) && (
+              <View style={styles.dropdownContainer}>
+                <Text style={styles.dropdownLabel}>
+                  {t("orders.statusManagement")}
+                </Text>
+                <TouchableOpacity
+                  style={styles.dropdownSelector}
+                  onPress={() => setPickerVisible(true)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.dropdownLeftValue}>
+                    <View
+                      style={[
+                        styles.indicatorDot,
+                        { backgroundColor: "#185FA5" },
+                      ]}
+                    />
+                    <Text style={styles.dropdownSelectorValue}>
+                      {t(
+                        `status.${OrderStatusEnum[order.orderStatus].toLowerCase()}`,
+                      )}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-down" size={18} color="#666" />
+                </TouchableOpacity>
+              </View>
+            )}
+
+          {!isProvider &&
+            !isUpdatingStatus &&
+            (order.orderStatus === OrderStatusEnum.Pending ||
+              order.orderStatus === OrderStatusEnum.Active) &&
+            isOrderOwner && (
+              <TouchableOpacity
+                onPress={handleCustomerCancel}
+                style={styles.dangerBtn}
+                activeOpacity={0.85}
+              >
+                <Ionicons
+                  name="close-circle-outline"
+                  size={18}
+                  color="#E53935"
+                />
+                <Text style={styles.dangerBtnText}>
+                  {t("orders.cancelOrder")}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+          {order.orderStatus === OrderStatusEnum.Canceled && (
+            <View style={[styles.staticStateBox, { borderColor: "#FFCDD2" }]}>
+              <Text style={styles.dangerBtnText}>{t("status.canceled")}</Text>
+            </View>
+          )}
+
+          {order.orderStatus === OrderStatusEnum.Completed && (
+            <View style={[styles.staticStateBox, { borderColor: "#C8E6C9" }]}>
+              <Text style={styles.successTextText}>
+                {t("status.completed")}
+              </Text>
+            </View>
+          )}
+
           <TouchableOpacity
             style={styles.primaryBtn}
             activeOpacity={0.85}
@@ -308,34 +342,97 @@ export function OrderDetailScreen() {
             }
           >
             <Ionicons name="storefront-outline" size={18} color="#fff" />
-            <Text style={styles.primaryBtnText}>View Service</Text>
+            <Text style={styles.primaryBtnText}>{t("orders.viewService")}</Text>
           </TouchableOpacity>
-
-          {order.orderStatus === OrderStausEnum.Upcoming && (
-            <TouchableOpacity
-              onPress={() => OrderService.cancelOrder(order.id)}
-              style={styles.dangerBtn}
-              activeOpacity={0.85}
-            >
-              <Ionicons name="close-circle-outline" size={18} color="#E53935" />
-              <Text style={styles.dangerBtnText}>Cancel Order</Text>
-            </TouchableOpacity>
-          )}
-          {order.orderStatus === OrderStausEnum.Canceled && (
-            <TouchableOpacity style={styles.dangerBtn} activeOpacity={0.85}>
-              <Text style={styles.dangerBtnText}>Order Canceled!</Text>
-            </TouchableOpacity>
-          )}
         </View>
-      </Animated.ScrollView>
+      </ScrollView>
+
+      <Modal
+        visible={pickerVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPickerVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setPickerVisible(false)}
+        >
+          <View
+            style={styles.modalContent}
+            onStartShouldSetResponder={() => true}
+          >
+            <Text style={styles.modalTitle}>{t("orders.manageStatus")}</Text>
+            <Text style={styles.modalSubtitle}>
+              {t("orders.currentStatus")} :{" "}
+              {t(`status.${OrderStatusEnum[order.orderStatus].toLowerCase()}`)}
+            </Text>
+
+            {/* Row Layout container for Action pairs */}
+            <View style={styles.modalButtonsRow}>
+              {isProvider && OrderStatusEnum.Pending == order.orderStatus && (
+                <TouchableOpacity
+                  style={[styles.sheetBtn, styles.sheetSuccessBtn]}
+                  onPress={() => handleStatusSelect(OrderStatusEnum.Active)}
+                >
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={18}
+                    color="#fff"
+                  />
+                  <Text style={styles.sheetSuccessBtnText}>
+                    {t("orders.activate")}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {isProvider && OrderStatusEnum.Active == order.orderStatus && (
+                <TouchableOpacity
+                  style={[styles.sheetBtn, styles.sheetSuccessBtn]}
+                  onPress={() => handleStatusSelect(OrderStatusEnum.Completed)}
+                >
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={18}
+                    color="#fff"
+                  />
+                  <Text style={styles.sheetSuccessBtnText}>
+                    {t("orders.complete")}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              <TouchableOpacity
+                style={[styles.sheetBtn, styles.sheetDangerBtn]}
+                onPress={() => handleStatusSelect(OrderStatusEnum.Canceled)}
+              >
+                <Ionicons
+                  name="close-circle-outline"
+                  size={18}
+                  color="#E53935"
+                />
+                <Text style={styles.sheetDangerBtnText}>
+                  {t("orders.cancelOrder")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={styles.sheetCancelBtn}
+              onPress={() => setPickerVisible(false)}
+            >
+              <Text style={styles.sheetCancelBtnText}>
+                {t("common.cancel")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "#f7f9fc" },
+  root: { flex: 1, backgroundColor: Colors.background.base },
   centered: {
     flex: 1,
     alignItems: "center",
@@ -354,48 +451,8 @@ const styles = StyleSheet.create({
   },
   retryBtnText: { color: "#fff", fontWeight: "600" },
 
-  // Top bar
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingTop: 52,
-    paddingBottom: 12,
-    backgroundColor: "#f7f9fc",
-  },
-  topBarTitle: { fontSize: 17, fontWeight: "700", color: "#1a1a1a" },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.07,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  floatingHeader: {
-    position: "absolute",
-    top: 58,
-    left: 60,
-    right: 60,
-    zIndex: 10,
-    alignItems: "center",
-  },
-  floatingHeaderTitle: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#1a1a1a",
-  },
-
-  // Scroll
   scrollContent: { padding: 16, paddingBottom: 48, gap: 14 },
 
-  // Hero card
   heroCard: {
     backgroundColor: "#fff",
     borderRadius: 18,
@@ -406,11 +463,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
   },
-  heroTop: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 10,
-  },
+  heroTop: { flexDirection: "row", alignItems: "flex-start", gap: 10 },
   heroTitle: {
     flex: 1,
     fontSize: 18,
@@ -424,11 +477,7 @@ const styles = StyleSheet.create({
     color: "#666",
     lineHeight: 19,
   },
-  heroDivider: {
-    height: 1,
-    backgroundColor: "#f0f0f0",
-    marginVertical: 14,
-  },
+  heroDivider: { height: 1, backgroundColor: "#f0f0f0", marginVertical: 14 },
   priceRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -440,38 +489,6 @@ const styles = StyleSheet.create({
   priceCurrency: { fontSize: 13, fontWeight: "500", color: "#185FA5" },
   pricePer: { fontSize: 11, color: "#aaa", marginTop: 1 },
 
-  // Status badge
-  statusBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  statusText: { fontSize: 11, fontWeight: "700" },
-
-  // Section card
-  sectionCard: {
-    backgroundColor: "#fff",
-    borderRadius: 18,
-    padding: 18,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#aaa",
-    letterSpacing: 0.8,
-    textTransform: "uppercase",
-    marginBottom: 14,
-  },
-
-  // Provider
   providerRow: { flexDirection: "row", alignItems: "center", gap: 12 },
   providerName: { fontSize: 15, fontWeight: "600", color: "#1a1a1a" },
   providerSub: { fontSize: 12, color: "#aaa", marginTop: 2 },
@@ -483,33 +500,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  // Info rows
-  infoRow: { flexDirection: "row", alignItems: "center", gap: 12 },
-  infoIconWrap: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    backgroundColor: "#185FA510",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  infoTextWrap: { flex: 1 },
-  infoLabel: { fontSize: 11, color: "#aaa", fontWeight: "500" },
-  infoValue: {
-    fontSize: 14,
-    color: "#1a1a1a",
-    fontWeight: "600",
-    marginTop: 1,
-  },
-  infoValueAccent: { color: "#185FA5" },
   infoSeparator: { height: 1, backgroundColor: "#f5f5f5", marginVertical: 10 },
-
-  // Notes
   notesText: { fontSize: 13, color: "#555", lineHeight: 20 },
 
-  // Actions
-  actionArea: { gap: 10, marginTop: 4 },
+  actionArea: { gap: 12, marginTop: 4 },
   primaryBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -532,4 +526,93 @@ const styles = StyleSheet.create({
     borderColor: "#FFCDD2",
   },
   dangerBtnText: { color: "#E53935", fontWeight: "700", fontSize: 15 },
+  successTextText: { color: "#2E7D32", fontWeight: "700", fontSize: 15 },
+  staticStateBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 15,
+    borderRadius: 14,
+    backgroundColor: "#fafafa",
+    borderWidth: 1,
+  },
+
+  dropdownContainer: { gap: 6, marginBottom: 2 },
+  dropdownLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#666",
+    paddingLeft: 2,
+  },
+  dropdownSelector: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#dbe2eb",
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  dropdownLeftValue: { flexDirection: "row", alignItems: "center", gap: 8 },
+  indicatorDot: { width: 8, height: 8, borderRadius: 4 },
+  dropdownSelectorValue: { fontSize: 15, fontWeight: "600", color: "#1a1a1a" },
+
+  // ─── BOTTOM DROPDOWN MODAL DESIGN LAYOUTS ───
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    paddingBottom: 34,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#1a1a1a",
+    marginBottom: 4,
+  },
+  modalSubtitle: { fontSize: 13, color: "#777", marginBottom: 20 },
+
+  // Custom Horizontal Side-by-Side Row layout config
+  modalButtonsRow: {
+    flexDirection: "row",
+    gap: 12,
+    width: "100%",
+    marginBottom: 12,
+  },
+  sheetBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    borderRadius: 14,
+    paddingVertical: 14,
+  },
+  sheetSuccessBtn: { backgroundColor: "#2E7D32" },
+  sheetSuccessBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
+  sheetDangerBtn: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#FFCDD2",
+  },
+  sheetDangerBtnText: { color: "#E53935", fontWeight: "700", fontSize: 14 },
+
+  // Bottom isolated dismiss action
+  sheetCancelBtn: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 14,
+    marginTop: 4,
+  },
+  sheetCancelBtnText: { color: "#666", fontWeight: "600", fontSize: 15 },
 });

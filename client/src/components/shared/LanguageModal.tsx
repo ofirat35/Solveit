@@ -5,8 +5,9 @@ import { CustomModal } from "../../components/shared/CustomModal";
 import i18n from "../../localization";
 
 const LANGUAGES: { code: string; label: string; flag: string }[] = [
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+  { code: "en", label: "language.english", flag: "🇬🇧" },
+  { code: "tr", label: "language.turkish", flag: "🇹🇷" },
+  { code: "de", label: "language.german", flag: "🇩🇪" },
 ];
 
 type LanguageModalProps = {

@@ -3,7 +3,9 @@
   "common": {
     "cancel": "İptal",
     "confirm": "Onayla",
+    "created": "Oluşturuldu",
     "error": "Hata",
+    "errorOccurred": "Hata Oluştu",
     "fixed": "Sabit",
     "goBack": "Geri Dön",
     "n/a": "N/A",
@@ -12,7 +14,8 @@
     "perHour": "/ saat",
     "perSession": "/ oturum",
     "search": "Ara...",
-    "success": "Başarılı"
+    "success": "Başarılı",
+    "updated": "Güncellendi"
   },
   "createService": {
     "active": "Aktif",
@@ -61,6 +64,11 @@
     "updateSuccess": "Profil başarıyla güncellendi!",
     "woman": "Kadın"
   },
+  "editService": {
+    "saveChanges": "Değişiklikleri Kaydet",
+    "title": "Düzenle",
+    "updateSuccess": "Hizmet başarıyla güncellendi!"
+  },
   "Email": "E-posta",
   "errors": {
     "failedLoadOrder": "Sipariş detayları yüklenemedi."
@@ -68,6 +76,11 @@
   "home": {
     "greeting": "Ne konuda yardıma ihtiyacınız var?",
     "searchPlaceholder": "Şunu deneyin: 'Ev Temizliği'"
+  },
+  "language": {
+    "english": "İngilizce",
+    "german": "Almanca",
+    "turkish": "Türkçe"
   },
   "Loading": "Yükleniyor",
   "login": {
@@ -81,9 +94,18 @@
     "TabNavTitle": "Bildirimler"
   },
   "orders": {
+    "activate": "Aktifleştir",
     "cancelOrder": "Siparişi İptal Et",
+    "changeStatusConfirmMessage": "Statü değiştirme onayı",
+    "changeStatusTitle": "Statü Değiştir",
+    "complete": "Tamamla",
+    "currentStatus": "Mevcut Durum",
+    "customer": "Müşteri",
     "emptyOrdersSubtitle": "Aktif ve geçmiş hizmet talepleriniz burada listelenir.",
+    "failedToLoad": "Yükleme esnasında sorun oluştu",
     "location": "Konum",
+    "manageStatus": "Sipariş Durumunu Yönet",
+    "noMoreOrders": "Daha fazla sipariş yok",
     "noOrdersYet": "Henüz sipariş yok",
     "notes": "Notlar",
     "orderCanceled": "Sipariş İptal Edildi!",
@@ -92,7 +114,16 @@
     "orderedOnDate": "Sipariş tarihi: {{date}}",
     "orderId": "Sipariş Kodu",
     "orderInfo": "Sipariş Bilgisi",
-    "scheduledFor": "Planlanan Zaman"
+    "price": "Fiyat",
+    "scheduledFor": "Planlanan Zaman",
+    "serviceProvider": "Hizmet Sağlayıcı",
+    "statusManagement": "Sipariş Durumu Yönetimi",
+    "statusUpdatedSuccess": "Sipariş durumu başarıyla güncellendi!",
+    "statusUpdateFailed": "Sipariş durumu güncellenemedi.",
+    "title": "Siparişim",
+    "totalOrdersCount_one": "Toplam {{count}} sipariş",
+    "totalOrdersCount_other": "Toplam {{count}} sipariş",
+    "viewService": "Hizmeti Görüntüle"
   },
   "pricingUnits": {
     "Fixed": "Sabit",
@@ -100,7 +131,7 @@
     "Item": "Adet Başına"
   },
   "providerDetail": {
-    "about": "Hakkında",
+    "about": "Hizmet hakkında",
     "applyButton": "Başvur",
     "applyError": "Başvuru sırasında bir hata oluştu",
     "applySuccess": "Başvuru başarıyla gönderildi!",
@@ -108,8 +139,9 @@
     "errorLoading": "Veriler yüklenirken hata oluştu",
     "location": "Konum",
     "noDescription": "Açıklama bulunmuyor",
+    "offeredBy": "Hizmet Sağlayan",
     "phone": "Telefon",
-    "startingFrom": "Şu fiyattan başlayan"
+    "startingFrom": "Bu fiyattan başlayan"
   },
   "providers": {
     "loading": "Yükleniyor...",
@@ -138,6 +170,10 @@
   },
   "Reset": "Sıfırla",
   "Reset Password": "Şifreyi Sıfırla",
+  "serviceDetail": {
+    "confirmApplicationBody": "Hizmeti satın almak istediğinize emin misiniz?",
+    "confirmApplicationTitle": "Hizmeti Onayla"
+  },
   "services": {
     "activate": "Aktifleştir",
     "activateToOffer": "Hizmet sunmaya başlamak için aktifleştirin",
@@ -155,12 +191,17 @@
     "price": "Fiyat",
     "providerModeOff": "Sağlayıcı Modu Kapalı",
     "providerModeOn": "Sağlayıcı Modu Açık",
+    "serviceDetails": "Hizmet detayları",
+    "serviceNotFound": "Hizmet bulunamadı",
     "serviceProvider": "Hizmet Sağlayıcı",
     "servicesVisible": "Hizmetleriniz müşteriler tarafından görülebilir",
     "setAsDefault": "Varsayılan Yap",
     "setAsDefaultDescription": "\"{{tab}}\" sekmesini varsayılan açılış görünümünüz yapmak istediğinize emin misiniz?",
     "setAsDefaultTitle": "Varsayılan Sekme Yap",
     "title": "Hizmetler",
+    "totalServices": "{{count}} Hizmet",
+    "totalOrders_one": "{{count}} Sipariş",
+    "totalOrders_other": "{{count}} Sipariş",
     "viewService": "Hizmeti Görüntüle"
   },
   "ServicesTab": {
@@ -188,12 +229,15 @@
   "status": {
     "accepted": "Kabul Edildi",
     "active": "Aktif",
-    "cancelled": "İptal Edildi",
+    "canceled": "İptal Edildi",
     "completed": "Tamamlandı",
     "paused": "Duraklatıldı",
     "pending": "Beklemede",
     "rejected": "Reddedildi",
     "unknown": "Bilinmiyor",
     "upcoming": "Yaklaşan"
+  },
+  "users": {
+    "userProfile": "Kullanıcı Profili"
   }
 }

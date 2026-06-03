@@ -7,16 +7,16 @@ using Solveit.Api.Core.Domain.Models;
 namespace Solveit.Api.Core.Application.Features.Queries.Categories
 {
     public class MyServicesQueryHandler(ICategoryService categoryService)
-        : BaseQueryHandler, IRequestHandler<GetCategoriesRequestQuery, ResponseModel<List<Category>>>
+        : BaseQueryHandler, IRequestHandler<GetCategoriesRequestQuery, Result<List<Category>>>
     {
-        public async Task<ResponseModel<List<Category>>> Handle(GetCategoriesRequestQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<Category>>> Handle(GetCategoriesRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await categoryService.GetAll().ToListAsync(cancellationToken);
-            return ToSuccessResponseModel(response);
+            return ToSuccessResult(response);
         }
     }
 
-    public class GetCategoriesRequestQuery : IRequest<ResponseModel<List<Category>>>
+    public class GetCategoriesRequestQuery : IRequest<Result<List<Category>>>
     {
     }
 }

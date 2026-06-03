@@ -5,7 +5,6 @@ using Minio.Exceptions;
 using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.AppUsers;
-using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Entities.Files;
 using Solveit.Api.Core.Domain.Models;
 using Solveit.Api.Extensions;
@@ -16,9 +15,9 @@ namespace Solveit.Api.Core.Application.Features.Commands.Users
         IMinioFileService fileService,
         IHttpContextAccessor httpContext,
         IAppUserService userService)
-        : BaseCommandHandler, IRequestHandler<UploadUserImageRequestCommand, ResponseModel<UserImageListDto>>
+        : BaseCommandHandler, IRequestHandler<UploadUserImageRequestCommand, Result<UserImageListDto>>
     {
-        public async Task<ResponseModel<UserImageListDto>> Handle(UploadUserImageRequestCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserImageListDto>> Handle(UploadUserImageRequestCommand request, CancellationToken cancellationToken)
         {
             var userId = httpContext.GetUserId();
             PutObjectResponse response;
@@ -60,7 +59,7 @@ namespace Solveit.Api.Core.Application.Features.Commands.Users
 
                 await userService.SaveChangesAsync();
 
-                return ToSuccessResponseModel(
+                return ToSuccessResult(
                     new UserImageListDto
                     {
                         CreatedDate = image.CreatedDate,
@@ -70,12 +69,12 @@ namespace Solveit.Api.Core.Application.Features.Commands.Users
             }
             catch (MinioException ex)
             {
-                return ToFailResponseModel<UserImageListDto>(ex.Message, StatusCodes.Status500InternalServerError);
+                return ToFailResult<UserImageListDto>([ex.Message], StatusCodes.Status500InternalServerError);
             }
         }
     }
 
-    public class UploadUserImageRequestCommand : IRequest<ResponseModel<UserImageListDto>>
+    public class UploadUserImageRequestCommand : IRequest<Result<UserImageListDto>>
     {
         public IFormFile File { get; set; }
     }

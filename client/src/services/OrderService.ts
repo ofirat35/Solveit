@@ -1,3 +1,4 @@
+import { OrderStatusEnum } from "../helpers/enums/OrderStatusEnum";
 import { OrderListModel } from "../models/Services/OrderListModel";
 import { PaginatedItemsViewModel } from "./../models/PaginatedItemsViewModel";
 import { api } from "./api";
@@ -31,10 +32,32 @@ export const OrderService: IOrderService = {
       throw error;
     }
   },
-  async cancelOrder(orderId: string): Promise<boolean> {
+  async GetOrdersByServiceId(
+    serviceId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<PaginatedItemsViewModel<OrderListModel>> {
     try {
-      var result = await api.post<boolean>(`/orders/cancelOrder`, {
+      var result = await api.get<PaginatedItemsViewModel<OrderListModel>>(
+        `/orders/GetOrdersByServiceId`,
+        {
+          params: { serviceId, page, pageSize },
+        },
+      );
+      return result.data;
+    } catch (error) {
+      console.error("api error222:", error);
+      throw error;
+    }
+  },
+  async updateOrderStatus(
+    orderId: string,
+    status: OrderStatusEnum,
+  ): Promise<boolean> {
+    try {
+      var result = await api.put<boolean>(`/orders/updateOrderStatus`, {
         orderId: orderId,
+        orderStatus: status,
       });
       return result.data;
     } catch (error) {
@@ -50,5 +73,10 @@ interface IOrderService {
     pageSize?: number,
   ): Promise<PaginatedItemsViewModel<OrderListModel>>;
   getOrderById(orderId: string): Promise<OrderListModel>;
-  cancelOrder(orderId: string): Promise<boolean>;
+  GetOrdersByServiceId(
+    serviceId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<PaginatedItemsViewModel<OrderListModel>>;
+  updateOrderStatus(orderId: string, status: OrderStatusEnum): Promise<boolean>;
 }

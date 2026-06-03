@@ -1,21 +1,21 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { ScreenHeader } from "../../components/shared/ScreenHeader";
+import { CustomModal } from "../../components/shared/CustomModal";
+import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { DiscoveryStackParamList } from "../../helpers/types/RootStackParamList";
-import { ServiceProviderService } from "../../services/ServiceProviderService";
-import { UserService } from "../../services/UserService";
+import { useServiceDetail } from "../../hooks/Discovery/useServiceDetail";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 type ServiceProviderDetailRouteProp = RouteProp<
   DiscoveryStackParamList,
@@ -25,47 +25,30 @@ type ServiceProviderDetailRouteProp = RouteProp<
 export function ServiceDetailScreen() {
   const { t } = useTranslation();
   const route = useRoute<ServiceProviderDetailRouteProp>();
+  const { navigate, setOptions } = useAppNavigation();
   const { serviceId } = route.params;
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const {
-    data: service,
+    service,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["service", serviceId],
-    queryFn: () => ServiceProviderService.getServiceById(serviceId),
+    userImageData,
+    applyForService,
+    isApplying,
+  } = useServiceDetail({
+    serviceId,
   });
-
-  const provider = useMemo(() => service?.provider, [service]);
-  const { data: userImageData } = useQuery({
-    queryKey: ["userImage", service?.providerId],
-    queryFn: () => {
-      return service?.providerId
-        ? UserService.getUserImage(service.providerId)
-        : undefined;
-    },
-    enabled: !!service?.providerId,
-  });
-
-  // 2. Mutation for applying to a service
-  const { mutate: applyForService, isPending: isApplying } = useMutation({
-    mutationFn: (id: number) => ServiceProviderService.applyForService(id),
-    onSuccess: () => {
-      Alert.alert(
-        t("common.success", "Success"),
-        t(
-          "providerDetail.applySuccess",
-          "Your application has been submitted successfully!",
-        ),
-      );
-    },
-    onError: (err) => {
-      Alert.alert(
-        t("common.error", "Error"),
-        err.message ||
-          t("providerDetail.applyError", "Failed to submit application."),
-      );
-    },
-  });
+  const currentUserId = useMemo(() => keycloakService.getCurrentUserId(), []);
+  const applyForServiceHandler = async () => {
+    applyForService();
+  };
+  useEffect(() => {
+    if (service?.title) {
+      setOptions({
+        title: service.title,
+      });
+    }
+  }, [service?.title, setOptions]);
 
   if (isLoading) {
     return (
@@ -78,17 +61,13 @@ export function ServiceDetailScreen() {
   if (error || !service) {
     return (
       <View style={styles.centerState}>
-        <Text style={styles.errorText}>
-          {t("providerDetail.errorLoading", "Failed to load provider details.")}
-        </Text>
+        <Text style={styles.errorText}>{t("providerDetail.errorLoading")}</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <ScreenHeader headerTitle={provider?.firstName} />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -104,38 +83,44 @@ export function ServiceDetailScreen() {
             transition={200}
           />
         ) : (
-          <View
-            style={[
-              styles.bannerImage,
-              { justifyContent: "center", alignItems: "center" },
-            ]}
-          >
-            <Text style={[{ color: "#185FA5", fontSize: 32, fontWeight: 500 }]}>
-              {service.provider?.firstName.charAt(0).toUpperCase()}
-            </Text>
+          <View style={[styles.bannerImage, styles.bannerPlaceholder]}>
+            <View style={styles.avatarCircle}>
+              <Text style={styles.avatarLetter}>
+                {service.provider?.firstName?.charAt(0).toUpperCase()}
+              </Text>
+            </View>
           </View>
         )}
 
         <View style={styles.contentCard}>
-          {/* Header Row (Name & Rating) */}
-          <View style={styles.metaRow}>
-            <Text style={styles.providerName}>{provider?.firstName}</Text>
-            {/* {provider.rating && (
-              <View style={styles.ratingBadge}>
-                <Text style={styles.ratingText}>
-                  ⭐️ {provider.rating.toFixed(1)}
-                </Text>
-              </View>
-            )} */}
+          {/* ── Enhanced Provider identity Block ── */}
+          <TouchableOpacity
+            onPress={() => {
+              navigate("UserProfileScreen", {
+                userId: service.providerId,
+              });
+            }}
+            style={styles.providerCard}
+          >
+            <View style={styles.providerInfo}>
+              <Text style={styles.providerLabel}>
+                {t("providerDetail.offeredBy")}
+              </Text>
+              <Text style={styles.providerName}>
+                {service.provider?.firstName} {service.provider?.lastName ?? ""}
+              </Text>
+            </View>
             <View style={styles.ratingBadge}>
               <Text style={styles.ratingText}>⭐️ 3.5</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          {/* Pricing or Subcategory context if applicable */}
+          {/* ── Enhanced Service Title Block ── */}
+          <Text style={styles.mainServiceTitle}>{service.title}</Text>
+
           {service.pricing && (
             <Text style={styles.priceText}>
-              {t("providerDetail.startingFrom", "Starting from")}:{" "}
+              {t("providerDetail.startingFrom")}:{" "}
               <Text style={styles.priceValue}>
                 ${service.minPrice}
                 {service.maxPrice ? ` - $${service.maxPrice}` : ""}
@@ -146,65 +131,69 @@ export function ServiceDetailScreen() {
           <View style={styles.divider} />
 
           {/* About / Description */}
-          <Text style={styles.sectionTitle}>
-            {t("providerDetail.about", "About Service")}
-          </Text>
+          <Text style={styles.sectionTitle}>{t("providerDetail.about")}</Text>
           <Text style={styles.description}>
-            {service.description ||
-              t(
-                "providerDetail.noDescription",
-                "No description available for this vendor.",
-              )}
+            {service.description || t("providerDetail.noDescription")}
           </Text>
 
           <View style={styles.divider} />
 
           {/* Additional Details info blocks */}
-          <Text style={styles.sectionTitle}>
-            {t("providerDetail.contact", "Contact Info")}
-          </Text>
+          <Text style={styles.sectionTitle}>{t("providerDetail.contact")}</Text>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>
-              📍 {t("providerDetail.location", "Location")}:
+              📍 {t("providerDetail.location")}:
             </Text>
-            <Text style={styles.infoValue}>
-              {/* {provider.address || t("common.n/a", "N/A")} */}address
-            </Text>
+            <Text style={styles.infoValue}>address</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>
-              📞 {t("providerDetail.phone", "Phone")}:
+              📞 {t("providerDetail.phone")}:
             </Text>
             <Text style={styles.infoValue}>
-              {provider?.phone || t("common.n/a", "N/A")}
+              {service.provider?.phone || t("common.n/a")}
             </Text>
           </View>
         </View>
       </ScrollView>
 
+      <CustomModal
+        visible={confirmModalVisible}
+        onDismiss={() => setConfirmModalVisible(false)}
+        title={t("serviceDetail.confirmApplicationTitle")}
+        onConfirm={() =>
+          applyForServiceHandler().then(() => setConfirmModalVisible(false))
+        }
+        onCancel={() => setConfirmModalVisible(false)}
+      >
+        <Text>{t("serviceDetail.confirmApplicationBody")}</Text>
+      </CustomModal>
+
       {/* Sticky Bottom Application Button Container */}
-      <View style={styles.bottomActionContainer}>
-        <TouchableOpacity
-          style={[styles.applyButton, isApplying && styles.disabledButton]}
-          activeOpacity={0.8}
-          disabled={isApplying}
-          onPress={() => applyForService(serviceId)}
-        >
-          {isApplying ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.applyButtonText}>
-              {t("providerDetail.applyButton", "Apply for Service")}
-            </Text>
-          )}
-        </TouchableOpacity>
-      </View>
+      {currentUserId != service.providerId && (
+        <View style={styles.bottomActionContainer}>
+          <TouchableOpacity
+            style={[styles.applyButton, isApplying && styles.disabledButton]}
+            activeOpacity={0.8}
+            disabled={isApplying}
+            onPress={() => setConfirmModalVisible(true)}
+          >
+            {isApplying ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.applyButtonText}>
+                {t("providerDetail.applyButton")}
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8f9fa" },
+  container: { flex: 1, backgroundColor: Colors.background.base },
   centerState: {
     flex: 1,
     justifyContent: "center",
@@ -217,6 +206,29 @@ const styles = StyleSheet.create({
     height: 220,
     backgroundColor: "#e9ecef",
   },
+  bannerPlaceholder: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e7f1f9",
+  },
+  avatarCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#185FA5",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  avatarLetter: {
+    color: "#185FA5",
+    fontSize: 28,
+    fontWeight: "600",
+  },
   contentCard: {
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 24,
@@ -225,28 +237,51 @@ const styles = StyleSheet.create({
     padding: 24,
     minHeight: 400,
   },
-  metaRow: {
+
+  // New Stylings for Identity presentation
+  providerCard: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 12,
-    marginBottom: 8,
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#f1f3f5",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 14,
+    marginBottom: 20,
+  },
+  providerInfo: {
+    flex: 1,
+  },
+  providerLabel: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#868e96",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 2,
   },
   providerName: {
-    flex: 1,
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: "700",
+    color: "#212529",
+  },
+  mainServiceTitle: {
+    fontSize: 24,
+    fontWeight: "800",
     color: "#1a1a1a",
+    lineHeight: 30,
+    marginBottom: 8,
   },
   ratingBadge: {
     backgroundColor: "#fff9db",
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingVertical: 5,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ffe066",
   },
-  ratingText: { fontSize: 13, fontWeight: "600", color: "#f59f00" },
-  priceText: { fontSize: 14, color: "#666", marginBottom: 16 },
+  ratingText: { fontSize: 13, fontWeight: "700", color: "#f59f00" },
+  priceText: { fontSize: 14, color: "#495057", marginBottom: 8 },
   priceValue: { fontWeight: "700", color: "#185FA5", fontSize: 16 },
   divider: {
     height: 1,
@@ -254,10 +289,11 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "700",
     color: "#1a1a1a",
     marginBottom: 10,
+    letterSpacing: 0.3,
   },
   description: { fontSize: 14, color: "#495057", lineHeight: 22 },
   infoRow: { flexDirection: "row", marginBottom: 8, alignItems: "center" },

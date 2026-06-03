@@ -18,8 +18,10 @@ import { CustomModal } from "../../components/shared/CustomModal";
 import { LanguageModal } from "../../components/shared/LanguageModal";
 import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
+import { Colors } from "../../helpers/consts/ColorConts";
 import { useAuth } from "../../helpers/contexts/AuthContext";
 import { useSettings } from "../../hooks/Settings/useSettings";
+
 export function SettingsScreen() {
   const { logout } = useAuth();
   const { user } = useSettings();
@@ -139,12 +141,15 @@ export function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 30, backgroundColor: "#f8f9fa" },
+  container: {
+    flex: 1,
+    paddingTop: 30,
+    backgroundColor: Colors.background.base,
+  },
   scroll: {
     paddingHorizontal: 16,
     paddingBottom: 50,
   },
-
   profileCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -177,7 +182,6 @@ const styles = StyleSheet.create({
   },
   profileName: { fontSize: 15, fontWeight: "600", color: "#1a1a1a" },
   profileEmail: { fontSize: 13, color: "#888", marginTop: 2 },
-
   sectionLabel: {
     fontSize: 11,
     fontWeight: "600",

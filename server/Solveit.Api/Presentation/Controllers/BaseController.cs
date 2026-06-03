@@ -11,16 +11,16 @@ namespace Solveit.Api.Presentation.Controllers
         private IMediator _mediator;
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
-        protected IActionResult HandleResponse<T>(ResponseModel<T> response)
+        protected IActionResult HandleResponse<T>(Result<T> response)
         {
-            if (response.IsError)
+            if (!response.IsSuccess)
             {
-                return StatusCode(response.StatusCode, new
+                return StatusCode(response.StatusCode ?? StatusCodes.Status400BadRequest, new
                 {
-                    Errors = response.ErrorMessages
+                    response.Errors
                 });
             }
-            return StatusCode(response.StatusCode, response.Data);
+            return StatusCode(response.StatusCode ?? StatusCodes.Status200OK, response.Value);
         }
     }
 }

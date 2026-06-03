@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Solveit.Api.Core.Application.Consts;
 using Solveit.Api.Core.Application.Enums;
 using Solveit.Api.Core.Application.Services;
-using Solveit.Api.Core.Domain.Dtos.AppUsers;
 using Solveit.Api.Core.Domain.Dtos.Orders;
 using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Models;
+using Solveit.Api.Extensions;
 using Solveit.Api.Infrastructure.Context;
 
 namespace Solveit.Api.Infrastructure.Services
@@ -15,7 +15,6 @@ namespace Solveit.Api.Infrastructure.Services
     public class ServiceProviderService(
         SolveitAppContext dbContext,
         IHttpContextAccessor httpContext,
-        IAppUserService userService,
         ILogger<AppUserService> logger,
         IMapper mapper)
         : BaseService<SolveitAppContext, Service, int>(dbContext, logger, httpContext, EventIds.ServiceProviderService),
@@ -27,17 +26,34 @@ namespace Solveit.Api.Infrastructure.Services
                 service.MaxPrice = null;
 
             var serviceToAdd = mapper.Map<Service>(service);
+            serviceToAdd.Status = ServiceStatusEnum.Pending;
             await AddAsync(serviceToAdd);
             var response = await SaveChangesAsync(serviceToAdd, DbOperation.Create);
 
             return response
                 ? SuccessResult(true)
-                : FailResult<bool>(ExceptionMessages.DbOperationFailed, StatusCodes.Status500InternalServerError);
+                : FailResult<bool>([ExceptionMessages.DbOperationFailed], StatusCodes.Status500InternalServerError);
         }
 
-        public async Task<PaginatedItemsViewModel<ServiceListDto>> GetMyServicesAsync(int page, int pageSize)
+        public async Task<Result<bool>> UpdateServiceAsync(ServiceUpdateDto service)
         {
-            var baseQuery = GetAll().Where(s => s.ProviderId == CurrentUserId);
+            var existingService = await GetByIdAsync(service.Id);
+            if (existingService is null)
+                return FailResult<bool>([DbOperation.Query], StatusCodes.Status404NotFound);
+            if (existingService.ProviderId != CurrentUserId)
+                return FailResult<bool>([ExceptionMessages.ForbiddenException], StatusCodes.Status403Forbidden);
+
+            mapper.Map(service, existingService);
+            var response = await SaveChangesAsync(existingService, DbOperation.Update);
+
+            return response
+                ? SuccessResult(true)
+                : FailResult<bool>([ExceptionMessages.DbOperationFailed], StatusCodes.Status500InternalServerError);
+        }
+
+        public async Task<PaginatedItemsViewModel<ServiceListDto>> GetUserServicesAsync(string userId, int page, int pageSize)
+        {
+            var baseQuery = GetAll().Where(s => s.ProviderId == userId);
             var totalCount = await baseQuery.CountAsync();
 
             var services = await baseQuery
@@ -92,33 +108,37 @@ namespace Solveit.Api.Infrastructure.Services
             return result;
         }
 
-        public async Task<Result<ServiceListDto>> GetServicesByIdAsync(int serviceId)
+        public async Task<Result<ServiceListDto>> GetServiceByIdAsync(int serviceId)
         {
             var service = await GetAll()
-                .Where(_ => _.Id == serviceId && _.Status == ServiceStatusEnum.Active)
+                .Where(_ => _.Id == serviceId)
                 .Include(_ => _.Provider)
                 .FirstOrDefaultAsync();
             if (service is null)
-                return FailResult<ServiceListDto>(DbOperation.Query, StatusCodes.Status404NotFound);
+                return FailResult<ServiceListDto>([DbOperation.Query], StatusCodes.Status404NotFound);
+            
+            var mappedService = mapper.Map<ServiceListDto>(service);
+            mappedService.TotalOrdersCount = await DbContext.Orders.Where(_ => _.ServiceId == serviceId).CountAsync();
 
-
-            return SuccessResult(mapper.Map<ServiceListDto>(service));
+            return SuccessResult(mappedService);
         }
+
 
         public async Task<Result<bool>> ApplyForServiceAsync(int serviceId)
         {
             IServiceBase service = await GetSingleAsync(_ => _.Id == serviceId);
-            if (service is null) return FailResult<bool>(DbOperation.Query, StatusCodes.Status404NotFound);
+            if (service is null) return FailResult<bool>([DbOperation.Query], StatusCodes.Status404NotFound);
 
             var order = mapper.Map<Order>(service);
             order.Id = Guid.NewGuid();
             order.UserId = CurrentUserId;
             order.ServiceId = serviceId;
+            
 
             await DbContext.AddAsync(order);
             var result = await SaveChangesAsync(order, DbOperation.Create);
 
-            return result ? SuccessResult(true) : FailResult<bool>(ExceptionMessages.DbOperationFailed);
+            return result ? SuccessResult(true) : FailResult<bool>([ExceptionMessages.DbOperationFailed]);
         }
     }
 }
