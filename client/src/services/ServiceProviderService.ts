@@ -6,84 +6,53 @@ import { api } from "./api";
 
 export const ServiceProviderService: IServiceProviderService = {
   async createService(service: ServiceCreateModel): Promise<boolean> {
-    try {
-      var result = await api.post<boolean>(`/serviceProviders/create`, service);
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.post<boolean>(`/serviceProviders/create`, service);
+    return result!;
   },
   async updateService(service: ServiceUpdateModel): Promise<boolean> {
-    try {
-      var result = await api.put<boolean>(`/serviceProviders/update`, service);
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.put<boolean>(`/serviceProviders/update`, service);
+    return result!;
   },
   async getUserServices(
     userId: string,
     page: number = 1,
     pageSize: number = 10,
   ): Promise<PaginatedItemsViewModel<ServiceListModel>> {
-    try {
-      var result = await api.get<PaginatedItemsViewModel<ServiceListModel>>(
-        `/ServiceProviders/GetUserServices`,
-        {
-          params: { userId, page, pageSize },
-        },
-      );
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.get<PaginatedItemsViewModel<ServiceListModel>>(
+      `/ServiceProviders/GetUserServices`,
+      {
+        params: { userId, page, pageSize },
+      },
+    );
+    return result!;
   },
   async getServicesBySubcategoryId(
     subcategoryId: number,
     page: number = 1,
     pageSize: number = 10,
   ): Promise<PaginatedItemsViewModel<ServiceListModel>> {
-    try {
-      var result = await api.get<PaginatedItemsViewModel<ServiceListModel>>(
-        `/ServiceProviders/ServicesBySubcategoryId`,
-        {
-          params: { subcategoryId: subcategoryId, page, pageSize }, // This appends ?page=1&pageSize=10 to the URL
-        },
-      );
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.get<PaginatedItemsViewModel<ServiceListModel>>(
+      `/ServiceProviders/ServicesBySubcategoryId`,
+      {
+        params: { subcategoryId: subcategoryId, page, pageSize }, // This appends ?page=1&pageSize=10 to the URL
+      },
+    );
+    return result!;
   },
   async getServiceById(serviceId: number): Promise<ServiceListModel> {
-    try {
-      var result = await api.get<ServiceListModel>(
-        `/ServiceProviders/GetServiceById`,
-        {
-          params: { serviceId: serviceId },
-        },
-      );
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.get<ServiceListModel>(
+      `/ServiceProviders/GetServiceById`,
+      {
+        params: { serviceId: serviceId },
+      },
+    );
+    return result!;
   },
   async applyForService(serviceId: number): Promise<boolean> {
-    try {
-      var result = await api.post<boolean>(
-        `/serviceProviders/ApplyForService`,
-        { serviceId: serviceId },
-      );
-      return result.data;
-    } catch (error) {
-      console.error("api error222:", error);
-      throw error;
-    }
+    var result = await api.post<boolean>(`/serviceProviders/ApplyForService`, {
+      serviceId: serviceId,
+    });
+    return result!;
   },
 };
 

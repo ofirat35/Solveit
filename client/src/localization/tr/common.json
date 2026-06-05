@@ -199,9 +199,11 @@
     "setAsDefaultDescription": "\"{{tab}}\" sekmesini varsayılan açılış görünümünüz yapmak istediğinize emin misiniz?",
     "setAsDefaultTitle": "Varsayılan Sekme Yap",
     "title": "Hizmetler",
-    "totalServices": "{{count}} Hizmet",
     "totalOrders_one": "{{count}} Sipariş",
     "totalOrders_other": "{{count}} Sipariş",
+    "totalServices": "{{count}} Hizmet",
+    "totalServices_one": "services.totalServices",
+    "totalServices_other": "services.totalServices",
     "viewService": "Hizmeti Görüntüle"
   },
   "ServicesTab": {

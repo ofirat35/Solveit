@@ -3,13 +3,10 @@ import { api } from "./api";
 
 export const AuthService: IAuthService = {
   async register(registerModel: RegisterModel): Promise<boolean> {
-    try {
-      var result = await api.post<boolean>("/auth/register", registerModel);
-      return result.data;
-    } catch (ex) {
-      console.log(ex);
-      return false;
-    }
+    var result = await api.post<boolean>("/auth/register", registerModel, {
+      shouldThrow: true,
+    });
+    return result!;
   },
 };
 

@@ -200,9 +200,11 @@
     "setAsDefaultDescription": "Are you sure you want to set \"{{tab}}\" as your default landing view?",
     "setAsDefaultTitle": "Set as Default Tab",
     "title": "Services",
-    "totalServices": "{{count}} Services",
     "totalOrders_one": "Total {{count}} order",
     "totalOrders_other": "Total {{count}} orders",
+    "totalServices": "{{count}} Services",
+    "totalServices_one": "services.totalServices",
+    "totalServices_other": "services.totalServices",
     "viewService": "View Service"
   },
   "ServicesTab": {
