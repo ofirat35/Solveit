@@ -7,6 +7,7 @@ export interface UserInfo {
   given_name?: string;
   family_name?: string;
   sub?: string;
+  country_code: string;
 }
 
 export class JWTUtils {
@@ -39,6 +40,7 @@ export class JWTUtils {
       given_name: decoded.given_name,
       family_name: decoded.family_name,
       sub: decoded.sub,
+      country_code: decoded.country_code,
     };
     return userInfo;
   }

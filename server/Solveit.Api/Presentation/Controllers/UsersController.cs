@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Application.Features.Queries.Users;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Solveit.Api.Presentation.Controllers
 {

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { UserAvatar } from "../components/UserAvatar";
 import { Colors } from "../helpers/consts/ColorConts";
+import { formatCurrency } from "../helpers/methods/formatCurrency";
 import { getPricingUnit } from "../helpers/methods/getPricingUnit";
 import { RootStackParamList } from "../helpers/types/RootStackParamList";
 import { useAppNavigation } from "../hooks/useAppNavigation";
@@ -170,8 +171,14 @@ export function UserProfileScreen() {
 
             <View style={styles.serviceFooter}>
               <Text style={styles.priceValue}>
-                {service.minPrice}
-                {service.maxPrice ? ` – ${service.maxPrice}` : ""}{" "}
+                {formatCurrency({
+                  amount: service.minPrice,
+                })}
+                {service.maxPrice
+                  ? ` – ${formatCurrency({
+                      amount: service.maxPrice,
+                    })}`
+                  : ""}{" "}
                 <Text style={styles.priceCurrency}>TRY</Text>
               </Text>
               <Text style={styles.pricePer}>

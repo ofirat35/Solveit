@@ -18,7 +18,7 @@ export type RootTabParamList = {
 
 export type DiscoveryStackParamList = {
   DiscoveryScreen: undefined;
-  ServiceProvidersScreen: { subcategoryId: number; subcategoryName: string };
+  ServiceProviderListScreen: { subcategoryId: number; subcategoryName: string };
   ServiceDetailScreen: { serviceId: number };
 };
 

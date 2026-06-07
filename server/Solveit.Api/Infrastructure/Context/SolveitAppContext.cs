@@ -82,7 +82,7 @@ namespace Solveit.Api.Infrastructure.Context
 
             modelBuilder.Entity<Order>()
             .HasOne(o => o.Provider)
-            .WithMany() 
+            .WithMany()
             .HasForeignKey(o => o.ProviderId)
             .OnDelete(DeleteBehavior.Restrict);
 

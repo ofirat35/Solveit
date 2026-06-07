@@ -19,6 +19,7 @@ import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
 import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
 import { ServicesStackParamList } from "../../helpers/types/RootStackParamList";
@@ -126,8 +127,14 @@ export function OrderDetailScreen() {
             <Text style={styles.priceLabel}>{t("orders.price")}</Text>
             <View style={styles.priceRight}>
               <Text style={styles.priceValue}>
-                {order.minPrice}
-                {order.maxPrice ? ` – ${order.maxPrice}` : ""}{" "}
+                {formatCurrency({
+                  amount: order.minPrice,
+                })}
+                {order.maxPrice
+                  ? ` – ${formatCurrency({
+                      amount: order.maxPrice,
+                    })}`
+                  : ""}{" "}
                 <Text style={styles.priceCurrency}>TRY</Text>
               </Text>
               <Text style={styles.pricePer}>

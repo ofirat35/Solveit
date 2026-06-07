@@ -23,6 +23,7 @@ import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
 import { PricingUnitsEnum } from "../../helpers/enums/PricingUnitsEnum";
 import { ServiceStatusEnum } from "../../helpers/enums/ServiceStatusEnum";
+import { getCurrencySymbol } from "../../helpers/methods/currencyMapping";
 import {
   ServiceUpdateFormData,
   serviceUpdateSchema,
@@ -109,7 +110,6 @@ export function EditServiceScreen() {
         status: service.status,
         providerId: service.providerId || userId,
       });
-      console.log(service);
 
       setPricingUnit(service.pricing);
       if (service.categoryId) setSelectedCategoryId(service.categoryId);
@@ -278,7 +278,9 @@ export function EditServiceScreen() {
                 name="minPrice"
                 render={({ field: { onChange, value } }) => (
                   <View style={styles.priceInputWrap}>
-                    <Text style={styles.currencySymbol}>$</Text>
+                    <Text style={styles.currencySymbol}>
+                      {getCurrencySymbol()}
+                    </Text>
                     <TextInput
                       style={[
                         styles.priceInput,
@@ -328,7 +330,9 @@ export function EditServiceScreen() {
                   name="maxPrice"
                   render={({ field: { onChange, value } }) => (
                     <View style={styles.priceInputWrap}>
-                      <Text style={styles.currencySymbol}>$</Text>
+                      <Text style={styles.currencySymbol}>
+                        {getCurrencySymbol()}
+                      </Text>
                       <TextInput
                         style={[
                           styles.priceInput,

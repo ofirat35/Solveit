@@ -6,7 +6,7 @@ using Solveit.Api.Extensions;
 namespace Solveit.Api.Core.Application.Features.Commands.Users
 {
     public class UserDeleteCommandHandler(
-        IAppUserService userService, 
+        IAppUserService userService,
         IKeycloakService keycloakService,
         IHttpContextAccessor httpContext)
         : BaseCommandHandler, IRequestHandler<UserDeleteRequestCommand, Result<Unit>>

@@ -18,7 +18,7 @@ namespace Solveit.Api.Core.Application.Features.Commands.Users
     {
         public async Task<Result<Unit>> Handle(UserUpdateRequestCommand request, CancellationToken cancellationToken)
         {
-            if(request.Id != httpContext.GetUserId())
+            if (request.Id != httpContext.GetUserId())
                 return ToFailResult<Unit>(["Unauthorized"], StatusCodes.Status401Unauthorized);
 
             var keyCloakModel = mapper.Map<KeyCloakUserUpdateDto>(request);

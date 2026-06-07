@@ -17,6 +17,7 @@ namespace Solveit.Api.Core.Domain.Entities
         public List<Order> Orders { get; set; }
         public bool IsServiceProvider { get; set; }
         public AppUserStatus Status { get; set; }
+        public string CountryCode { get; set; }
         public bool IsValid { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Services;
-using Solveit.Api.Core.Application.Features.Queries.Orders;
 using Solveit.Api.Core.Application.Features.Queries.Services;
 
 namespace Solveit.Api.Presentation.Controllers

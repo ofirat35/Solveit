@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Solveit.Api.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Solveit.Api.Infrastructure.Context;
 namespace Solveit.Api.Migrations
 {
     [DbContext(typeof(SolveitAppContext))]
-    partial class SolveitAppContextModelSnapshot : ModelSnapshot
+    [Migration("20260605125030_init12")]
+    partial class init12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

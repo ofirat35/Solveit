@@ -13,9 +13,12 @@ import {
 } from "react-native";
 import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
+import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
 import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
 import { ServiceStatusEnum } from "../../helpers/enums/ServiceStatusEnum";
+import { COUNTRY_TO_CURRENCY } from "../../helpers/methods/currencyMapping";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
 import { ServicesStackParamList } from "../../helpers/types/RootStackParamList";
@@ -96,9 +99,17 @@ export function ServiceApplicantsScreen() {
               </View>
 
               <Text style={styles.heroPrice}>
-                {service.minPrice}
-                {service.maxPrice ? ` - ${service.maxPrice}` : ""}{" "}
-                <Text style={styles.currencyText}>TRY</Text>
+                {formatCurrency({
+                  amount: service.minPrice,
+                })}
+                {service.maxPrice
+                  ? ` - ${formatCurrency({
+                      amount: service.maxPrice,
+                    })}`
+                  : ""}{" "}
+                <Text style={styles.currencyText}>
+                  {COUNTRY_TO_CURRENCY[keycloakService.getCurrentUserCountry()]}
+                </Text>
                 <Text style={styles.unitText}>
                   {" "}
                   • {getPricingUnit(t, service.pricing)}

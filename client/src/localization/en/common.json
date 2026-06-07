@@ -17,6 +17,11 @@
     "success": "Success",
     "updated": "Updated"
   },
+  "countries": {
+    "de": "Germany",
+    "tr": "Türkiye",
+    "us": "United States"
+  },
   "createService": {
     "active": "Active",
     "activeDescription": "Visible to others and accepting applications",
@@ -152,7 +157,9 @@
   "register": {
     "alreadyHaveAccount": "Already have an account?",
     "birthday": "Birthday",
+    "chooseCountry": "register.chooseCountry",
     "confirmPassword": "Confirm Password",
+    "country": "Country",
     "createAccount": "Create account",
     "email": "Email",
     "firstName": "First Name",
@@ -163,6 +170,7 @@
     "password": "Password",
     "phone": "Phone",
     "registerSuccess": "Successfully registered!",
+    "selectCountry": "register.selectCountry",
     "show": "Show",
     "signIn": "Sign in",
     "subtitle": "Sign up to get started",
@@ -203,8 +211,8 @@
     "totalOrders_one": "Total {{count}} order",
     "totalOrders_other": "Total {{count}} orders",
     "totalServices": "{{count}} Services",
-    "totalServices_one": "services.totalServices",
-    "totalServices_other": "services.totalServices",
+    "totalServices_one": "Total {{count}} service",
+    "totalServices_other": "Total {{count}} services",
     "viewService": "View Service"
   },
   "ServicesTab": {

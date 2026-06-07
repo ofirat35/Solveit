@@ -11,5 +11,6 @@ namespace Solveit.Api.Core.Domain.Dtos.AppUsers
         public string Email { get; set; } = default!;
         public string? Phone { get; set; }
         public DateOnly Birthday { get; set; }
+        public string CountryCode { get; set; }
     }
 }

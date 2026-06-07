@@ -12,6 +12,7 @@ import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
 import { ServiceStatusEnum } from "../../helpers/enums/ServiceStatusEnum";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { useMyServices } from "../../hooks/Services/useMyServices";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -58,8 +59,14 @@ export function MyServicesTab() {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.cardTitle}>{item.title}</Text>
                     <Text style={styles.cardSubtitle}>
-                      {item.minPrice}
-                      {item.maxPrice ? ` - ${item.maxPrice}` : ""}
+                      {formatCurrency({
+                        amount: item.minPrice,
+                      })}
+                      {item.maxPrice
+                        ? ` - ${formatCurrency({
+                            amount: item.maxPrice,
+                          })}`
+                        : ""}
                     </Text>
                   </View>
                   <Badge

@@ -97,13 +97,12 @@ export function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   header: {
-    // Fixed over the viewport window
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     height: HEADER_HEIGHT,
-    zIndex: 10, // Layers over the scrollview list
+    zIndex: 10,
     padding: 20,
     paddingTop: 60,
     backgroundColor: Colors.background.base,

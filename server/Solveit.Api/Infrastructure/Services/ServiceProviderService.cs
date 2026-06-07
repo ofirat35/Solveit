@@ -7,7 +7,6 @@ using Solveit.Api.Core.Domain.Dtos.Orders;
 using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Entities;
 using Solveit.Api.Core.Domain.Models;
-using Solveit.Api.Extensions;
 using Solveit.Api.Infrastructure.Context;
 
 namespace Solveit.Api.Infrastructure.Services
@@ -55,6 +54,7 @@ namespace Solveit.Api.Infrastructure.Services
         {
             var baseQuery = GetAll().Where(s => s.ProviderId == userId);
             var totalCount = await baseQuery.CountAsync();
+            if (totalCount == 0) return new PaginatedItemsViewModel<ServiceListDto>(page, pageSize, 0, []);
 
             var services = await baseQuery
                 .Skip((page - 1) * pageSize)
@@ -94,6 +94,8 @@ namespace Solveit.Api.Infrastructure.Services
                 .Where(_ => _.SubcategoryId == subcategoryId && _.Status == ServiceStatusEnum.Active)
                 .Include(_ => _.Provider);
             var totalCount = await query.CountAsync();
+            if (totalCount == 0) return new PaginatedItemsViewModel<ServiceListDto>(page, pageSize, 0, []);
+
             var services = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -116,7 +118,7 @@ namespace Solveit.Api.Infrastructure.Services
                 .FirstOrDefaultAsync();
             if (service is null)
                 return FailResult<ServiceListDto>([DbOperation.Query], StatusCodes.Status404NotFound);
-            
+
             var mappedService = mapper.Map<ServiceListDto>(service);
             mappedService.TotalOrdersCount = await DbContext.Orders.Where(_ => _.ServiceId == serviceId).CountAsync();
 
@@ -133,7 +135,7 @@ namespace Solveit.Api.Infrastructure.Services
             order.Id = Guid.NewGuid();
             order.UserId = CurrentUserId;
             order.ServiceId = serviceId;
-            
+
 
             await DbContext.AddAsync(order);
             var result = await SaveChangesAsync(order, DbOperation.Create);

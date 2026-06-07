@@ -14,5 +14,6 @@ namespace Solveit.Api.Core.Domain.Dtos.Auth
         public bool Enabled { get; init; } = true;
         [JsonPropertyName("credentials")]
         public List<KeycloakCredentialDto> Credentials { get; init; } = [];
+        public Dictionary<string, string[]> Attributes { get; set; } = new();
     }
 }

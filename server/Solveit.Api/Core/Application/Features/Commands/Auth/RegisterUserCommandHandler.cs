@@ -59,5 +59,6 @@ namespace Solveit.Api.Core.Application.Features.Commands.Auth
         public string Email { get; set; } = default!;
         public DateOnly Birthday { get; set; }
         public string Password { get; set; }
+        public string CountryCode { get; set; }
     }
 }

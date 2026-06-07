@@ -18,8 +18,10 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { CountrySelector } from "../components/shared/CountrySelector";
 import { CustomTextInput } from "../components/shared/Forms/CustomTextInput";
 import { GenderEnum } from "../helpers/enums/GenderEnum";
+import { getInitialCountryFromLanguage } from "../helpers/methods/getInitialCountryFromLanguage";
 import {
   RegisterFormData,
   registerSchema,
@@ -35,7 +37,8 @@ export function RegisterScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const structuralDefaultCountry = getInitialCountryFromLanguage(i18n.language);
 
   const defaultBirthday = new Date();
   defaultBirthday.setFullYear(defaultBirthday.getFullYear() - 18);
@@ -48,6 +51,7 @@ export function RegisterScreen() {
     resolver: yupResolver(registerSchema),
     defaultValues: {
       birthday: defaultBirthday,
+      countryCode: structuralDefaultCountry,
     },
   });
 
@@ -56,6 +60,7 @@ export function RegisterScreen() {
     const { confirmPassword, ...rest } = data;
     const payload: RegisterModel = {
       ...rest,
+      countryCode: rest.countryCode.trim().toUpperCase(),
       birthday: rest.birthday.toISOString().split("T")[0],
     };
     AuthService.register({ ...payload }).then((isSuccess) => {
@@ -239,6 +244,22 @@ export function RegisterScreen() {
                   )}
                 </View>
               </View>
+            </View>
+
+            {/* Country Input Field Setup */}
+            <View style={styles.field}>
+              <Controller
+                control={control}
+                name="countryCode"
+                render={({ field: { onChange, value } }) => (
+                  <CountrySelector
+                    labelText={`${t("register.country")} *`}
+                    value={value}
+                    onChange={onChange}
+                    error={errors.countryCode?.message}
+                  />
+                )}
+              />
             </View>
 
             <View style={[styles.field, styles.rowField]}>
@@ -437,6 +458,7 @@ const styles = StyleSheet.create({
     color: "#888",
     marginBottom: 8,
   },
+
   input: {
     borderWidth: 1,
     borderColor: "#E0E0E0",

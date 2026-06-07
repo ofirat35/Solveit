@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Repositories;
 using Solveit.Api.Core.Domain.Entities;

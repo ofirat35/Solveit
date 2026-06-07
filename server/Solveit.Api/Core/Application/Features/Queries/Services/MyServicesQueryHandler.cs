@@ -1,9 +1,4 @@
-﻿using MediatR;
-using Solveit.Api.Core.Application.Services;
-using Solveit.Api.Core.Domain.Dtos.Services;
-using Solveit.Api.Core.Domain.Models;
-
-namespace Solveit.Api.Core.Application.Features.Queries.Services
+﻿namespace Solveit.Api.Core.Application.Features.Queries.Services
 {
     //public class MyServicesQueryHandler(IServiceProviderService serviceProviderService)
     //    : BaseQueryHandler, IRequestHandler<MyServicesRequestQuery, PaginatedItemsViewModel<ServiceListDto>>

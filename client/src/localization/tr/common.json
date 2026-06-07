@@ -17,6 +17,11 @@
     "success": "Başarılı",
     "updated": "Güncellendi"
   },
+  "countries": {
+    "de": "Almanya",
+    "tr": "Türkiye",
+    "us": "Amerika"
+  },
   "createService": {
     "active": "Aktif",
     "activeDescription": "Diğerleri tarafından görülebilir ve başvurulara açık",
@@ -151,7 +156,9 @@
   "register": {
     "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
     "birthday": "Doğum Tarihi",
+    "chooseCountry": "register.chooseCountry",
     "confirmPassword": "Şifreyi Onayla",
+    "country": "Ülke",
     "createAccount": "Hesap Oluştur",
     "email": "E-posta",
     "firstName": "Ad",
@@ -162,6 +169,7 @@
     "password": "Şifre",
     "phone": "Telefon",
     "registerSuccess": "Başarıyla kayıt olundu!",
+    "selectCountry": "register.selectCountry",
     "show": "Göster",
     "signIn": "Giriş Yap",
     "subtitle": "Başlamak için kayıt olun",
@@ -202,8 +210,8 @@
     "totalOrders_one": "{{count}} Sipariş",
     "totalOrders_other": "{{count}} Sipariş",
     "totalServices": "{{count}} Hizmet",
-    "totalServices_one": "services.totalServices",
-    "totalServices_other": "services.totalServices",
+    "totalServices_one": "{{count}} Hizmet",
+    "totalServices_other": "{{count}} Hizmet",
     "viewService": "Hizmeti Görüntüle"
   },
   "ServicesTab": {

@@ -16,10 +16,10 @@ import { useServiceProviders } from "../../hooks/Services/useServiceProviders";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 type ServiceProvidersRouteProp = RouteProp<
   DiscoveryStackParamList,
-  "ServiceProvidersScreen"
+  "ServiceProviderListScreen"
 >;
 
-export function ServiceProvidersScreen() {
+export function ServiceProviderListScreen() {
   const { t } = useTranslation();
   const { navigate, setOptions } = useAppNavigation();
   const route = useRoute<ServiceProvidersRouteProp>();

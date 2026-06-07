@@ -10,7 +10,7 @@ namespace Solveit.Api.Infrastructure.Services
         IHttpContextAccessor httpContext,
         IFileService fileService,
         ILogger<AppUserService> logger)
-        : BaseService<SolveitAppContext, Subcategory, int>(dbContext, logger, httpContext, EventIds.CategoryService),
+        : BaseService<SolveitAppContext, Subcategory, int>(dbContext, logger, httpContext, EventIds.SubcategoryService),
             ISubcategoryService
     {
         public async Task UploadSubcategoryImageAsync(IFormFile file, int subcategoryId)

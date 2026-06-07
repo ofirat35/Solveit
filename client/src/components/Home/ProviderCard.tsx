@@ -1,6 +1,7 @@
 import { Star } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
 import { ServiceListModel } from "../../models/Services/ServiceListModel";
 import { UserAvatar } from "../UserAvatar";
@@ -43,8 +44,14 @@ export function ProviderCard({
 
           {/* Price */}
           <Text style={styles.price}>
-            ${item.minPrice}
-            {item.maxPrice ? ` – $${item.maxPrice}` : ""}{" "}
+            {formatCurrency({
+              amount: item.minPrice,
+            })}
+            {item.maxPrice
+              ? ` – ${formatCurrency({
+                  amount: item.maxPrice,
+                })}`
+              : ""}{" "}
             <Text style={styles.pricingUnit}>
               {getPricingUnit(t, item.pricing)}
             </Text>

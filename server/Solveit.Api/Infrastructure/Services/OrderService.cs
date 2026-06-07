@@ -25,6 +25,8 @@ namespace Solveit.Api.Infrastructure.Services
         {
             var query = GetAll().Where(a => a.UserId == CurrentUserId);
             var totalCount = await query.CountAsync();
+            if (totalCount == 0) return new PaginatedItemsViewModel<OrderListDto>(page, pageSize, 0, []);
+
             var applications = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -54,6 +56,8 @@ namespace Solveit.Api.Infrastructure.Services
                 .Where(_ => _.ServiceId == serviceId)
                 .Include(_ => _.User);
             var totalCount = await query.CountAsync();
+            if (totalCount == 0) return new PaginatedItemsViewModel<OrderListDto>(page, pageSize, 0, []);
+
             var orders = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -70,20 +74,25 @@ namespace Solveit.Api.Infrastructure.Services
 
         public async Task<Result<OrderListDto>> GetOrderByIdAsync(Guid id)
         {
-            var application = await GetAll()
+            var order = await GetAll()
                 .Where(a => a.Id == id)
                 .Include(_ => _.User)
                 .Include(_ => _.Provider)
                 .FirstOrDefaultAsync();
-            var serviceApplication = mapper.Map<OrderListDto>(application);
-            return SuccessResult(serviceApplication);
+            if (order is null)
+                return FailResult<OrderListDto>([DbOperation.Query], StatusCodes.Status404NotFound);
+
+            return SuccessResult(mapper.Map<OrderListDto>(order));
         }
 
         public async Task<Result<bool>> UpdateOrderStausAsync(Guid orderId, OrderStatusEnum orderStatus)
         {
-            var serviceApplication = await GetSingleAsync(_ => _.Id == orderId);
-            serviceApplication.OrderStatus = orderStatus;
-            var result = await SaveChangesAsync(serviceApplication, DbOperation.Create);
+            var order = await GetSingleAsync(_ => _.Id == orderId);
+            if (order is null)
+                return FailResult<bool>([DbOperation.Query], StatusCodes.Status404NotFound);
+
+            order.OrderStatus = orderStatus;
+            var result = await SaveChangesAsync(order, DbOperation.Update);
 
             return result ? SuccessResult(true) : FailResult<bool>([ExceptionMessages.DbOperationFailed]);
         }

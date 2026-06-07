@@ -13,6 +13,7 @@ import {
 import { CustomModal } from "../../components/shared/CustomModal";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { DiscoveryStackParamList } from "../../helpers/types/RootStackParamList";
 import { useServiceDetail } from "../../hooks/Discovery/useServiceDetail";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -122,8 +123,14 @@ export function ServiceDetailScreen() {
             <Text style={styles.priceText}>
               {t("providerDetail.startingFrom")}:{" "}
               <Text style={styles.priceValue}>
-                ${service.minPrice}
-                {service.maxPrice ? ` - $${service.maxPrice}` : ""}
+                {formatCurrency({
+                  amount: service.minPrice,
+                })}
+                {service.maxPrice
+                  ? ` - ${formatCurrency({
+                      amount: service.maxPrice,
+                    })}`
+                  : ""}
               </Text>
             </Text>
           )}

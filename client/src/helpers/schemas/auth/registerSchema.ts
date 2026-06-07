@@ -41,6 +41,7 @@ export const registerSchema = yup.object({
       return birthDate <= minAge;
     }),
   phone: yup.string().optional().nullable().default(null),
+  countryCode: yup.string().required(),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;

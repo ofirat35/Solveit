@@ -247,6 +247,11 @@ class KeycloakService {
     return "User";
   }
 
+  getCurrentUserCountry(): string {
+    const tokens = this.getStoredTokens();
+    return tokens?.userInfo?.country_code!;
+  }
+
   getCurrentUserId(): string | undefined {
     const tokens = this.getStoredTokens();
 

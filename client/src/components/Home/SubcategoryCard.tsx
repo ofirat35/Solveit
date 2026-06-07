@@ -13,7 +13,7 @@ export function SubcategoryCard({ item }: { item: SubcategoryListModel }) {
         navigate("RootTabNavigationScreen", {
           screen: "DiscoveryTab",
           params: {
-            screen: "ServiceProvidersScreen",
+            screen: "ServiceProviderListScreen",
             params: {
               subcategoryId: item.id,
               subcategoryName: item.name,

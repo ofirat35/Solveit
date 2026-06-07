@@ -130,6 +130,7 @@
     "noProvidersSubtitle": "Für diese Kategorie gibt es noch keine Anbieter."
   },
   "register": {
+    "country": "Land",
     "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
     "birthday": "Geburtsdatum",
     "confirmPassword": "Passwort bestätigen",
@@ -155,6 +156,11 @@
     "confirmApplicationBody": "Sind Sie sicher, dass Sie diese Dienstleistung buchen möchten?",
     "confirmApplicationTitle": "Dienstleistung bestätigen"
   },
+  "countries": {
+  "tr": "Türkei",
+  "de": "Deutschland",
+  "us": "Vereinigte Staaten"
+},
   "services": {
     "totalServices": "{{count}} Dienstleistungen",
      "totalOrders_one": "{{count}} Bestellung",

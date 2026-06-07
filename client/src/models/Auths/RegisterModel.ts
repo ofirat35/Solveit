@@ -7,5 +7,6 @@ export type RegisterModel = {
   phone: string | null;
   email: string;
   birthday: string;
+  countryCode: string;
   password: string;
 };

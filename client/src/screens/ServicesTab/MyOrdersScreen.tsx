@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useMemo } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next"; // Added Hook Import
 import {
   ActivityIndicator,
@@ -13,33 +12,17 @@ import {
 import { Badge } from "../../components/shared/Badge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
+import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
-import { queryKeys } from "../../helpers/queryKeys";
+import { useMyOrders } from "../../hooks/Services/useMyOrders";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-import { OrderService } from "../../services/OrderService";
 
 export function MyOrdersTab() {
   const { t } = useTranslation();
   const { navigate } = useAppNavigation();
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: queryKeys.orders.myOrders,
-      queryFn: ({ pageParam = 1 }) => OrderService.getMyOrders(pageParam, 10),
-      getNextPageParam: (lastPage, allPages) => {
-        const totalFetched = allPages.flatMap((p) => p.data).length;
-        return totalFetched < lastPage.totalEntities
-          ? allPages.length + 1
-          : undefined;
-      },
-      initialPageParam: 1,
-    });
-
-  const orders = useMemo(
-    () => data?.pages.flatMap((p) => p.data) ?? [],
-    [data],
-  );
+  const { orders, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMyOrders();
 
   return (
     <FlatList
@@ -87,8 +70,14 @@ export function MyOrdersTab() {
               </Text>
               <View>
                 <Text style={styles.price}>
-                  {item.minPrice}
-                  {item.maxPrice ? ` - ${item.maxPrice}` : ""}
+                  {formatCurrency({
+                    amount: item.minPrice,
+                  })}
+                  {item.maxPrice
+                    ? ` - ${formatCurrency({
+                        amount: item.maxPrice,
+                      })}`
+                    : ""}
                 </Text>
                 <Text
                   style={{ fontSize: 11, textAlign: "right", color: "#aaa" }}
@@ -122,8 +111,9 @@ export function MyOrdersTab() {
           </View>
         ) : (
           <Text style={{ textAlign: "center", color: "#aaa", padding: 10 }}>
-            {t("orders.totalOrdersCount", { count: orders.length })}
-            {t("orders.noMoreOrders")}
+            {orders.length > 0
+              ? t("orders.totalOrdersCount", { count: orders.length })
+              : t("orders.noMoreOrders")}
           </Text>
         )
       }

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Solveit.Api.Core.Application.Extensions;
-using Solveit.Api.Core.Application.Features.Commands;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Models;
 

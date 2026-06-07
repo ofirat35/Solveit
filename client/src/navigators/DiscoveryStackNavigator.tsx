@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ScreenHeader } from "../components/shared/ScreenHeader";
 import { HomeScreen } from "../screens/DiscoveryTab/DiscoveryScreen";
 import { ServiceDetailScreen } from "../screens/DiscoveryTab/ServiceDetailScreen";
-import { ServiceProvidersScreen } from "../screens/DiscoveryTab/ServiceProvidersScreen";
+import { ServiceProviderListScreen } from "../screens/DiscoveryTab/ServiceProviderListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,8 +22,8 @@ export function DiscoveryStackNavigator() {
         }}
       />
       <Stack.Screen
-        name="ServiceProvidersScreen"
-        component={ServiceProvidersScreen}
+        name="ServiceProviderListScreen"
+        component={ServiceProviderListScreen}
       />
       <Stack.Screen
         name="ServiceDetailScreen"

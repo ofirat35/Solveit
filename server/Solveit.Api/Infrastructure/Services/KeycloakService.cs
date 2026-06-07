@@ -36,7 +36,11 @@ namespace Solveit.Api.Infrastructure.Services
                             Value = user.Password,
                             Temporary = false
                         }
-                    ]
+                    ],
+                Attributes = new Dictionary<string, string[]>
+                    {
+                        { "country_code", [ user.CountryCode.Trim().ToUpper() ] }
+                    }
             };
 
             var response = await _clientHttpClient
