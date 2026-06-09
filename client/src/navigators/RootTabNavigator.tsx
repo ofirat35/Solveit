@@ -1,4 +1,4 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../helpers/consts/ColorConts";
@@ -6,7 +6,6 @@ import { DiscoveryStackNavigator } from "./DiscoveryStackNavigator";
 import { NotificationStackNavigator } from "./NotificationStackNavigator";
 import { ServicesStackNavigator } from "./ServicesStackNavigator";
 import { SettingsStackNavigator } from "./SettingsStackNavigator";
-
 const Tab = createBottomTabNavigator();
 
 export function RootTabNavigator() {
@@ -32,9 +31,9 @@ export function RootTabNavigator() {
           title: t("DiscoveryTab.TabNavTitle"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <FontAwesome5
-              name="users"
-              size={22}
+            <FontAwesome
+              name="search"
+              size={24}
               color={
                 focused ? Colors.text.gray_primary : Colors.text.gray_secondary
               }
@@ -47,9 +46,9 @@ export function RootTabNavigator() {
           title: t("ServicesTab.TabNavTitle"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <FontAwesome5
-              name="users"
-              size={22}
+            <FontAwesome6
+              name="opencart"
+              size={24}
               color={
                 focused ? Colors.text.gray_primary : Colors.text.gray_secondary
               }
@@ -64,9 +63,9 @@ export function RootTabNavigator() {
           title: t("NotificationTab.TabNavTitle"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <FontAwesome5
-              name="users"
-              size={22}
+            <Ionicons
+              name="notifications"
+              size={24}
               color={
                 focused ? Colors.text.gray_primary : Colors.text.gray_secondary
               }
@@ -81,9 +80,9 @@ export function RootTabNavigator() {
           title: t("SettingsTab.TabNavTitle"),
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <FontAwesome5
-              name="users"
-              size={22}
+            <Ionicons
+              name="settings-sharp"
+              size={24}
               color={
                 focused ? Colors.text.gray_primary : Colors.text.gray_secondary
               }

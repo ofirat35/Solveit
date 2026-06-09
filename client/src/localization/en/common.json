@@ -8,6 +8,7 @@
     "errorOccurred": "Error Occurred",
     "fixed": "fixed",
     "goBack": "Go Back",
+    "loginToContinue": "Login to continue",
     "n/a": "n/a",
     "notNow": "Cancel",
     "perDay": "/ day",
@@ -93,7 +94,8 @@
     "forgotPassword": "Forgot password?",
     "register": "Register",
     "subtitle": "Welcome back",
-    "title": "Sign in"
+    "title": "Sign in",
+    "continueWithoutLogging": "Continue without login"
   },
   "NotificationTab": {
     "TabNavTitle": "Notifications"
@@ -144,6 +146,7 @@
     "contact": "Contact",
     "errorLoading": "Error while loading",
     "location": "Location",
+    "loginToApply": "Login to apply",
     "noDescription": "No description",
     "offeredBy": "Offered by",
     "phone": "Phone",
@@ -208,11 +211,11 @@
     "setAsDefaultDescription": "Are you sure you want to set \"{{tab}}\" as your default landing view?",
     "setAsDefaultTitle": "Set as Default Tab",
     "title": "Services",
-    "totalOrders_one": "Total {{count}} order",
-    "totalOrders_other": "Total {{count}} orders",
+    "totalOrders_one": "{{count}} order",
+    "totalOrders_other": "{{count}} orders",
     "totalServices": "{{count}} Services",
-    "totalServices_one": "Total {{count}} service",
-    "totalServices_other": "Total {{count}} services",
+    "totalServices_one": "{{count}} service",
+    "totalServices_other": "{{count}} services",
     "viewService": "View Service"
   },
   "ServicesTab": {

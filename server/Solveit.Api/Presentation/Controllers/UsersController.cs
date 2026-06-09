@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Users;
 using Solveit.Api.Core.Application.Features.Queries.Users;
 
 namespace Solveit.Api.Presentation.Controllers
 {
-    //[Authorize]
+    [Authorize(Policies.BasicUser)]
     public class UsersController : BaseController
     {
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById([FromRoute] GetUserByIdRequestQuery query)
         {
             return HandleResponse(await Mediator.Send(query));
@@ -32,6 +34,7 @@ namespace Solveit.Api.Presentation.Controllers
         }
 
         [HttpGet("{userId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> CheckIsServiceProvider([FromRoute] CheckUserIsServiceProviderRequestQuery query)
         {
             return HandleResponse(await Mediator.Send(query));
@@ -44,6 +47,7 @@ namespace Solveit.Api.Presentation.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserImage([FromQuery] GetUserImageRequestQuery query)
         {
             return HandleResponse(await Mediator.Send(query));

@@ -30,6 +30,24 @@ export function RootStack() {
 
   return (
     <Stack.Navigator>
+      <>
+        <Stack.Screen
+          name="RootTabNavigationScreen"
+          component={RootTabNavigator}
+          options={{
+            headerShown: false,
+            statusBarStyle: "dark",
+          }}
+        />
+        <Stack.Screen
+          name="UserProfileScreen"
+          component={UserProfileScreen}
+          options={{
+            header: (props) => <ScreenHeader props={props} />,
+            statusBarStyle: "dark",
+          }}
+        />
+      </>
       {!isAuthenticated && (
         <>
           {AUTH_SCREENS.map((screen) => (
@@ -40,27 +58,6 @@ export function RootStack() {
               component={screen.component}
             />
           ))}
-        </>
-      )}
-
-      {isAuthenticated && (
-        <>
-          <Stack.Screen
-            name="RootTabNavigationScreen"
-            component={RootTabNavigator}
-            options={{
-              headerShown: false,
-              statusBarStyle: "dark",
-            }}
-          />
-          <Stack.Screen
-            name="UserProfileScreen"
-            component={UserProfileScreen}
-            options={{
-              header: (props) => <ScreenHeader props={props} />,
-              statusBarStyle: "dark",
-            }}
-          />
         </>
       )}
     </Stack.Navigator>

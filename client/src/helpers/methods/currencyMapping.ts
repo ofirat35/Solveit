@@ -1,5 +1,6 @@
 import i18n from "../../localization";
 import { keycloakService } from "../Auth/keycloak";
+import { getInitialCountryFromLanguage } from "./getInitialCountryFromLanguage";
 
 export const COUNTRY_TO_CURRENCY: Record<string, string> = {
   TR: "TRY",
@@ -8,7 +9,11 @@ export const COUNTRY_TO_CURRENCY: Record<string, string> = {
 };
 
 export function getCurrencyByCountry(countryCode: string): string {
-  return COUNTRY_TO_CURRENCY[countryCode.toUpperCase()] || "USD";
+  return (
+    COUNTRY_TO_CURRENCY[
+      countryCode?.toUpperCase() ?? getInitialCountryFromLanguage(i18n.language)
+    ] || "USD"
+  );
 }
 
 export function getCurrencySymbol(

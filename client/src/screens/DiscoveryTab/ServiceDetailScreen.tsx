@@ -11,8 +11,10 @@ import {
   View,
 } from "react-native";
 import { CustomModal } from "../../components/shared/CustomModal";
+import { LoginRedirect } from "../../components/shared/LoginRedirect";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
+import { useAuth } from "../../helpers/contexts/AuthContext";
 import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { DiscoveryStackParamList } from "../../helpers/types/RootStackParamList";
 import { useServiceDetail } from "../../hooks/Discovery/useServiceDetail";
@@ -39,6 +41,7 @@ export function ServiceDetailScreen() {
   } = useServiceDetail({
     serviceId,
   });
+  const { isAuthenticated } = useAuth();
   const currentUserId = useMemo(() => keycloakService.getCurrentUserId(), []);
   const applyForServiceHandler = async () => {
     applyForService();
@@ -177,7 +180,7 @@ export function ServiceDetailScreen() {
       </CustomModal>
 
       {/* Sticky Bottom Application Button Container */}
-      {currentUserId != service.providerId && (
+      {currentUserId != service.providerId && isAuthenticated && (
         <View style={styles.bottomActionContainer}>
           <TouchableOpacity
             style={[styles.applyButton, isApplying && styles.disabledButton]}
@@ -193,6 +196,38 @@ export function ServiceDetailScreen() {
               </Text>
             )}
           </TouchableOpacity>
+        </View>
+      )}
+
+      {!isAuthenticated && (
+        <View
+          style={{
+            backgroundColor: "#ffffff",
+            borderTopWidth: 1,
+            borderColor: "#eee",
+            height: 100,
+          }}
+        >
+          <LoginRedirect
+            text={t("providerDetail.loginToApply")}
+          ></LoginRedirect>
+          {/* <TouchableOpacity
+            style={[styles.applyButton, isApplying && styles.disabledButton]}
+            activeOpacity={0.8}
+            disabled={isApplying}
+            onPress={() =>
+              navigate("RootTabNavigationScreen", {
+                screen: "SettingsTab",
+                params: {
+                  screen: "SettingsScreen",
+                },
+              })
+            }
+          >
+            <Text style={styles.applyButtonText}>
+              {t("providerDetail.LoginToApply")}
+            </Text>
+          </TouchableOpacity> */}
         </View>
       )}
     </View>
@@ -314,6 +349,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopWidth: 1,
     borderColor: "#eee",
+    flex: 1,
   },
   applyButton: {
     backgroundColor: "#185FA5",

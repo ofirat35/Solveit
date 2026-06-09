@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react-native";
 import React, { useRef } from "react";
@@ -8,11 +9,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SubcategoryCard } from "../../components/Home/SubcategoryCard";
 import { Colors } from "../../helpers/consts/ColorConts";
+import { useAuth } from "../../helpers/contexts/AuthContext";
 import { queryKeys } from "../../helpers/queryKeys";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { CategoryService } from "../../services/CategoryService";
 
 // The precise total height of your search header container including padding
@@ -20,6 +24,8 @@ const HEADER_HEIGHT = 130;
 
 export function HomeScreen() {
   const { t } = useTranslation();
+  const { navigate } = useAppNavigation();
+  const { isAuthenticated } = useAuth();
 
   // Create an animated value reference to log the Y scroll position
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -55,6 +61,17 @@ export function HomeScreen() {
             style={styles.searchInput}
           />
         </View>
+        {!isAuthenticated && (
+          <TouchableOpacity
+            style={{ paddingLeft: 20, alignItems: "center" }}
+            onPress={() => {
+              navigate("LoginScreen");
+            }}
+          >
+            <MaterialCommunityIcons name="login" size={30} color="black" />
+            <Text>{t("login.title")}</Text>
+          </TouchableOpacity>
+        )}
       </Animated.View>
 
       {/* ── Main Scroll View ── */}
@@ -98,6 +115,9 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   header: {
     position: "absolute",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     top: 0,
     left: 0,
     right: 0,
@@ -118,6 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   searchBar: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",

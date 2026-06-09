@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Services;
 using Solveit.Api.Core.Application.Features.Queries.Services;
 
@@ -7,12 +8,14 @@ namespace Solveit.Api.Presentation.Controllers
     public class ServiceProvidersController : BaseController
     {
         [HttpPost]
+        [Authorize(Policies.BasicUser)]
         public async Task<IActionResult> Create([FromBody] CreateServiceRequestCommand command)
         {
             return HandleResponse(await Mediator.Send(command));
         }
 
         [HttpPut]
+        [Authorize(Policies.BasicUser)]
         public async Task<IActionResult> Update([FromBody] UpdateServiceRequestCommand command)
         {
             return HandleResponse(await Mediator.Send(command));
@@ -37,6 +40,7 @@ namespace Solveit.Api.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policies.BasicUser)]
         public async Task<IActionResult> ApplyForService([FromBody] ApplyForServiceRequestCommand command)
         {
             return HandleResponse(await Mediator.Send(command));

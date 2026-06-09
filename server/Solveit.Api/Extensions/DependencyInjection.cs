@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Keycloak.AuthServices.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos;
@@ -14,10 +15,7 @@ namespace Solveit.Api.Extensions
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMediatR(config =>
-            {
-                config.RegisterServicesFromAssemblyContaining<Program>();
-            });
+            services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<Program>());
             services.AddAutoMapper(_ => { }, Assembly.GetExecutingAssembly());
 
 
@@ -41,6 +39,9 @@ namespace Solveit.Api.Extensions
                 services.TryAddScoped(registration.Service, registration.Implementation);
             }
             services.AddScoped<IAppCacheService, InMemoryCacheService>();
+            services.AddScoped<IFileService, LocalFileService>();
+
+
             services.AddControllers();
             services.AddDbContext<SolveitAppContext>(o =>
             {
@@ -83,6 +84,19 @@ namespace Solveit.Api.Extensions
                 //    }
                 //};
             });
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("BasicUser", policy =>
+                {
+                    policy.RequireResourceRoles("basic_user");
+                });
+                //opt.AddPolicy("Admin", policy =>
+                //{
+                //    policy.RequireRealmRoles("admin_user", "superadmin_user");
+                //});
+            }).AddKeycloakAuthorization(configuration);
+
+
             services.Configure<MinioConfig>(configuration.GetSection("MinioConfig"));
             services.Configure<KeycloakConfig>(configuration.GetSection("KeycloakClientConfig"));
             services.AddHttpContextAccessor();

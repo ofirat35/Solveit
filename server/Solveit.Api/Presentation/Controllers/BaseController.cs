@@ -22,5 +22,12 @@ namespace Solveit.Api.Presentation.Controllers
             }
             return StatusCode(response.StatusCode ?? StatusCodes.Status200OK, response.Value);
         }
+
+        protected static class Policies
+        {
+            public const string BasicUser = "BasicUser";
+            public const string SilverUser = "SilverUser";
+            public const string Admin = "Admin";
+        }
     }
 }

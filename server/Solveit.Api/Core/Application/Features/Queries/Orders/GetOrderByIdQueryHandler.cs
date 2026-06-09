@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.Orders;
 using Solveit.Api.Core.Domain.Models;
@@ -11,7 +12,7 @@ namespace Solveit.Api.Core.Application.Features.Queries.Orders
         public async Task<Result<OrderListDto>> Handle(GetOrderByIdRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await orderService.GetOrderByIdAsync(request.OrderId);
-            return ToSuccessResult(response.Value);
+            return response.ToResult();
         }
     }
 

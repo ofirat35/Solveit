@@ -18,7 +18,6 @@ export function DiscoveryStackNavigator() {
         component={HomeScreen}
         options={{
           headerShown: false,
-          statusBarHidden: true,
         }}
       />
       <Stack.Screen

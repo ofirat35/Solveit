@@ -136,6 +136,33 @@ export function LoginScreen() {
             </Text>
           </TouchableOpacity>
         </View>
+        <View style={{ height: 100 }}>
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
+            onPress={() =>
+              navigate("RootTabNavigationScreen", {
+                screen: "DiscoveryTab",
+                params: {
+                  screen: "DiscoveryScreen",
+                },
+              })
+            }
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#111",
+                fontWeight: "600",
+              }}
+            >
+              {t("login.continueWithoutLogging")}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
       <LanguageModal
         visible={changeLanguageVisible}

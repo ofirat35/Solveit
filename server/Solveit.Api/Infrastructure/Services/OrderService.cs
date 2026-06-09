@@ -87,7 +87,7 @@ namespace Solveit.Api.Infrastructure.Services
 
         public async Task<Result<bool>> UpdateOrderStausAsync(Guid orderId, OrderStatusEnum orderStatus)
         {
-            var order = await GetSingleAsync(_ => _.Id == orderId);
+            var order = await GetSingleAsync(_ => _.Id == orderId && (_.ProviderId == CurrentUserId || _.UserId == CurrentUserId));
             if (order is null)
                 return FailResult<bool>([DbOperation.Query], StatusCodes.Status404NotFound);
 

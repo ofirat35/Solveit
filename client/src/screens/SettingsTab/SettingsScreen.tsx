@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -16,20 +15,29 @@ import {
 } from "../../components/SettingsTab/SettingRow";
 import { CustomModal } from "../../components/shared/CustomModal";
 import { LanguageModal } from "../../components/shared/LanguageModal";
+import { LoginRedirect } from "../../components/shared/LoginRedirect";
 import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
 import { useAuth } from "../../helpers/contexts/AuthContext";
 import { useSettings } from "../../hooks/Settings/useSettings";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 export function SettingsScreen() {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const { user } = useSettings();
   const [changeLanguageVisible, setChangeLanguageVisible] = useState(false);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const { t, i18n } = useTranslation();
-  const navigation = useNavigation<any>();
+  const { navigate } = useAppNavigation();
   const [selectedLang, setSelectedLang] = useState(i18n.language);
+
+  if (!isAuthenticated)
+    return (
+      <View style={styles.notAuthenticatedContainer}>
+        <LoginRedirect></LoginRedirect>
+      </View>
+    );
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -61,7 +69,14 @@ export function SettingsScreen() {
             iconBg="#e7f5ff"
             iconColor="#185FA5"
             label={t("settings.editProfile")}
-            onPress={() => navigation.navigate("EditProfileScreen")}
+            onPress={() =>
+              navigate("RootTabNavigationScreen", {
+                screen: "SettingsTab",
+                params: {
+                  screen: "EditProfileScreen",
+                },
+              })
+            }
           />
           <SettingRow
             icon="lock-closed-outline"
@@ -141,6 +156,10 @@ export function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  notAuthenticatedContainer: {
+    flex: 1,
+    backgroundColor: Colors.background.base,
+  },
   container: {
     flex: 1,
     paddingTop: 30,

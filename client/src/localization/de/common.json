@@ -12,7 +12,8 @@
     "perHour": "/ Stunde",
     "perSession": "/ Sitzung",
     "search": "Suchen...",
-    "success": "Erfolgreich"
+    "success": "Erfolgreich",
+    "loginToContinue": "Einloggen"
   },
   "createService": {
     "active": "Aktiv",
@@ -75,7 +76,8 @@
     "forgotPassword": "Passwort vergessen?",
     "register": "Registrieren",
     "subtitle": "Willkommen zurück",
-    "title": "Einloggen"
+    "title": "Einloggen",
+    "continueWithoutLogging": "ohne Einloggen fortfahren"
   },
   "NotificationTab": {
     "TabNavTitle": "Benachrichtigungen"
@@ -119,6 +121,7 @@
     "contact": "Kontakt",
     "errorLoading": "Fehler beim Laden der Daten",
     "location": "Standort",
+    "loginToApply": "Einloggen",
     "noDescription": "Keine Beschreibung verfügbar",
     "offeredBy": "Angeboten von",
     "phone": "Telefon",

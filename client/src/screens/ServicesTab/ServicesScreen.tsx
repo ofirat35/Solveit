@@ -11,8 +11,10 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LoginRedirect } from "../../components/shared/LoginRedirect";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
+import { useAuth } from "../../helpers/contexts/AuthContext";
 import { showToast } from "../../helpers/Toasts/DefaultToasts";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { UserService } from "../../services/UserService";
@@ -31,6 +33,7 @@ export function ServicesScreen() {
   const [isProvider, setIsProvider] = useState(false);
   const [showProviderModal, setShowProviderModal] = useState(false);
   const [showDefaultTabModal, setShowDefaultTabModal] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const getDefaultTab = async () => {
     let selectedTab = await AsyncStorage.getItem(cacheName);
@@ -71,13 +74,21 @@ export function ServicesScreen() {
   };
 
   useEffect(() => {
-    UserService.checkIsServiceProviderByUserId(
-      keycloakService.getCurrentUserId()!,
-    ).then((isServiceProvider) => setIsProvider(isServiceProvider));
+    isAuthenticated &&
+      UserService.checkIsServiceProviderByUserId(
+        keycloakService.getCurrentUserId()!,
+      ).then((isServiceProvider) => setIsProvider(isServiceProvider));
     getDefaultTab().then((tab) => {
       setActiveTab(tab);
     });
-  }, []);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated)
+    return (
+      <View style={styles.container}>
+        <LoginRedirect></LoginRedirect>
+      </View>
+    );
 
   return (
     <View style={styles.container}>

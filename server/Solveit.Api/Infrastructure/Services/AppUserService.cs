@@ -23,6 +23,9 @@ namespace Solveit.Api.Infrastructure.Services
         public async Task<Result<bool>> CreateAppUserAsync(AppUserCreateDto user)
         {
             var mappedUser = mapper.Map<AppUser>(user);
+            mappedUser.FirstName = mappedUser.FirstName.Trim();
+            mappedUser.LastName = mappedUser.LastName.Trim();
+            mappedUser.CountryCode = mappedUser.CountryCode = mappedUser.CountryCode.Trim().ToUpper();
             await AddAsync(mappedUser);
             var response = await SaveChangesAsync(user, DbOperation.Create);
 

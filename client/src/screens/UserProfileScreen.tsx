@@ -11,7 +11,9 @@ import {
   View,
 } from "react-native";
 import { UserAvatar } from "../components/UserAvatar";
+import { keycloakService } from "../helpers/Auth/keycloak";
 import { Colors } from "../helpers/consts/ColorConts";
+import { COUNTRY_TO_CURRENCY } from "../helpers/methods/currencyMapping";
 import { formatCurrency } from "../helpers/methods/formatCurrency";
 import { getPricingUnit } from "../helpers/methods/getPricingUnit";
 import { RootStackParamList } from "../helpers/types/RootStackParamList";
@@ -120,12 +122,22 @@ export function UserProfileScreen() {
                   marginBottom: 16,
                 }}
               >
-                <Text style={styles.sectionHeadline}>
-                  {t("services.myServices")}
-                </Text>
-                <Text style={styles.sectionBody}>
-                  ({t("services.totalServices", { count: totalServices })})
-                </Text>
+                {keycloakService.getCurrentUserId() == user.id ? (
+                  <>
+                    <Text style={styles.sectionHeadline}>
+                      {t("services.myServices")}
+                    </Text>
+                    <Text style={styles.sectionBody}>
+                      ({t("services.totalServices", { count: totalServices })})
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.sectionHeadline}>
+                      {t("services.totalServices", { count: totalServices })}
+                    </Text>
+                  </>
+                )}
               </View>
             )}
           </View>
@@ -179,7 +191,9 @@ export function UserProfileScreen() {
                       amount: service.maxPrice,
                     })}`
                   : ""}{" "}
-                <Text style={styles.priceCurrency}>TRY</Text>
+                <Text style={styles.priceCurrency}>
+                  {COUNTRY_TO_CURRENCY[keycloakService.getCurrentUserCountry()]}
+                </Text>
               </Text>
               <Text style={styles.pricePer}>
                 {getPricingUnit(t, service.pricing)}

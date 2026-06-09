@@ -8,8 +8,7 @@ using Solveit.Api.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDependencies(builder.Configuration);
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IFileService, LocalFileService>();
+
 
 var app = builder.Build();
 

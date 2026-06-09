@@ -56,28 +56,24 @@ namespace Solveit.Api.Infrastructure.Services
             var totalCount = await baseQuery.CountAsync();
             if (totalCount == 0) return new PaginatedItemsViewModel<ServiceListDto>(page, pageSize, 0, []);
 
-            var services = await baseQuery
+            var services = baseQuery
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                .Take(pageSize);
 
-            var serviceDtos = mapper.Map<List<ServiceListDto>>(services);
-            var serviceIds = serviceDtos.Select(s => s.Id).ToList();
+            if (CurrentUserId != userId || CurrentUserId == null)
+                services = services.Where(_ => _.Status == ServiceStatusEnum.Active);
 
-            var ordersGroup = await DbContext.Orders
-                .Where(o => serviceIds.Contains(o.ServiceId))
-                .Include(o => o.User)
-                .AsNoTracking()
-                .ToListAsync();
+            var serviceDtos = mapper.Map<List<ServiceListDto>>(await services.ToListAsync());
+
+            var ordersGroup = DbContext.Orders
+                .OrderByDescending(o => o.CreatedDate)
+                .Include(o => o.User);
 
             foreach (var dto in serviceDtos)
             {
-                var allServiceOrders = ordersGroup.Where(o => o.ServiceId == dto.Id).ToList();
-
-                dto.TotalOrdersCount = allServiceOrders.Count;
-
+                dto.TotalOrdersCount = await ordersGroup.Where(o => o.ServiceId == dto.Id).CountAsync();
                 dto.Orders = mapper.Map<List<OrderListDto>>(
-                    allServiceOrders.OrderByDescending(o => o.CreatedDate).Take(2).ToList()
+                    await ordersGroup.Where(o => o.ServiceId == dto.Id).Take(2).ToListAsync()
                 );
             }
 
@@ -135,7 +131,6 @@ namespace Solveit.Api.Infrastructure.Services
             order.Id = Guid.NewGuid();
             order.UserId = CurrentUserId;
             order.ServiceId = serviceId;
-
 
             await DbContext.AddAsync(order);
             var result = await SaveChangesAsync(order, DbOperation.Create);

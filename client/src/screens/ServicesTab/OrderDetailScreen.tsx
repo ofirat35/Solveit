@@ -19,6 +19,7 @@ import { UserAvatar } from "../../components/UserAvatar";
 import { keycloakService } from "../../helpers/Auth/keycloak";
 import { Colors } from "../../helpers/consts/ColorConts";
 import { OrderStatusEnum } from "../../helpers/enums/OrderStatusEnum";
+import { COUNTRY_TO_CURRENCY } from "../../helpers/methods/currencyMapping";
 import { formatCurrency } from "../../helpers/methods/formatCurrency";
 import { formatLocaleDate } from "../../helpers/methods/formatLocaleDate";
 import { getPricingUnit } from "../../helpers/methods/getPricingUnit";
@@ -135,7 +136,9 @@ export function OrderDetailScreen() {
                       amount: order.maxPrice,
                     })}`
                   : ""}{" "}
-                <Text style={styles.priceCurrency}>TRY</Text>
+                <Text style={styles.priceCurrency}>
+                  {COUNTRY_TO_CURRENCY[keycloakService.getCurrentUserCountry()]}
+                </Text>
               </Text>
               <Text style={styles.pricePer}>
                 {getPricingUnit(t, order.pricing)}

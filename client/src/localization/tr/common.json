@@ -8,6 +8,7 @@
     "errorOccurred": "Hata Oluştu",
     "fixed": "Sabit",
     "goBack": "Geri Dön",
+    "loginToContinue": "Devam etmek için giriş yap",
     "n/a": "N/A",
     "notNow": "Şimdi Değil",
     "perDay": "/ gün",
@@ -93,7 +94,8 @@
     "forgotPassword": "Şifrenizi mi unuttunuz?",
     "register": "Kayıt Ol",
     "subtitle": "Tekrar hoş geldiniz",
-    "title": "Giriş Yap"
+    "title": "Giriş Yap",
+    "continueWithoutLogging": "Giriş yapmadan devam et"
   },
   "NotificationTab": {
     "TabNavTitle": "Bildirimler"
@@ -143,6 +145,7 @@
     "contact": "İletişim",
     "errorLoading": "Veriler yüklenirken hata oluştu",
     "location": "Konum",
+    "loginToApply": "Başvurmak için giriş yap",
     "noDescription": "Açıklama bulunmuyor",
     "offeredBy": "Hizmet Sağlayan",
     "phone": "Telefon",

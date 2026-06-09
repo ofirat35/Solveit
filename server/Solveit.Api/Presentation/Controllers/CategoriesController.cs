@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Categories;
 using Solveit.Api.Core.Application.Features.Queries.Categories;
 
@@ -25,12 +26,14 @@ namespace Solveit.Api.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policies.Admin)]
         public async Task<IActionResult> UploadCategoryImage([FromForm] UploadCategoryImageRequestCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPost]
+        [Authorize(Policies.Admin)]
         public async Task<IActionResult> UploadSubcategoryImage([FromForm] UploadSubcategoryImageRequestCommand command)
         {
             return Ok(await Mediator.Send(command));

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Solveit.Api.Core.Application.Extensions;
 using Solveit.Api.Core.Application.Services;
 using Solveit.Api.Core.Domain.Dtos.Services;
 using Solveit.Api.Core.Domain.Models;
@@ -11,7 +12,7 @@ namespace Solveit.Api.Core.Application.Features.Queries.Services
         public async Task<Result<ServiceListDto>> Handle(GetServiceByIdRequestQuery request, CancellationToken cancellationToken)
         {
             var response = await serviceProviderService.GetServiceByIdAsync(request.ServiceId);
-            return ToSuccessResult(response.Value, StatusCodes.Status200OK);
+            return response.ToResult();
         }
     }
 

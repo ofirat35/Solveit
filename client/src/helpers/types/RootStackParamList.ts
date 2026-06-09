@@ -36,4 +36,5 @@ export type NotificationStackParamList = {
 
 export type SettingsStackParamList = {
   SettingsScreen: undefined;
+  EditProfileScreen: undefined;
 };

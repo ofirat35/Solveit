@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Solveit.Api.Core.Application.Features.Commands.Orders;
 using Solveit.Api.Core.Application.Features.Queries.Orders;
 
 namespace Solveit.Api.Presentation.Controllers
 {
+    [Authorize(Policies.BasicUser)]
     public class OrdersController : BaseController
     {
         [HttpGet]
